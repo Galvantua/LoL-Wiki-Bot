@@ -3,29 +3,34 @@ export async function run(bot, core, message, args) {
 	
 	//create parser for HTML
 	const parser = new DOMParser();
-	var document, abilityMain, abilityDetails, abilityNumber;
+	const document, abilityMain, abilityCode, abilityDetails, abilityNumber;
 	
 	if (args[1] == "kogmaw") {
 		args[1] = "kog'maw";
 	} //add exceptions here
-	
-	//clean inputs
-	if (args[2] == "Q" || args[2] == "q"){
-		args[2] = "q";
-		abilityNumber = 1;
-	} else if (args[2] == "W" || args[2] == "w"){
-		args[2] = "w";
-		abilityNumber = 2;
-	} else if (args[2] == "E" || args[2] == "e"){
-		args[2] = "e";
-		abilityNumber = 3;
-	} else if (args[2] == "R" || args[2] == "r"){
-		args[2] = "r";
-		abilityNumber = 4;
-	} else if (args[2] == "P" || args[2] == "p" || args[2] == "passive" || args[2] == "Passive"){
+
+	if (args[2].lowerCase() === "p" || args[2].toLowerCase() === "passive") {
 		args[2] = "innate";
 		abilityNumber = 0;
-	} //else throw error?
+	} else {
+		args[2].toLowerCase();
+		if (args[2].toLowerCase() === "q") {
+			abilityCode = "q";
+			abilityNumber = 1;
+		} else if (args[2].toLowerCase() === "w") {
+			abilityCode = "w";
+			abilityNumber = 2;
+		} else if (args[2].toLowerCase() === "e") {
+			abilityCode = "e";
+			abilityNumber = 3;
+		} else if (args[2].toLowerCase() === "r") {
+			abilityCode = "r";
+			abilityNumber = 4;
+		} else {
+			//error for invalid ability
+		};
+	};
+	
 	
     const Http = new XMLHttpRequest(); //create new request
     const url='https://leagueoflegends.fandom.com/wiki/${args[1]}/LoL'; 
@@ -36,7 +41,7 @@ export async function run(bot, core, message, args) {
     Http.onreadystatechange = (e) => {
         if (this.readyState==4 && this.status==200){
 			document = parser.parseFromString(Http.responseText, "text/html"); //parse the response into a document for scraping
-			abilityMain = document.getElementsByClassName(`skill skill_${args[2]}`);
+			abilityMain = document.getElementsByClassName(`skill skill_${abilityCode}`);
 			abilityDetails = document.getElementsByClassName('tabbertab-bordered')[abilityNumber];
 		} /*else if (this.readyState==4 && this.status!=200) {
 			throw error due to http error
