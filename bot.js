@@ -9,9 +9,9 @@ const bot = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.DIRECT_ME
 //Create ready event
 bot.once('ready', async () => {
    bot.user.setStatus('online'); //useless but looks cool 8)
-   bot.user.setActivity('for PREFIXhelp', { type: 'WATCHING' });  
+   bot.user.setActivity(`for ${config.prefix}help`, { type: 'WATCHING' });  
    console.log(`woah the bot is running`); 
 });
 
 //Login to gateway
-bot.login(config.json); 
+bot.login(config.token); 
