@@ -36,7 +36,7 @@ export async function run(bot, core, message, args) {
     Http.onreadystatechange = (e) => {
         if (this.readyState==4 && this.status==200){
 			document = parser.parseFromString(Http.responseText, "text/html"); //parse the response into a document for scraping
-			abilityMain = document.getElementsByClassName('skill skill_${args[2]}');
+			abilityMain = document.getElementsByClassName(`skill skill_${args[2]}`);
 			abilityDetails = document.getElementsByClassName('tabbertab-bordered')[abilityNumber];
 		} /*else if (this.readyState==4 && this.status!=200) {
 			throw error due to http error
