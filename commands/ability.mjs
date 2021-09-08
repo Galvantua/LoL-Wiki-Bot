@@ -10,7 +10,7 @@ export async function run(bot, core, message, args) {
 	} //add exceptions here
 
 	if (args[2].lowerCase() === "p" || args[2].toLowerCase() === "passive") {
-		args[2] = "innate";
+		abilityCode = "innate";
 		abilityNumber = 0;
 	} else {
 		args[2].toLowerCase();
