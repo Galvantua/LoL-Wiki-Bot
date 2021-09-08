@@ -49,13 +49,13 @@ export async function run(bot, core, message, args) {
 	
 	//scraps through html to find header information
   	const abilityName = document.getElementsByClassName(`skill_${abilityCode}`)[0].getElementsByClassName("mw-headline")[0].innerText;
-	const abilityRange = document.getElementsByClassName(`skill_${abilityCode}`)[0].getElementsByClassName("champion-ability__header")[0].getElementsByTagName("section").querySelector('div[data-source="range"]').innerText;
-	const abilityCost = document.getElementsByClassName(`skill_${abilityCode}`)[0].getElementsByClassName("champion-ability__header")[0].getElementsByTagName("section").querySelector('div[data-source="cost"]').innerText;
-	const abilityCastTime = document.getElementsByClassName(`skill_${abilityCode}`)[0].getElementsByClassName("champion-ability__header")[0].getElementsByTagName("section").querySelector('div[data-source="cast time"]').innerText;
-	const abilityCooldown = document.getElementsByClassName(`skill_${abilityCode}`)[0].getElementsByClassName("champion-ability__header")[0].getElementsByTagName("section").querySelector('div[data-source="cooldown"]').innerText;
-	const abilitySpeed = document.getElementsByClassName(`skill_${abilityCode}`)[0].getElementsByClassName("champion-ability__header")[0].getElementsByTagName("section").querySelector('div[data-source="speed"]').innerText;
-	const abilityEffectRadius = document.getElementsByClassName(`skill_${abilityCode}`)[0].getElementsByClassName("champion-ability__header")[0].getElementsByTagName("section").querySelector('div[data-source="effect radius"]').innerText;
-	const abilityWidth = document.getElementsByClassName(`skill_${abilityCode}`)[0].getElementsByClassName("champion-ability__header")[0].getElementsByTagName("section").querySelector('div[data-source="width"]').innerText;
+	const abilityRange = document.getElementsByClassName(`skill_${abilityCode}`)[0].getElementsByClassName("champion-ability__header")[0].getElementsByTagName("section")[0].querySelector('div[data-source="range"]').innerText;
+	const abilityCost = document.getElementsByClassName(`skill_${abilityCode}`)[0].getElementsByClassName("champion-ability__header")[0].getElementsByTagName("section")[0].querySelector('div[data-source="cost"]').innerText;
+	const abilityCastTime = document.getElementsByClassName(`skill_${abilityCode}`)[0].getElementsByClassName("champion-ability__header")[0].getElementsByTagName("section")[0].querySelector('div[data-source="cast time"]').innerText;
+	const abilityCooldown = document.getElementsByClassName(`skill_${abilityCode}`)[0].getElementsByClassName("champion-ability__header")[0].getElementsByTagName("section")[0].querySelector('div[data-source="cooldown"]').innerText;
+	const abilitySpeed = document.getElementsByClassName(`skill_${abilityCode}`)[0].getElementsByClassName("champion-ability__header")[0].getElementsByTagName("section")[0].querySelector('div[data-source="speed"]').innerText;
+	const abilityEffectRadius = document.getElementsByClassName(`skill_${abilityCode}`)[0].getElementsByClassName("champion-ability__header")[0].getElementsByTagName("section")[0].querySelector('div[data-source="effect radius"]').innerText;
+	const abilityWidth = document.getElementsByClassName(`skill_${abilityCode}`)[0].getElementsByClassName("champion-ability__header")[0].getElementsByTagName("section")[0].querySelector('div[data-source="width"]').innerText;
 	
     //create an embed
     const embed = new core.MessageEmbed()
