@@ -7,6 +7,8 @@ export async function nameAbilityTEST(args) {
     'kogmaw':"Kog'Maw",
     'reksai':"Rek'Sai",
     'velkoz':"Vel'Koz",
+    'aurelionsol':"Aurelion_Sol",
+    'asol':"Aurelion_Sol",
     'mundo':"Dr._Mundo",
     'drmundo':"Dr._Mundo",
     'jarvan':"Jarvan_IV",
