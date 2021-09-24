@@ -40,7 +40,7 @@ export async function run(bot, core, message, args) {
     Http.onreadystatechange = (e) => {
         if (this.readyState==4 && this.status==200){
 			document = parser.parseFromString(Http.responseText, "text/html"); //parse the response into a document for scraping
-			abilityMain = document.getElementsByClassName(`skill skill_${abilityCode}`);
+			abilityMain = document.getElementsByClassName(`skill skill_${abilityCode}`)[0];
 			abilityDetails = document.getElementsByClassName('tabbertab-bordered')[abilityNumber];
 		} /*else if (this.readyState==4 && this.status!=200) {
 			throw error due to http error
@@ -48,20 +48,20 @@ export async function run(bot, core, message, args) {
     }
 	
 	//scraps through html to find header information
-  	const abilityName = document.getElementsByClassName(`skill_${abilityCode}`)[0].getElementsByClassName("mw-headline")[0].innerText;
-	const abilityRange = document.getElementsByClassName(`skill_${abilityCode}`)[0].getElementsByClassName("champion-ability__header")[0].getElementsByTagName("section")[0].querySelector('div[data-source="range"]').innerText;
-	const abilityCost = document.getElementsByClassName(`skill_${abilityCode}`)[0].getElementsByClassName("champion-ability__header")[0].getElementsByTagName("section")[0].querySelector('div[data-source="cost"]').innerText;
-	const abilityCastTime = document.getElementsByClassName(`skill_${abilityCode}`)[0].getElementsByClassName("champion-ability__header")[0].getElementsByTagName("section")[0].querySelector('div[data-source="cast time"]').innerText;
-	const abilityCooldown = document.getElementsByClassName(`skill_${abilityCode}`)[0].getElementsByClassName("champion-ability__header")[0].getElementsByTagName("section")[0].querySelector('div[data-source="cooldown"]').innerText;
-	const abilitySpeed = document.getElementsByClassName(`skill_${abilityCode}`)[0].getElementsByClassName("champion-ability__header")[0].getElementsByTagName("section")[0].querySelector('div[data-source="speed"]').innerText;
-	const abilityEffectRadius = document.getElementsByClassName(`skill_${abilityCode}`)[0].getElementsByClassName("champion-ability__header")[0].getElementsByTagName("section")[0].querySelector('div[data-source="effect radius"]').innerText;
-	const abilityWidth = document.getElementsByClassName(`skill_${abilityCode}`)[0].getElementsByClassName("champion-ability__header")[0].getElementsByTagName("section")[0].querySelector('div[data-source="width"]').innerText;
+  	const abilityName = abilityMain.getElementsByClassName("mw-headline")[0].innerText;
+	const abilityRange = abilityMain.getElementsByClassName("champion-ability__header")[0].getElementsByTagName("section")[0].querySelector('div[data-source="range"]').innerText;
+	const abilityCost = abilityMain.getElementsByClassName("champion-ability__header")[0].getElementsByTagName("section")[0].querySelector('div[data-source="cost"]').innerText;
+	const abilityCastTime = abilityMain.getElementsByClassName("champion-ability__header")[0].getElementsByTagName("section")[0].querySelector('div[data-source="cast time"]').innerText;
+	const abilityCooldown = abilityMain.getElementsByClassName("champion-ability__header")[0].getElementsByTagName("section")[0].querySelector('div[data-source="cooldown"]').innerText;
+	const abilitySpeed = abilityMain.getElementsByClassName("champion-ability__header")[0].getElementsByTagName("section")[0].querySelector('div[data-source="speed"]').innerText;
+	const abilityEffectRadius = abilityMain.getElementsByClassName("champion-ability__header")[0].getElementsByTagName("section")[0].querySelector('div[data-source="effect radius"]').innerText;
+	const abilityWidth = abilityMain.getElementsByClassName("champion-ability__header")[0].getElementsByTagName("section")[0].querySelector('div[data-source="width"]').innerText;
 	
     //create an embed
     const embed = new core.MessageEmbed()
     embed.setTitle("Pong!")
     embed.setColor('#01eee8') 
-    embed.addField(`🖥️ WebSocket`, `**${bot.ws.ping}**ms`)
+    embed.addField(`Name`, `${abilityName000}`)
     //create a red hex color embed
 
     //send the embed
