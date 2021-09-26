@@ -1,5 +1,5 @@
 # LoL-Wiki-Bot
 
-a bot to pull ability info from the lol wiki  
+a bot to pull ability info from the lol wiki
 
 Testing
