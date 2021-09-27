@@ -35,22 +35,25 @@ export async function nameAbilityTEST(args) {
 	//regex and return taken from eramsorgr. I'm too lazy to type those
 	let championAbility = args[args.length - 1].toLowerCase();
 	//console.log(championAbility);
-	if (!/[qwerp]/gm.test(championAbility) || championAbility !== "passive") {
+	if (
+		!/(q{1}|w{1}|e{1}|r{1}|p{1})/gm.test(championAbility) &&
+		championAbility !== "passive"
+	) {
+		console.log("Invalid Ability\n" + championAbility);
 		return "Invalid ability";
 	} //checks if the input is valid
 
 	//args = args.filter((a) => a); //remove the empty arrays
-	for (let i = 0; i < args.length; i++) {
-		const element = args[i];
-		console.log(element);
-	}
+	// for (let i = 0; i < args.length; i++) {
+	// 	const element = args[i];
+	// 	console.log(element);
+	// }
 	let championName = "";
 	for (let i = 0; i < args.length - 1; i++) {
 		args[i] = args[i].toLowerCase().replace(/['"^_.\s]/gm, "");
 		args[i] = args[i].charAt(0).toUpperCase() + args[i].slice(1);
 		championName += args[i] + "_";
 	} //reformat the champ name
-	console.log(championName);
 	championName = championName.slice(0, -1); //removes the excess underscore
 	let nameCheck = championName.replace(/[_]/gm, "").toLowerCase();
 	if (excList.hasOwnProperty(nameCheck)) {
