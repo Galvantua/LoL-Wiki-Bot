@@ -20,6 +20,7 @@ export async function nameAbilityTEST(args) {
 		khazix: "Kha'Zix",
 		kog: "Kog'Maw",
 		kogmaw: "Kog'Maw",
+		rock: "Malphite",
 		mundo: "Dr._Mundo",
 		drmundo: "Dr._Mundo",
 		nunuwillump: "Nunu",
@@ -28,6 +29,7 @@ export async function nameAbilityTEST(args) {
 		trynd: "Tryndamere",
 		tf: "Twisted_Fate",
 		velkoz: "Vel'Koz",
+		monkey: "Wukong",
 		xin: "Xin_Zhao",
 		yi: "Master_Yi",
 	}; //list of exceptions
