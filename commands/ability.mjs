@@ -9,7 +9,12 @@ export async function run(bot, core, message, args) {
 	//create parser for HTML
 	const embed = new core.MessageEmbed();
 	const parser = new DOMParser();
-	let document, abilityMain, abilityCode, abilityDetails, abilityNumber;
+	let document,
+		abilityMain,
+		abilityCode,
+		abilityDetails,
+		abilityNumber,
+		abilityLetter;
 
 	let abilityAndName = await nameAbilityTEST(args);
 	// for (let i = 0; i < args.length; i++) {
@@ -29,80 +34,99 @@ export async function run(bot, core, message, args) {
 		abilityAndName[1].toLowerCase() === "passive"
 	) {
 		abilityCode = "innate";
+		abilityLetter = "I";
 		abilityNumber = 0;
 	} else {
 		abilityAndName[1].toLowerCase();
 		if (abilityAndName[1].toLowerCase() === "q") {
+			abilityLetter = "Q";
 			abilityCode = "q";
 			abilityNumber = 1;
 		} else if (abilityAndName[1].toLowerCase() === "w") {
 			abilityCode = "w";
+			abilityLetter = "W";
 			abilityNumber = 2;
 		} else if (abilityAndName[1].toLowerCase() === "e") {
 			abilityCode = "e";
+			abilityLetter = "E";
 			abilityNumber = 3;
 		} else if (abilityAndName[1].toLowerCase() === "r") {
 			abilityCode = "r";
+			abilityLetter = "R";
 			abilityNumber = 4;
 		} else {
 			//error for invalid ability
 		}
 	}
 
+	const url = `https://leagueoflegends.fandom.com/api.php?action=parse&text={{Grouped%20ability|${abilityAndName[0]}|${abilityLetter}}}&contentmodel=wikitext&format=json`;
 	const request = await fetch(
-		"https://leagueoflegends.fandom.com/wiki/Template:Data_Aurelion_Sol/Celestial_Expansion"
+		url
 		//`https://leagueoflegends.fandom.com/wiki/${abilityAndName[0]}/LoL`
 	).catch((err) => {
 		console.log(err);
 	});
 
 	const body = await request.text();
-	const dom = new jsdom.JSDOM(body, {
+	const bodyJSON = JSON.parse(body);
+	//console.log(bodyJSON.parse.text["*"]);
+
+	const dom = new jsdom.JSDOM(bodyJSON.parse.text["*"], {
 		contentType: "text/html",
-		resources: "usable",
 	});
 	document = dom.window.document;
+	//console.log(document);
+
 	abilityMain = document.getElementsByClassName(
 		`skill skill_${abilityCode}`
 	)[0];
+	//console.log(abilityMain);
+	embed.setTitle("Ability Name");
+	embed.setColor("#01eee8");
+
 	abilityDetails =
 		document.getElementsByClassName("tabbertab-bordered")[abilityNumber];
-	console.log(abilityMain);
 	//scraps through html to find header information
+	//console.log(abilityName);
+	let abilityProperties = [
+		"cast time",
+		"target range",
+		"range",
+		"cost",
+		"cooldown",
+		"speed",
+		"effect radius",
+		"width",
+	];
+	let abilityHeaders = document
+		.getElementsByClassName(`skill_${abilityCode}`)[0]
+		.getElementsByClassName("champion-ability__header");
+	for (let i = 0; i < abilityHeaders.length; i++) {
+		const element = abilityHeaders[i];
+		//console.log(i);
+		const abilityName =
+			element.getElementsByClassName("mw-headline")[0].textContent;
 
-	const abilityName =
-		abilityMain.getElementsByClassName("mw-headline")[0].innerText;
-	const abilityCastTime = abilityMain
-		.getElementsByClassName("champion-ability__header")[0]
-		.getElementsByTagName("section")[0]
-		.querySelector('div[data-source="cast time"]').innerText;
-	console.log(abilityCastTime);
-	const abilityTargetRange = abilityMain
-		.getElementsByClassName("champion-ability__header")[0]
-		.getElementsByTagName("section")[0]
-		.querySelector('div[data-source="target range"]').innerText;
-	const abilityRange = abilityMain
-		.getElementsByClassName("champion-ability__header")[0]
-		.getElementsByTagName("section")[0]
-		.querySelector('div[data-source="range"]').innerText;
-	const abilityCost = abilityMain
-		.getElementsByClassName("champion-ability__header")[0]
-		.getElementsByTagName("section")[0]
-		.querySelector('div[data-source="cost"]').innerText;
-	const abilityCooldown = abilityMain
-		.getElementsByClassName("champion-ability__header")[0]
-		.getElementsByTagName("section")[0]
-		.querySelector('div[data-source="cooldown"]').innerText;
-	const abilitySpeed = abilityMain
-		.getElementsByClassName("champion-ability__header")[0]
-		.getElementsByTagName("section")[0]
-		.querySelector('div[data-source="speed"]').innerText;
-	const abilityEffectRadius = abilityMain
-		.getElementsByClassName("champion-ability__header")[0]
-		.getElementsByTagName("section")[0]
-		.querySelector('div[data-source="effect radius"]').innerText;
-	const abilityWidth = abilityMain
-		.getElementsByClassName("champion-ability__header")[0]
-		.getElementsByTagName("section")[0]
-		.querySelector('div[data-source="width"]').innerText;
+		embed.addField(`Name:`, `**${abilityName}**`);
+		let abilitySection = element.getElementsByTagName("section")[0];
+		if (abilitySection) {
+			for (let i = 0; i < abilityProperties.length; i++) {
+				const element = abilitySection.querySelector(
+					`div[data-source="${abilityProperties[i]}"]`
+				);
+				if (element) {
+					const elementText = element.textContent.split(":");
+					embed.addField(
+						`${elementText[0]}`,
+						`**${elementText[1]}**`,
+						true
+					);
+				}
+			}
+		}
+	}
+	//.getElementsByTagName("section")[0];
+
+	//send the embed
+	await message.channel.send({ embeds: [embed] });
 }
