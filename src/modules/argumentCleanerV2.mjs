@@ -7,6 +7,7 @@ export async function nameAbilityTEST(args) {
 		blitz: "Blitzcrank",
 		givemeyourlux: "Blitzcrank",
 		cass: "Cassiopeia",
+		cho: "Cho'Gath",
 		chogath: "Cho'Gath",
 		fiddle: "Fiddlesticks",
 		fortune: "Miss_Fortune",
