@@ -2,7 +2,6 @@
 export async function nameAbilityTEST(args) {
 	let excList = {
 		aph: "Aphelios",
-		aurelionsol: "Aurelion_Sol",
 		asol: "Aurelion_Sol",
 		blitz: "Blitzcrank",
 		givemeyourlux: "Blitzcrank",
