@@ -45,6 +45,7 @@ export async function nameAbilityTEST(args) {
 		tf: "Twisted_Fate",
 		legs: "Urgot",
 		velkoz: "Vel'Koz",
+		billieeilish: "Vex",
 		monkey: "Wukong",
 		xin: "Xin_Zhao",
 		yonesbrother: "Yasuo",
