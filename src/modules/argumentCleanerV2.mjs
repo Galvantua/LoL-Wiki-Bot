@@ -56,6 +56,15 @@ export async function nameAbilityTEST(args) {
 		yi: "Master_Yi",
 	}; //list of exceptions
 
+	let cancer =[
+		"Morgana",
+		"Shaco",
+		"Teemo",
+		"Yasuo",
+		"Yone",
+		"Yuumi",
+	]; //list of cancer champs
+
 	//regex and return taken from eramsorgr. I'm too lazy to type those
 	let championAbility = args[args.length - 1].toLowerCase();
 	//console.log(championAbility);
@@ -80,9 +89,12 @@ export async function nameAbilityTEST(args) {
 	} //reformat the champ name
 	championName = championName.slice(0, -1); //removes the excess underscore
 	let nameCheck = championName.replace(/[_]/gm, "").toLowerCase();
-	if (excList.hasOwnProperty(nameCheck)) {
+	if (excList.hasOwnProperty(nameCheck)) {  
 		championName = excList[nameCheck];
 	} //check the exception list
+	else if(nameCheck == "cancer"){  
+		championName = cancer[Math.floor(Math.random()*cancer.length)]
+	} //check if cancer
 
 	//console.log(championName);
 	//console.log(championAbility);
@@ -92,7 +104,7 @@ export async function nameAbilityTEST(args) {
 
 //let testarray = ["kO g_.","","", "mAW", "Passive"];
 //let testarray2 = ["tWiSTed","","", "fAte", "Q"];
-//let testarray3 = ["JaRVan_","","", "iV", "passive"];
+//let testarray3 = ["Cancer","","", "passive"];
 //let testability = nameAbilityTEST(testarray);
 //let testability2 = nameAbilityTEST(testarray2);
 //let testability3 = nameAbilityTEST(testarray3);
