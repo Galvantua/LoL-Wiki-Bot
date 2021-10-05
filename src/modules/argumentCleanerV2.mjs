@@ -47,23 +47,27 @@ export async function nameAbilityTEST(args) {
 		shotgunknees: "Urgot",
 		vel: "Vel'Koz",
 		velkoz: "Vel'Koz",
+		shadow: "Vex",
 		billieeilish: "Vex",
 		monkey: "Wukong",
 		xin: "Xin_Zhao",
 		yonesbrother: "Yasuo",
 		tendeathspowerspike: "Yasuo",
 		yasuosbrother: "Yone",
+		q: "Master_Yi",
 		yi: "Master_Yi",
+		tutorial: "Master_Yi",
 	}; //list of exceptions
 
 	let cancer =[
 		"Morgana",
 		"Shaco",
 		"Teemo",
+		"Vladimir",
 		"Yasuo",
 		"Yone",
 		"Yuumi",
-	]; //list of cancer champs
+	]; //list of cancer champs 
 
 	//regex and return taken from eramsorgr. I'm too lazy to type those
 	let championAbility = args[args.length - 1].toLowerCase();
