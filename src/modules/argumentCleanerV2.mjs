@@ -62,6 +62,7 @@ export async function nameAbilityTEST(args) {
 
 	let cancer = [
 		"Morgana",
+		"Quinn",
 		"Shaco",
 		"Teemo",
 		"Vladimir",
