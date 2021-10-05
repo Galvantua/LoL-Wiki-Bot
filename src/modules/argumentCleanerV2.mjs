@@ -47,6 +47,7 @@ export async function nameAbilityTEST(args) {
 		shotgunknees: "Urgot",
 		vel: "Vel'Koz",
 		velkoz: "Vel'Koz",
+		emo: "Vex",
 		shadow: "Vex",
 		billieeilish: "Vex",
 		monkey: "Wukong",
@@ -59,7 +60,7 @@ export async function nameAbilityTEST(args) {
 		tutorial: "Master_Yi",
 	}; //list of exceptions
 
-	let cancer =[
+	let cancer = [
 		"Morgana",
 		"Shaco",
 		"Teemo",
@@ -93,11 +94,11 @@ export async function nameAbilityTEST(args) {
 	} //reformat the champ name
 	championName = championName.slice(0, -1); //removes the excess underscore
 	let nameCheck = championName.replace(/[_]/gm, "").toLowerCase();
-	if (excList.hasOwnProperty(nameCheck)) {  
+	if (excList.hasOwnProperty(nameCheck)) {
 		championName = excList[nameCheck];
 	} //check the exception list
-	else if(nameCheck == "cancer"){  
-		championName = cancer[Math.floor(Math.random()*cancer.length)]
+	else if (nameCheck == "cancer") {
+		championName = cancer[Math.floor(Math.random() * cancer.length)]
 	} //check if cancer
 
 	//console.log(championName);
