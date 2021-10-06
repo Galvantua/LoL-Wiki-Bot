@@ -80,8 +80,11 @@ export async function run(bot, core, message, args) {
 	abilityMain = document.getElementsByClassName(
 		`skill skill_${abilityCode}`
 	)[0];
-	//console.log(abilityMain);
-	embed.setTitle("Ability Name");
+	// console.log(
+	// 	abilityMain
+	// 		.getElementsByClassName("ability-info-container")[0]
+	// 		.getElementsByTagName("div")[1].textContent
+	// );
 	embed.setColor("#01eee8");
 
 	abilityDetails =
@@ -98,17 +101,27 @@ export async function run(bot, core, message, args) {
 		"effect radius",
 		"width",
 	];
+	let abilityTables = abilityMain.getElementsByTagName("table");
 	let abilityHeaders = document
 		.getElementsByClassName(`skill_${abilityCode}`)[0]
 		.getElementsByClassName("champion-ability__header");
+	if (abilityHeaders.length > 1) {
+		if (
+			abilityHeaders[0].getElementsByClassName("mw-headline")[0]
+				.textContent ===
+			abilityHeaders[1].getElementsByClassName("mw-headline")[0]
+				.textContent
+		) {
+			abilityHeaders.pop();
+		}
+	}
 	for (let i = 0; i < abilityHeaders.length; i++) {
 		const element = abilityHeaders[i];
 		//console.log(i);
 		const abilityName =
 			element.getElementsByClassName("mw-headline")[0].textContent;
-
-		embed.addField(`Name:`, `**${abilityName}**`);
-		let abilitySection = element.getElementsByTagName("section")[0];
+		embed.setTitle(`**${abilityName}**`);
+		let abilitySection = element.getElementsByTagName("aside")[0];
 		if (abilitySection) {
 			for (let i = 0; i < abilityProperties.length; i++) {
 				const element = abilitySection.querySelector(
@@ -118,11 +131,26 @@ export async function run(bot, core, message, args) {
 					const elementText = element.textContent.split(":");
 					embed.addField(
 						`${elementText[0]}`,
-						`**${elementText[1]}**`,
-						true
+						`**${elementText[1]}**`
 					);
 				}
 			}
+		}
+		for (let i = 0; i < abilityTables.length; i++) {
+			const table = abilityTables[i];
+			const subTables = table.getElementsByTagName("dl");
+			for (let i = 0; i < subTables.length; i++) {
+				const subTable = subTables[i];
+				const subTableHeaders = subTable.getElementsByTagName("dt");
+				const subTableData = subTable.getElementsByTagName("dd");
+				for (let i = 0; i < subTableHeaders.length; i++) {
+					const header = subTableHeaders[i].textContent;
+					const data = subTableData[i].textContent;
+					embed.addField(`${header}`, `${data}`);
+				}
+			}
+			//console.log(tableText);
+			//embed.addField(`${tableText[0]}`, `${tableText[1]}`);
 		}
 	}
 	//.getElementsByTagName("section")[0];
