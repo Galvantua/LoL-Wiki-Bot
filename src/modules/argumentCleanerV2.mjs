@@ -8,6 +8,7 @@ export async function nameAbilityTEST(args) {
 		cass: "Cassiopeia",
 		cho: "Cho'Gath",
 		chogath: "Cho'Gath",
+		eve: "Evelynn",
 		fiddle: "Fiddlesticks",
 		fortune: "Miss_Fortune",
 		mf: "Miss_Fortune",
@@ -16,6 +17,7 @@ export async function nameAbilityTEST(args) {
 		j4: "Jarvan_IV",
 		jarvan: "Jarvan_IV",
 		jarvaniv: "Jarvan_IV",
+		lamp: "Jax",
 		four: "Jhin",
 		4: "Jhin",
 		kaisa: "Kai'Sa",
@@ -30,6 +32,7 @@ export async function nameAbilityTEST(args) {
 		eep: "Lillia",
 		deer: "Lillia",
 		rock: "Malphite",
+		dwayne: "Malphite",
 		mord: "Mordekaiser",
 		morde: "Mordekaiser",
 		morg: "Morgana",
@@ -39,6 +42,8 @@ export async function nameAbilityTEST(args) {
 		nunuwillump: "Nunu",
 		nunuandwillump: "Nunu",
 		reksai: "Rek'Sai",
+		dio: "Sett",
+		konodioda: "Sett",
 		clown: "Shaco",
 		equilibrium: "Shen",
 		banana: "Soraka",
@@ -48,7 +53,6 @@ export async function nameAbilityTEST(args) {
 		vel: "Vel'Koz",
 		velkoz: "Vel'Koz",
 		emo: "Vex",
-		shadow: "Vex",
 		billieeilish: "Vex",
 		monkey: "Wukong",
 		xin: "Xin_Zhao",
@@ -61,10 +65,16 @@ export async function nameAbilityTEST(args) {
 	}; //list of exceptions
 
 	let randomList = {
+		beyblade:["Garen", "Katarina", "Tryndamer"],
 		bird: ["Anivia", "Quinn", "Rakan", "Xayah"],
 		cancer: ["Morgana", "Quinn", "Shaco", "Teemo", "Vladimir", "Yasuo", "Yone", "Yuumi",],
 		cat:["Rengar", "Yuumi"],
+		dog:["Nasus", "Warwick"],
+		dragon: ["Aurelion_So", "Shyvana"],
 		fish:["Fizz", "Nami"],
+		legs:["Camille", "Urgot"],
+		mute:["Aphelios", "Sona"],
+		shadow:["Vex", "Zed"],
 		tree:["Ivern", "Maokai"],
 	};
 
