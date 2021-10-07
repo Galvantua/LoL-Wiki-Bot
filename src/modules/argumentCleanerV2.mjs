@@ -76,7 +76,7 @@ export async function nameAbilityTEST(args) {
 		mute:["Aphelios", "Sona"],
 		shadow:["Vex", "Zed"],
 		tree:["Ivern", "Maokai"],
-	};
+	};  //arrays of champs that will be randomized
 
 	//regex and return taken from eramsorgr. I'm too lazy to type those
 	let championAbility = args[args.length - 1].toLowerCase();
