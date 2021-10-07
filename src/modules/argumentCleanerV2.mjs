@@ -60,16 +60,13 @@ export async function nameAbilityTEST(args) {
 		tutorial: "Master_Yi",
 	}; //list of exceptions
 
-	let cancer = [
-		"Morgana",
-		"Quinn",
-		"Shaco",
-		"Teemo",
-		"Vladimir",
-		"Yasuo",
-		"Yone",
-		"Yuumi",
-	]; //list of cancer champs 
+	let randomList = {
+		bird: ["Anivia", "Quinn", "Rakan", "Xayah"],
+		cancer: ["Morgana", "Quinn", "Shaco", "Teemo", "Vladimir", "Yasuo", "Yone", "Yuumi",],
+		cat:["Rengar", "Yuumi"],
+		fish:["Fizz", "Nami"],
+		tree:["Ivern", "Maokai"],
+	};
 
 	//regex and return taken from eramsorgr. I'm too lazy to type those
 	let championAbility = args[args.length - 1].toLowerCase();
@@ -98,8 +95,8 @@ export async function nameAbilityTEST(args) {
 	if (excList.hasOwnProperty(nameCheck)) {
 		championName = excList[nameCheck];
 	} //check the exception list
-	else if (nameCheck == "cancer") {
-		championName = cancer[Math.floor(Math.random() * cancer.length)]
+	else if (randomList.hasOwnProperty(nameCheck)) {
+		championName = randomList[nameCheck][Math.floor(Math.random() * randomList[nameCheck].length)]
 	} //check if cancer
 
 	//console.log(championName);
