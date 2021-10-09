@@ -29,35 +29,41 @@ export async function run(bot, core, message, args) {
 		await message.channel.send({ embeds: [embed] });
 		return "error";
 	}
-	if (
-		abilityAndName[1].toLowerCase() === "p" ||
-		abilityAndName[1].toLowerCase() === "passive"
-	) {
-		abilityCode = "innate";
-		abilityLetter = "I";
-		abilityNumber = 0;
-	} else {
-		abilityAndName[1].toLowerCase();
-		if (abilityAndName[1].toLowerCase() === "q") {
+
+	//assign value to vars according to the ability selected.
+	//add .toLowercase() back in if this doesn't work
+	switch(abilityAndName[1]){
+		case "p":
+		case "passive":
+			abilityCode = "innate";
+			abilityLetter = "I";
+			abilityNumber = 0;
+			break;
+		case "q":
 			abilityLetter = "Q";
 			abilityCode = "q";
 			abilityNumber = 1;
-		} else if (abilityAndName[1].toLowerCase() === "w") {
+			break;
+		case "w":
 			abilityCode = "w";
 			abilityLetter = "W";
 			abilityNumber = 2;
-		} else if (abilityAndName[1].toLowerCase() === "e") {
+			break;
+		case "e":
 			abilityCode = "e";
 			abilityLetter = "E";
 			abilityNumber = 3;
-		} else if (abilityAndName[1].toLowerCase() === "r") {
+			break;
+		case "r":
 			abilityCode = "r";
 			abilityLetter = "R";
 			abilityNumber = 4;
-		} else {
+			break;
+		default:
 			//error for invalid ability
-		}
+			break;
 	}
+
 
 	const url = `https://leagueoflegends.fandom.com/api.php?action=parse&text={{Grouped%20ability|${abilityAndName[0]}|${abilityLetter}}}&contentmodel=wikitext&format=json`;
 	const request = await fetch(
