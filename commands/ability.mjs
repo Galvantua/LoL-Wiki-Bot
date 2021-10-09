@@ -111,15 +111,9 @@ export async function run(bot, core, message, args) {
 	let abilityHeaders = document
 		.getElementsByClassName(`skill_${abilityCode}`)[0]
 		.getElementsByClassName("champion-ability__header");
-	if (abilityHeaders.length > 1) {
-		if (
-			abilityHeaders[0].getElementsByClassName("mw-headline")[0]
-				.textContent ===
-			abilityHeaders[1].getElementsByClassName("mw-headline")[0]
-				.textContent
-		) {
+	if (abilityHeaders.length > 1 && 
+		abilityHeaders[0].getElementsByClassName("mw-headline")[0].textContent === abilityHeaders[1].getElementsByClassName("mw-headline")[0].textContent) {
 			abilityHeaders.pop();
-		}
 	}
 	for (let i = 0; i < abilityHeaders.length; i++) {
 		const element = abilityHeaders[i];
