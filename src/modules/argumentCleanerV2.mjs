@@ -66,11 +66,11 @@ export async function nameAbilityTEST(args) {
 
 	let randomList = {
 		beyblade:["Garen", "Katarina", "Tryndamer"],
-		bird: ["Anivia", "Quinn", "Rakan", "Xayah"],
+		bird: ["Anivia", "Azir", "Quinn", "Rakan", "Xayah"],
 		cancer: ["Morgana", "Quinn", "Shaco", "Teemo", "Vladimir", "Yasuo", "Yone", "Yuumi",],
 		cat:["Rengar", "Yuumi"],
 		dog:["Nasus", "Warwick"],
-		dragon: ["Aurelion_So", "Shyvana"],
+		dragon: ["Aurelion_Sol", "Shyvana"],
 		fish:["Fizz", "Nami"],
 		legs:["Camille", "Urgot"],
 		mute:["Aphelios", "Sona"],
