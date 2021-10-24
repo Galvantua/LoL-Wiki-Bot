@@ -32,7 +32,7 @@ export async function run(bot, core, message, args) {
 
 	//assign value to vars according to the ability selected.
 	//add .toLowercase() back in if this doesn't work
-	switch(abilityAndName[1]){
+	switch (abilityAndName[1]) {
 		case "p":
 		case "passive":
 			abilityCode = "innate";
@@ -63,7 +63,6 @@ export async function run(bot, core, message, args) {
 			//error for invalid ability
 			break;
 	}
-
 
 	const url = `https://leagueoflegends.fandom.com/api.php?action=parse&text={{Grouped%20ability|${abilityAndName[0]}|${abilityLetter}}}&contentmodel=wikitext&format=json`;
 	const request = await fetch(
@@ -111,15 +110,24 @@ export async function run(bot, core, message, args) {
 	let abilityHeaders = document
 		.getElementsByClassName(`skill_${abilityCode}`)[0]
 		.getElementsByClassName("champion-ability__header");
-	if (abilityHeaders.length > 1 && 
-		abilityHeaders[0].getElementsByClassName("mw-headline")[0].textContent === abilityHeaders[1].getElementsByClassName("mw-headline")[0].textContent) {
-				abilityHeaders = abilityHeaders[0];
+	if (
+		abilityHeaders.length > 1 &&
+		abilityHeaders[0].getElementsByClassName("mw-headline")[0]
+			.textContent ===
+			abilityHeaders[1].getElementsByClassName("mw-headline")[0]
+				.textContent
+	) {
+		//console.log(abilityHeaders);
+		abilityHeaders[0].remove();
+		//console.log(abilityHeaders.length);
 	}
 	for (let i = 0; i < abilityHeaders.length; i++) {
 		const element = abilityHeaders[i];
+		//console.log(element);
 		//console.log(i);
 		const abilityName =
 			element.getElementsByClassName("mw-headline")[0].textContent;
+		//console.log(abilityName);
 		embed.setTitle(`**${abilityName}**`);
 		let abilitySection = element.getElementsByTagName("aside")[0];
 		if (abilitySection) {
@@ -129,6 +137,7 @@ export async function run(bot, core, message, args) {
 				);
 				if (element) {
 					const elementText = element.textContent.split(":");
+					//console.log(elementText[0] + " " + elementText[1]);
 					embed.addField(
 						`${elementText[0]}`,
 						`**${elementText[1]}**`
@@ -146,6 +155,7 @@ export async function run(bot, core, message, args) {
 				for (let i = 0; i < subTableHeaders.length; i++) {
 					const header = subTableHeaders[i].textContent;
 					const data = subTableData[i].textContent;
+					//console.log(header + " " + data);
 					embed.addField(`${header}`, `${data}`);
 				}
 			}
