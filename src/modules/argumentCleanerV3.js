@@ -40,6 +40,7 @@ tests.nameAbilityTEST = function (input) {
 		morde: "Mordekaiser",
 		morg: "Morgana",
 		mundo: "Dr._Mundo",
+		nid: "Nidalee",
 		drmundo: "Dr._Mundo",
 		willump: "Nunu",
 		nunuwillump: "Nunu",
