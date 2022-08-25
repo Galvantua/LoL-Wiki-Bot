@@ -1,6 +1,6 @@
 const tests = function () {};
 
-tests.nameAbilityTEST = function (input) {
+tests.nameAbilityTEST = async function (input) {
 	let excList = {
 		aph: "Aphelios",
 		asol: "Aurelion_Sol",

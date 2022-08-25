@@ -45,7 +45,6 @@ handler.apheliosHandler = async function (abilityLetter) {
 
 		let abilityHeader =
 			ability.getElementsByClassName("mw-headline")[0].textContent;
-		console.log(abilityHeader + "\n");
 
 		embed.setTitle(`**${abilityHeader}**`);
 		let abilityStats = ability.getElementsByTagName("aside")[0];
@@ -79,7 +78,7 @@ handler.apheliosHandler = async function (abilityLetter) {
 				for (let i = 0; i < subTableHeaders.length; i++) {
 					const header = subTableHeaders[i].textContent;
 					const data = subTableData[i].textContent;
-					//console.log(header + " " + data);
+
 					embed.addFields({
 						name: `${header.trim()}`,
 						value: `${data.trim()}`,
@@ -94,7 +93,7 @@ handler.apheliosHandler = async function (abilityLetter) {
 		for (let i = 0; i < abilityDetails.length; i++) {
 			const detail = abilityDetails[i];
 			detailText = detail.textContent;
-			// console.log(detailText);
+
 			if (detailText) {
 				embed.addFields({
 					name: `​`,
@@ -110,10 +109,6 @@ handler.apheliosHandler = async function (abilityLetter) {
 
 		embed.setThumbnail(abilityImage);
 		myEmbeds.push(embed);
-
-		for (const embed of myEmbeds) {
-			console.log(embed);
-		}
 	}
 	return myEmbeds;
 };
