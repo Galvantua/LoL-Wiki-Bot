@@ -2,8 +2,8 @@ const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 const fetch = require("node-fetch");
-const tests = require("../src/modules/argumentCleanerV3");
-const handlers = require("../src/modules/apheliosHandler");
+const tests = require("../src/modules/tests");
+const handlers = require("../src/modules/handlers");
 
 module.exports = {
 	data: new SlashCommandBuilder()
