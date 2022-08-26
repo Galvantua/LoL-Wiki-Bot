@@ -231,7 +231,7 @@ tests.nameChampionTEST = async function (input) {
 				Math.floor(Math.random() * randomList[nameCheck].length)
 			];
 	} //check if cancer
-	console.log(championName);
+	//console.log(championName);
 
 	//console.log(championName);
 	//console.log(championAbility);

@@ -105,7 +105,13 @@ module.exports = {
 
 		//process response to get workable dom object
 		const body = await request.text();
-		const bodyJSON = JSON.parse(body);
+
+		try {
+			const bodyJSON = JSON.parse(body);
+		} catch (error) {
+			interaction.editReply("**Please choose a valid Champion Name**");
+			return;
+		}
 		const dom = new JSDOM(bodyJSON.parse.text["*"], {
 			contentType: "text/html",
 		});

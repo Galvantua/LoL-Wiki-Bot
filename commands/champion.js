@@ -27,10 +27,11 @@ module.exports = {
 					{ name: "Armor", value: "4" },
 					{ name: "Magic Resist", value: "5" },
 					{ name: "Attack Damage", value: "6" },
-					{ name: "Attack Range", value: "7" },
+					{ name: "Bonus Attack Speed", value: "7" },
 					{ name: "Attack Speed", value: "8" },
 					{ name: "Attack Speed Ratio", value: "9" },
-					{ name: "Move Speed", value: "10" },
+					{ name: "Attack Range", value: "10" },
+					{ name: "Move Speed", value: "11" },
 					{ name: "All", value: "all" }
 				)
 		)
@@ -64,7 +65,8 @@ module.exports = {
 	async execute(interaction) {
 		await interaction.deferReply();
 		let champion = interaction.options.getString("champion");
-		let championName = await tests.nameAbilityTEST(champion);
+		let displayName = await tests.nameAbilityTEST(champion);
+		let championName = await tests.nameChampionTEST(champion);
 		let stat = interaction.options.getString("stat");
 		let level = interaction.options.getString("level");
 
@@ -76,13 +78,21 @@ module.exports = {
 		const request = await fetch(
 			`https://cdn.merakianalytics.com/riot/lol/resources/latest/en-US/champions/${championName}.json`
 		).catch((err) => {
-			console.log("err");
+			interaction.editReply("Please choose a valid Champion name");
+			return;
 		});
 		const body = await request.text();
-		const bodyJSON = JSON.parse(body);
+
+		try {
+			const bodyJSON = JSON.parse(body);
+		} catch (error) {
+			console.log(error);
+			interaction.editReply("**Please choose a valid Champion name**");
+			return;
+		}
 		const stats = bodyJSON.stats;
 
-		embed.setTitle(championName).setThumbnail(bodyJSON["icon"]);
+		embed.setTitle(displayName).setThumbnail(bodyJSON["icon"]);
 
 		let statNames = [
 			"Health",
@@ -107,8 +117,8 @@ module.exports = {
 			stats.magicResistance["flat"],
 			stats.attackDamage["flat"],
 			0,
-			stats.attackSpeed["flat"].toString(),
-			stats.attackSpeedRatio["flat"].toString(),
+			stats.attackSpeed["flat"],
+			stats.attackSpeedRatio["flat"],
 			stats.attackRange["flat"].toString(),
 			stats.movespeed["flat"].toString(),
 		];
@@ -123,7 +133,12 @@ module.exports = {
 			stats.attackDamage["perLevel"],
 			stats.attackSpeed["perLevel"],
 		];
-
+		flatStats[8] = (
+			Math.round((flatStats[8] + Number.EPSILON) * 1000) / 1000
+		).toString();
+		flatStats[9] = (
+			Math.round((flatStats[9] + Number.EPSILON) * 1000) / 1000
+		).toString();
 		if (level != "n") {
 			for (let i = 0; i < growthStats.length; i++) {
 				const growth = growthStats[i];
@@ -132,7 +147,11 @@ module.exports = {
 					growth * (level - 1) * (0.7025 + 0.0175 * (level - 1));
 				flatStats[i] =
 					Math.round((flatStats[i] + Number.EPSILON) * 100) / 100;
+
 				flatStats[i] = flatStats[i].toString();
+				if (i == 7) {
+					flatStats[i] = flatStats[i] + "%";
+				}
 			}
 		} else {
 			for (let i = 0; i < growthStats.length; i++) {
@@ -140,6 +159,10 @@ module.exports = {
 					flatStats[i].toString() + " + " + growthStats[i].toString();
 			}
 		}
+		embed.addFields({
+			name: "Level",
+			value: level,
+		});
 		if (stat != "all") {
 			// console.log(statNames);
 			// console.log(flatStats);
