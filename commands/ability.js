@@ -119,6 +119,15 @@ module.exports = {
 		abilitySub = abilityMain.getElementsByClassName(
 			"ability-info-container"
 		);
+		if (
+			abilitySub.length > 1 &&
+			abilitySub[0].getElementsByClassName("mw-headline")[0]
+				.textContent ==
+				abilitySub[1].getElementsByClassName("mw-headline")[0]
+					.textContent
+		) {
+			abilitySub[1].parentNode.removeChild(abilitySub[1]);
+		}
 
 		for (let i = 0; i < abilitySub.length; i++) {
 			const embed = new EmbedBuilder();
