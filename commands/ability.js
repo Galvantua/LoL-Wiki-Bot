@@ -105,9 +105,9 @@ module.exports = {
 
 		//process response to get workable dom object
 		const body = await request.text();
-
+		let bodyJSON;
 		try {
-			const bodyJSON = JSON.parse(body);
+			bodyJSON = JSON.parse(body);
 		} catch (error) {
 			interaction.editReply("**Please choose a valid Champion Name**");
 			return;

@@ -82,9 +82,9 @@ module.exports = {
 			return;
 		});
 		const body = await request.text();
-
+		let bodyJSON;
 		try {
-			const bodyJSON = JSON.parse(body);
+			bodyJSON = JSON.parse(body);
 		} catch (error) {
 			console.log(error);
 			interaction.editReply("**Please choose a valid Champion name**");
