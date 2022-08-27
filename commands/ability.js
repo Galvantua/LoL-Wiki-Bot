@@ -262,6 +262,12 @@ module.exports = {
 			myEmbeds.push(embed);
 		}
 
-		await interaction.editReply({ embeds: myEmbeds });
+		try {
+			await interaction.editReply({ embeds: myEmbeds });
+		} catch (error) {
+			await interaction.editReply(
+				"**Please select a valid champion/ability pair**"
+			);
+		}
 	},
 };
