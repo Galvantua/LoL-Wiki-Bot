@@ -1,9 +1,17 @@
-const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
+const {
+	ActionRowBuilder,
+	ButtonBuilder,
+	ButtonStyle,
+	SlashCommandBuilder,
+	EmbedBuilder,
+	Collection,
+} = require("discord.js");
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 const fetch = require("node-fetch");
 const tests = require("../src/modules/tests");
 const handlers = require("../src/modules/handlers");
+const wait = require("node:timers/promises").setTimeout;
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -29,9 +37,8 @@ module.exports = {
 				)
 		),
 
-	async execute(interaction) {
+	async execute(interaction, channel) {
 		//defer to give time for slow api calls
-		await interaction.deferReply();
 
 		//parse options from command
 		let champion = interaction.options.getString("champion");
@@ -92,11 +99,61 @@ module.exports = {
 			championName == "Aphelios" &&
 			(abilityLetter == "I" || abilityLetter == "Q")
 		) {
+			const components = await handlers.apheliosHandler(
+				abilityLetter,
+				interaction
+			);
+
+			let tempButtons = [];
+
+			for (i = 0; i < components.buttons.length; i++) {
+				tempButtons[i] = components.buttons[i];
+			}
+			tempButtons.splice(0, 1);
+
+			let row = new ActionRowBuilder().addComponents(tempButtons);
+
 			await interaction.editReply({
-				embeds: await handlers.apheliosHandler(abilityLetter),
+				embeds: [components.embeds[0]],
+				components: [row],
+			});
+
+			const filter = (btnInt) => {
+				return interaction.user.id === btnInt.user.id;
+			};
+
+			const collector = channel.createMessageComponentCollector({
+				filter,
+				time: 15000,
+			});
+
+			collector.on("collect", async (i) => {
+				await i.deferUpdate();
+				console.log(parseInt(i.customId));
+				let intId = parseInt(i.customId);
+				console.log(i.user.id, typeof i.customId);
+				tempButtons = [];
+				for (i = 0; i < components.buttons.length; i++) {
+					tempButtons[i] = components.buttons[i];
+				}
+				tempButtons.splice(intId, 1);
+				row = new ActionRowBuilder().addComponents(tempButtons);
+				console.log(components.embeds[intId]);
+				let finalEmbeds = components.embeds[intId];
+				await interaction.editReply({
+					embeds: [finalEmbeds],
+					components: [row],
+				});
+			});
+
+			collector.on("end", async (collection) => {
+				await interaction.editReply({
+					components: [],
+				});
 			});
 			return;
 		}
+		await interaction.deferReply();
 		//send request to wiki based on champ and ability
 		const url = `https://leagueoflegends.fandom.com/api.php?action=parse&text={{Grouped%20ability|${championName}|${abilityLetter}}}&contentmodel=wikitext&format=json`;
 		const request = await fetch(url).catch((err) => {
@@ -205,6 +262,12 @@ module.exports = {
 			myEmbeds.push(embed);
 		}
 
-		await interaction.editReply({ embeds: myEmbeds });
+		try {
+			await interaction.editReply({ embeds: myEmbeds });
+		} catch (error) {
+			await interaction.editReply(
+				"**Please select a valid champion/ability pair**"
+			);
+		}
 	},
 };
