@@ -64,7 +64,7 @@ module.exports = {
 		await interaction.deferReply();
 		let champion = interaction.options.getString("champion");
 		let displayName = await tests.nameAbilityTEST(champion);
-		let championName = await tests.nameChampionTEST(champion);
+		let championName = await tests.nameChampionTEST(displayName);
 		let stat = interaction.options.getString("stat");
 		let level = interaction.options.getString("level");
 
