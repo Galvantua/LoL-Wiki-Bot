@@ -8,7 +8,6 @@ const { JSDOM } = jsdom;
 const fetch = require("node-fetch");
 const tests = require("../src/modules/tests");
 const handlers = require("../src/modules/handlers");
-const wait = require("node:timers/promises").setTimeout;
 
 module.exports = {
 	data: new SlashCommandBuilder()
