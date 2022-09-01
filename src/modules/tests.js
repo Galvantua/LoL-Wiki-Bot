@@ -1,6 +1,8 @@
 const tests = function () {};
+const Fuse = require("fuse.js");
+const fetch = require("node-fetch");
 
-tests.nameAbilityTEST = async function (input) {
+tests.nameAbilityTEST = async function (input, interaction) {
 	let excList = {
 		aph: "Aphelios",
 		asol: "Aurelion_Sol",
@@ -112,14 +114,41 @@ tests.nameAbilityTEST = async function (input) {
 				Math.floor(Math.random() * randomList[nameCheck].length)
 			];
 	} //check if cancer
-	console.log(championName);
-
 	//console.log(championName);
-	//console.log(championAbility);
-	//args = [championName, championAbility];
-	return championName; // need to rewrite to spit out array
+
+	const champReq = await fetch(
+		`https://cdn.merakianalytics.com/riot/lol/resources/latest/en-US/champions.json`
+	).catch((err) => {
+		interaction.editReply("Error getting champion names");
+		return;
+	});
+	const champBody = await champReq.text();
+	let bodyJSON;
+	try {
+		bodyJSON = JSON.parse(champBody);
+	} catch (error) {
+		console.log(error);
+		interaction.editReply("**Error getting champion names**");
+		return;
+	}
+
+	const champs = [];
+	for (const champ in bodyJSON) {
+		if (Object.hasOwnProperty.call(bodyJSON, champ)) {
+			champs.push(champ);
+		}
+	}
+
+	const fuse = new Fuse(champs);
+	const result = fuse.search(championName);
+
+	const final = bodyJSON[result[0].item].name;
+	console.log(final);
+	//console.log(result[0]);
+
+	return final; // need to rewrite to spit out array
 };
-tests.nameChampionTEST = async function (input) {
+tests.nameChampionTEST = async function (input, interaction) {
 	let excList = {
 		aph: "Aphelios",
 		asol: "Aurelion_Sol",
@@ -230,13 +259,36 @@ tests.nameChampionTEST = async function (input) {
 			randomList[nameCheck][
 				Math.floor(Math.random() * randomList[nameCheck].length)
 			];
-	} //check if cancer
-	//console.log(championName);
+	}
 
-	//console.log(championName);
-	//console.log(championAbility);
-	//args = [championName, championAbility];
-	return championName; // need to rewrite to spit out array
+	const champReq = await fetch(
+		`https://cdn.merakianalytics.com/riot/lol/resources/latest/en-US/champions.json`
+	).catch((err) => {
+		interaction.editReply("Error getting champion names");
+		return;
+	});
+	const champBody = await champReq.text();
+	let bodyJSON;
+	try {
+		bodyJSON = JSON.parse(champBody);
+	} catch (error) {
+		console.log(error);
+		interaction.editReply("**Error getting champion names**");
+		return;
+	}
+
+	const champs = [];
+	for (const champ in bodyJSON) {
+		if (Object.hasOwnProperty.call(bodyJSON, champ)) {
+			champs.push(champ);
+		}
+	}
+
+	const fuse = new Fuse(champs);
+	const result = fuse.search(championName);
+	//console.log(result[0].item);
+
+	return result[0].item; // need to rewrite to spit out array
 };
 //export default helpers;
 module.exports = tests;

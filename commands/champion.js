@@ -62,9 +62,13 @@ module.exports = {
 		),
 	async execute(interaction) {
 		await interaction.deferReply();
+
 		let champion = interaction.options.getString("champion");
-		let displayName = await tests.nameAbilityTEST(champion);
-		let championName = await tests.nameChampionTEST(displayName);
+		let displayName = await tests.nameAbilityTEST(champion, interaction);
+		let championName = await tests.nameChampionTEST(
+			displayName,
+			interaction
+		);
 		let stat = interaction.options.getString("stat");
 		let level = interaction.options.getString("level");
 
@@ -80,7 +84,7 @@ module.exports = {
 			return;
 		});
 		const body = await request.text();
-		let bodyJSON;
+		bodyJSON = "";
 		try {
 			bodyJSON = JSON.parse(body);
 		} catch (error) {

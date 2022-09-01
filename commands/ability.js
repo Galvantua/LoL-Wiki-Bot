@@ -1,10 +1,7 @@
 const {
 	ActionRowBuilder,
-	ButtonBuilder,
-	ButtonStyle,
 	SlashCommandBuilder,
 	EmbedBuilder,
-	Collection,
 } = require("discord.js");
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
@@ -42,7 +39,7 @@ module.exports = {
 
 		//parse options from command
 		let champion = interaction.options.getString("champion");
-		let championName = await tests.nameAbilityTEST(champion);
+		let championName = await tests.nameAbilityTEST(champion, interaction);
 		let ability = interaction.options.getString("ability");
 		let abilityProperties = [
 			"cast time",
