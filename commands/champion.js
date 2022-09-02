@@ -109,6 +109,7 @@ module.exports = {
 			"Attack Speed Ratio",
 			"Attack Range",
 			"Move Speed",
+			"Recharge",
 		];
 		let flatStats = [
 			stats.health["flat"],
