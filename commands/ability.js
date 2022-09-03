@@ -49,6 +49,8 @@ module.exports = {
 			"speed",
 			"effect radius",
 			"width",
+			"recharge",
+			"collision radius",
 		];
 		let myEmbeds = [];
 		let document,
