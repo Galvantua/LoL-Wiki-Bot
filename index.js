@@ -22,10 +22,10 @@ for (const file of commandFiles) {
 	client.commands.set(command.data.name, command);
 }
 // When the client is ready, run this code (only once)
-client.once("ready", () => {
+client.once("ready", async () => {
 	console.log("Ready!");
-	client.user.setPresence({
-		activities: [{ name: "Theorycrafting!", type: `PLAYING` }],
+	await client.user.setPresence({
+		activities: [{ name: "Theorycrafting!", type: 0 }],
 		status: "online",
 	});
 });
