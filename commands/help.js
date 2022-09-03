@@ -45,6 +45,10 @@ module.exports = {
 				);
 				break;
 		}
+		embed.addFields({
+			name: `​`,
+			value: "If you have a bug or feature request, go to https://discord.gg/XxXTpdDphN",
+		});
 		await interaction.reply({ embeds: [embed] });
 	},
 };
