@@ -3,7 +3,6 @@ const fs = require("node:fs");
 const path = require("node:path");
 const { Client, Collection, GatewayIntentBits } = require("discord.js");
 const { token } = require("./config.json");
-const handler = require("./src/modules/handlers");
 
 // Create a new client instance
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
@@ -25,6 +24,10 @@ for (const file of commandFiles) {
 // When the client is ready, run this code (only once)
 client.once("ready", () => {
 	console.log("Ready!");
+	client.user.setPresence({
+		activities: [{ name: "Theorycrafting!", type: `PLAYING` }],
+		status: "online",
+	});
 });
 
 client.on("interactionCreate", async (interaction) => {
