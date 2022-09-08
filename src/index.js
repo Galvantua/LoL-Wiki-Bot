@@ -2,8 +2,8 @@
 const fs = require("node:fs");
 const path = require("node:path");
 const { Client, Collection, GatewayIntentBits } = require("discord.js");
-const { token } = require("./config.json");
-const handler = require("./src/modules/handlers");
+const { token } = require("../config.json");
+const handler = require("./modules/handlers");
 
 // Create a new client instance
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
@@ -22,9 +22,10 @@ for (const file of commandFiles) {
 	// With the key as the command name and the value as the exported module
 	client.commands.set(command.data.name, command);
 }
-// When the client is ready, run this code (only once)
-client.once("ready", () => {
-	console.log("Ready!");
+
+//Bot ready event 
+client.on("ready", () => {
+	console.log(`Logged in as '${client.user.tag}'!`);
 });
 
 client.on("interactionCreate", async (interaction) => {
@@ -45,5 +46,5 @@ client.on("interactionCreate", async (interaction) => {
 	}
 });
 
-// Login to Discord with your client's token
+//Login to Discord
 client.login(token);
