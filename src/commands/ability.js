@@ -6,8 +6,8 @@ const {
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 const fetch = require("node-fetch");
-const tests = require("../src/modules/tests");
-const handlers = require("../src/modules/handlers");
+const tests = require("../modules/tests");
+const handlers = require("../modules/handlers");
 
 module.exports = {
 	data: new SlashCommandBuilder()
