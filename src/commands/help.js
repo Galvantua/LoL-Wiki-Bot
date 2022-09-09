@@ -1,23 +1,27 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 
 module.exports = {
+
 	data: new SlashCommandBuilder()
 		.setName("help")
 		.setDescription("Gives info on commands")
-		.addStringOption((option) =>
-			option
-				.setName("command")
-				.setDescription("Command Name")
-				.setRequired(false)
-				.addChoices(
-					{ name: "Ability", value: "ability" },
-					{ name: "Champion", value: "champion" }
-				)
+		.addStringOption((option) => option
+			.setName("command")
+			.setDescription("Command Name")
+			.setRequired(false)
+			.addChoices(
+				{ name: "Ability", value: "ability" },
+				{ name: "Champion", value: "champion" }
+			)
 		),
+
 	async execute(interaction) {
+
 		let command = interaction.options.getString("command");
 		let embed = new EmbedBuilder();
+
 		switch (command) {
+
 			case "ability":
 				embed
 					.setTitle("Ability")
@@ -25,6 +29,7 @@ module.exports = {
 						"Queries an Ability based on Champion name and Ability slot."
 					);
 				break;
+
 			case "champion":
 				embed
 					.setTitle("Champion")
@@ -32,6 +37,7 @@ module.exports = {
 						"Queries Champion stats based on Champion name, Stat name, and level. Level 'n' displays the base value and the growth value."
 					);
 				break;
+
 			default:
 				embed.setTitle("Help").addFields(
 					{
@@ -43,8 +49,12 @@ module.exports = {
 						value: "Queries Champion stats based on Champion name, Stat name, and level. Level 'n' displays the base value and the growth value.",
 					}
 				);
+
 				break;
 		}
+
 		await interaction.reply({ embeds: [embed] });
+
 	},
+	
 };
