@@ -1,20 +1,20 @@
-const { ActionRowBuilder, SlashCommandBuilder, EmbedBuilder } = require("discord.js");
-const jsdom = require("jsdom");
+import { ActionRowBuilder, SlashCommandBuilder, EmbedBuilder } from "discord.js";
+import fetch from "node-fetch";
+import jsdom from "jsdom";
+import tests from "../modules/tests.js";
+import handlers from "../modules/handlers.js";
 const { JSDOM } = jsdom;
-const fetch = require("node-fetch");
-const tests = require("../modules/tests");
-const handlers = require("../modules/handlers");
 
-module.exports = {
+export const information = {
+	name: "champion",
+	description: "Gets a champion info from the wiki",
+};
 
-	information: {
-		name: "ability",
-		description: "Gets an ability info from the wiki",
-	},
+export default {
 
 	data: new SlashCommandBuilder()
-		.setName(`${this.information.name}`)
-		.setDescription(`${this.information.name}`)
+		.setName(`${information.name}`)
+		.setDescription(`${information.name}`)
 
 		.addStringOption((option) => option
 			.setName("champion")
