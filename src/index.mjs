@@ -1,5 +1,5 @@
 import fs from 'node:fs';
-import { Client, Collection, GatewayIntentBits } from "discord.js";
+import { Client, GatewayIntentBits, EmbedBuilder } from "discord.js";
 import { REST } from "@discordjs/rest";
 import { Routes } from "discord-api-types/v9";
 import config from "../config.json" assert {type: "json"};
@@ -134,7 +134,8 @@ client.on("interactionCreate", async (interaction) => {
 		} catch (error) {
 
 			console.log(`[⚠️] Error executing command '${interaction.commandName}'`);
-			console.log({
+			
+			const interactionInformation = {
 				guild: {
 					id: interaction.guild.id,
 					name: interaction.guild.name,
@@ -152,12 +153,20 @@ client.on("interactionCreate", async (interaction) => {
 					name: interaction.commandName,
 					options: interaction.options,
 				},
-			})
+			};
+			console.log(interactionInformation);
+
 			console.error(error);
-			await interaction.reply({
-				content: "There was an error while executing this command!",
-				ephemeral: true,
-			});
+
+			//Embed 
+			const embed = new EmbedBuilder();
+			embed.setColor('#ff0000');
+			embed.setTitle('❌ Error during command execution');
+			embed.setDescription(`An error occured while executing the command '${interaction.commandName}'.`);
+			embed.setFooter({ text: 'Our team has been notified of this error. Still having issues? Contact us! Check /help for more info.'});
+			
+			//Send embed
+			await interaction.reply({ embeds: [embed], ephemeral: true });
 
 		};
 
