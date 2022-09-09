@@ -127,8 +127,6 @@ client.on("interactionCreate", async (interaction) => {
 
 			if (!command) return;
 
-			console.log(command)
-
 			await command.execute(interaction, interaction.channel);
 
 		} catch (error) {
