@@ -12,7 +12,7 @@ const handlers = require("../modules/handlers");
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("ability")
-		.setDescription("gets ability info from the LoL wiki")
+		.setDescription("Gets an ability info from the wiki")
 		.addStringOption((option) =>
 			option
 				.setName("champion")
@@ -22,7 +22,7 @@ module.exports = {
 		.addStringOption((option) =>
 			option
 				.setName("ability")
-				.setDescription("Ability Code")
+				.setDescription("Which ability to fetch info for?")
 				.setRequired(true)
 				.addChoices(
 					{ name: "Passive", value: "innate" },
