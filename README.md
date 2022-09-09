@@ -20,7 +20,7 @@ This project is licensed under the ISC License - see the [LICENSE](LICENSE) file
 
 ⚠️ Starting version 1.0.0, you will need to use the src/index.js file to run the bot. ⚠️
 
-To build and run the bot, you will need to have [Node.js](https://nodejs.org/en/) installed.
+To build and run the bot, you will need to have [Node.js](https://nodejs.org/en/) installed. Supported version: v18.9.0
 
 1. Clone the repository
 2. Run `npm install` to install the dependencies
