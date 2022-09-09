@@ -21,7 +21,7 @@ async function loadSlashCommands() {
 	for (const file of commandFiles) {
 
 		const command = await import(`./commands/${file}`);
-		client.slashCommands.push(command.information);
+		client.slashCommands.push(command.default.data.toJSON());
 
 	};
 
@@ -29,7 +29,7 @@ async function loadSlashCommands() {
 
 	return;
 
-}
+};
 
 async function registerSlashCommands() {
 
@@ -82,7 +82,8 @@ async function registerSlashCommands() {
 		console.error(err);
 		process.exit(1);
 
-	}
+	};
+
 };
 
 //Bot ready event 
@@ -113,8 +114,6 @@ client.on("interactionCreate", async (interaction) => {
 });
 
 //App clilogs
-console.log(process.env.NODE_ENV) 
-console.log(process.env.NODE_ENV === "dev")
 if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'dev') throw new Error('NODE_ENV is not set to "dev" or "production"');
 console.log(`--------------------------------------------`);
 console.log(`|                                          |`)
