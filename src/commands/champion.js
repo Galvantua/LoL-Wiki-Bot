@@ -4,14 +4,21 @@ const tests = require("../modules/tests");
 
 module.exports = {
 
+	information: {
+		name: "champion",
+		description: "Gets a champion info from the wiki",
+	},
+
 	data: new SlashCommandBuilder()
-		.setName("champion")
-		.setDescription("gets champion stats from the LoL wiki")
+		.setName(`${this.information.name}`)
+		.setDescription(`${this.information.name}`)
+
 		.addStringOption((option) => option
 			.setName("champion")
 			.setDescription("Champions Name")
 			.setRequired(true)
 		)
+
 		.addStringOption((option) => option
 			.setName("stat")
 			.setDescription("Statistic Wanted")
@@ -32,6 +39,7 @@ module.exports = {
 				{ name: "All", value: "all" }
 			)
 		)
+		
 		.addStringOption((option) => option
 			.setName("level")
 			.setDescription("Champion Level")
@@ -205,5 +213,5 @@ module.exports = {
 		//await interaction.reply("done");
 
 	},
-	
+
 };

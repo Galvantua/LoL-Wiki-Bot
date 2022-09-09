@@ -7,14 +7,21 @@ const handlers = require("../modules/handlers");
 
 module.exports = {
 
+	information: {
+		name: "ability",
+		description: "Gets an ability info from the wiki",
+	},
+
 	data: new SlashCommandBuilder()
-		.setName("ability")
-		.setDescription("Gets an ability info from the wiki")
+		.setName(`${this.information.name}`)
+		.setDescription(`${this.information.name}`)
+		
 		.addStringOption((option) => option
 			.setName("champion")
 			.setDescription("Champions Name")
 			.setRequired(true)
 		)
+
 		.addStringOption((option) => option
 			.setName("ability")
 			.setDescription("Which ability to fetch info for?")

@@ -2,9 +2,15 @@ const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 
 module.exports = {
 
+	information: {
+		name: "help",
+		description: "Shows you all the commands",
+	},
+
 	data: new SlashCommandBuilder()
-		.setName("help")
-		.setDescription("Gives info on commands")
+		.setName(`${this.information.name}`)
+		.setDescription(`${this.information.name}`)
+
 		.addStringOption((option) => option
 			.setName("command")
 			.setDescription("Command Name")
@@ -56,5 +62,5 @@ module.exports = {
 		await interaction.reply({ embeds: [embed] });
 
 	},
-	
+
 };
