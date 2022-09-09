@@ -25,4 +25,4 @@ To build and run the bot, you will need to have [Node.js](https://nodejs.org/en/
 1. Clone the repository
 2. Run `npm install` to install the dependencies
 3. Fill out the `config.json` file as indicated from the example file (`config.example.json`)
-4. Run `npm run sart:dev` to start the bot in development mode (verbose logs) or `npm run start` to start the bot in production mode (no logs)
+4. Run `npm run start:dev` to start the bot in development mode (verbose logs) or `npm run start` to start the bot in production mode (no logs)
