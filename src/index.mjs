@@ -176,13 +176,17 @@ client.on("interactionCreate", async (interaction) => {
 
 //App clilogs
 if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'dev') throw new Error('NODE_ENV is not set to "dev" or "production"');
-console.log(`--------------------------------------------`);
-console.log(`|                                          |`)
-console.log(`|                                          |`)
-console.log(`|              LoL Wiki Bot                |`)
-console.log(`|                                          |`)
-console.log(`|                                          |`)
-console.log(`--------------------------------------------`);
+console.log(`------------------------------------------------------`);
+console.log(`|                                                    |`);
+console.log(`|                                                    |`);
+console.log(`|                   LoL Wiki Bot                     |`);
+console.log(`|                                                    |`);
+console.log(`|                                                    |`);
+console.log(`------------------------------------------------------`);
+console.log(``);
+console.log(`Starting Lol Wiki bot running version ${process.version} in ${process.env.NODE_ENV} mode.`);
+console.log(``);
+console.log(`==================================================================`);
 
 //Login to Discord
 client.login(config.token);
