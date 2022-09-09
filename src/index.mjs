@@ -3,6 +3,7 @@ import { Client, GatewayIntentBits, EmbedBuilder } from "discord.js";
 import { REST } from "@discordjs/rest";
 import { Routes } from "discord-api-types/v9";
 import config from "../config.json" assert {type: "json"};
+import Package from "../package.json" assert {type: "json"};
 
 
 // Create a new client instance
@@ -182,7 +183,7 @@ console.log(`|                                                    |`);
 console.log(`|                                                    |`);
 console.log(`------------------------------------------------------`);
 console.log(``);
-console.log(`Starting Lol Wiki bot running version ${process.version} in ${process.env.NODE_ENV} mode.`);
+console.log(`Starting Lol Wiki bot running version v${Package.version} in ${process.env.NODE_ENV} mode.`);
 console.log(``);
 console.log(`==================================================================`);
 
