@@ -22,8 +22,8 @@ async function loadSlashCommands() {
 	for (const file of commandFiles) {
 
 		const command = await import(`./commands/${file}`);
-		const commandData = command.default.data.toJSON();
-		client.slashCommands.set(commandData.name, commandData);
+		const commandData = command.default.data.toJSON()
+		client.slashCommands.set(commandData.name, { execute: command.default.execute, data: commandData});
 
 	};
 
@@ -49,16 +49,16 @@ async function registerSlashCommands() {
 			let slashCommands = [];
 			client.slashCommands.forEach(command => {
 
-				if (command.options.length > 0) {
+				if (command.data.options.length > 0) {
 					slashCommands.push({
-						name: command.name,
-						description: command.description,
-						options: command.options
+						name: command.data.name,
+						description: command.data.description,
+						options: command.data.options
 					});
 				} else {
 					slashCommands.push({
-						name: command.name,
-						description: command.description,
+						name: command.data.name,
+						description: command.data.description,
 					});
 				};
 
