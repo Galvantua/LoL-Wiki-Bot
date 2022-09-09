@@ -10,7 +10,7 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 const rest = new REST({ version: '9' }).setToken(config.token);
 
 //Register commands and events
-client.slashCommands = [];
+client.slashCommands = new Map();
 
 async function loadSlashCommands() {
 
@@ -21,7 +21,8 @@ async function loadSlashCommands() {
 	for (const file of commandFiles) {
 
 		const command = await import(`./commands/${file}`);
-		client.slashCommands.push(command.default.data.toJSON());
+		const commandData = command.default.data.toJSON();
+		client.slashCommands.set(commandData.name, commandData);
 
 	};
 
@@ -43,10 +44,29 @@ async function registerSlashCommands() {
 
 		try {
 
+			//Get all slash commands
+			let slashCommands = [];
+			client.slashCommands.forEach(command => {
+
+				if (command.options.length > 0) {
+					slashCommands.push({
+						name: command.name,
+						description: command.description,
+						options: command.options
+					});
+				} else {
+					slashCommands.push({
+						name: command.name,
+						description: command.description,
+					});
+				};
+
+			});
+
 			//Register global slash commands
 			await rest.put(
 				Routes.applicationCommands(client.user.id),
-				{ body: client.slashCommands },
+				{ body: slashCommands },
 			);
 
 			console.log(`[✔️] Successfully registered global slash commands.`);
@@ -60,7 +80,7 @@ async function registerSlashCommands() {
 
 					await rest.put(
 						Routes.applicationGuildCommands(client.user.id, guild.id),
-						{ body: client.slashCommands },
+						{ body: slashCommands },
 					);
 
 					console.log(`[✔️] Successfully registered slash commands for guild ${guild.name}.`);
@@ -103,9 +123,11 @@ client.on("interactionCreate", async (interaction) => {
 
 		try {
 
-			const command = client.commands.get(interaction.commandName);
+			const command = client.slashCommands.get(interaction.commandName);
 
 			if (!command) return;
+
+			console.log(command)
 
 			await command.execute(interaction, interaction.channel);
 
