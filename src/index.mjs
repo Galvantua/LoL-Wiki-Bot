@@ -92,6 +92,8 @@ client.on("ready", async () => {
 	console.log(`Logged in as '${client.user.tag}'!`);
 
 	await registerSlashCommands();
+
+	console.log(`✅ Bot is ready!`);
 	
 });
 
@@ -99,16 +101,36 @@ client.on("interactionCreate", async (interaction) => {
 
 	if (interaction.isChatInputCommand()) {
 
-		const command = client.commands.get(interaction.commandName);
-
-		if (!command) return;
-
 		try {
+
+			const command = client.commands.get(interaction.commandName);
+
+			if (!command) return;
 
 			await command.execute(interaction, interaction.channel);
 
 		} catch (error) {
 
+			console.log(`[⚠️] Error executing command '${interaction.commandName}'`);
+			console.log({
+				guild: {
+					id: interaction.guild.id,
+					name: interaction.guild.name,
+				},
+				channel: {
+					id: interaction.channel.id,
+					name: interaction.channel.name,
+				},
+				user: {
+					id: interaction.user.id,
+					name: interaction.user.tag,
+				},
+				interaction: {
+					id: interaction.id,
+					name: interaction.commandName,
+					options: interaction.options,
+				},
+			})
 			console.error(error);
 			await interaction.reply({
 				content: "There was an error while executing this command!",
@@ -118,7 +140,7 @@ client.on("interactionCreate", async (interaction) => {
 		};
 
 	};
-	
+
 });
 
 //App clilogs
