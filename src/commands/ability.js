@@ -15,7 +15,7 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName(`${this.information.name}`)
 		.setDescription(`${this.information.name}`)
-		
+
 		.addStringOption((option) => option
 			.setName("champion")
 			.setDescription("Champions Name")
@@ -33,7 +33,8 @@ module.exports = {
 				{ name: "E", value: "e" },
 				{ name: "R", value: "r" }
 			)
-		),
+		)
+	, //end of SCB data
 
 	async execute(interaction, channel) {
 		//defer to give time for slow api calls

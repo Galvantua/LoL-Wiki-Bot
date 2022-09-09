@@ -9,7 +9,8 @@ module.exports = {
 
 	data: new SlashCommandBuilder()
 		.setName(`${this.information.name}`)
-		.setDescription(`${this.information.name}`),
+		.setDescription(`${this.information.name}`)
+	, //end of SCB data
 
 	async execute(interaction) {
 		await interaction.reply(`Server name: ${interaction.guild.name}\nTotal members: ${interaction.guild.memberCount}`);

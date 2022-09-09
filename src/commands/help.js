@@ -19,7 +19,8 @@ module.exports = {
 				{ name: "Ability", value: "ability" },
 				{ name: "Champion", value: "champion" }
 			)
-		),
+		)
+	, //end of SCB data
 
 	async execute(interaction) {
 

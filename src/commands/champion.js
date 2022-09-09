@@ -39,7 +39,7 @@ module.exports = {
 				{ name: "All", value: "all" }
 			)
 		)
-		
+
 		.addStringOption((option) => option
 			.setName("level")
 			.setDescription("Champion Level")
@@ -65,7 +65,8 @@ module.exports = {
 				{ name: "17", value: "17" },
 				{ name: "18", value: "18" }
 			)
-		),
+		)
+	, //end of SCB data
 
 	async execute(interaction) {
 
