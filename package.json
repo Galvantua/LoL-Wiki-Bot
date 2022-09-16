@@ -1,10 +1,13 @@
 {
-  "name": "new-wiki-bot",
-  "version": "1.0.0",
+  "name": "lol-wiki-bot",
+  "version": "1.0.1",
   "description": "",
-  "main": "bot.mjs",
+  "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "cd src&& SET NODE_ENV=production&&node --no-warnings index.mjs",
+    "start:dev": "cd src&& SET NODE_ENV=dev&&node index.mjs",
+    "start:dev:mon": "cd src&& SET NODE_ENV=dev&&nodemon index.mjs"
   },
   "author": "Gavin Morton",
   "license": "ISC",
