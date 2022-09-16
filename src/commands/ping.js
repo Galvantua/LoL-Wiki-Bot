@@ -1,11 +1,11 @@
-const { SlashCommandBuilder } = require('discord.js');
+import { SlashCommandBuilder } from "discord.js";
 
-module.exports = {
+export const information = {
+	name: "ping",
+	description: "Replies with Pong",
+};
 
-	information: {
-		name: "ping",
-		description: "Replies with Pong",
-	},
+export default {
 
 	data: new SlashCommandBuilder()
 		.setName(`${this.information.name}`)
