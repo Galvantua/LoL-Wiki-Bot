@@ -9,13 +9,14 @@ class handler {
 	constructor() { }
 
 	//Special handler for aphelios weapon system 
-	static async apheliosHandler(abilityLetter, interaction) {
+	async apheliosHandler(abilityLetter, interaction) {
 
 		//Prevent discord from ending the interaction
 		await interaction.deferReply();
 
 		let document, aphAbilities;
-		let myEmbeds, buttons = [];
+		let myEmbeds = [];
+		let buttons = [];
 
 		let abilityProperties = [
 			"cast time",
@@ -67,7 +68,7 @@ class handler {
 
 			let aphAbility = aphAbilities[i];
 
-			ability = document.getElementsByClassName("ability-info-container")[aphAbility];
+			let ability = document.getElementsByClassName("ability-info-container")[aphAbility];
 
 			const embed = new EmbedBuilder();
 
