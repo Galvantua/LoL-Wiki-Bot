@@ -6,8 +6,8 @@ import handlers from "../modules/handlers.js";
 const { JSDOM } = jsdom;
 
 export const information = {
-	name: "champion",
-	description: "Gets a champion info from the wiki",
+	name: "ability",
+	description: "Gets the information fo ran ability from the wiki",
 };
 
 export default {
@@ -96,11 +96,11 @@ export default {
 		//check if we are getting info for aphelios.
 		if (championName == "Aphelios" &&  (abilityLetter == "I" || abilityLetter == "Q")) {
 
-			const components = await handlers.apheliosHandler(abilityLetter, interaction);
+			const components = await new handlers().apheliosHandler(abilityLetter, interaction);
 
 			let tempButtons = [];
 
-			for (i = 0; i < components.buttons.length; i++) {
+			for (let i = 0; i < components.buttons.length; i++) {
 				tempButtons[i] = components.buttons[i];
 			};
 
