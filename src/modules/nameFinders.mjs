@@ -1,7 +1,7 @@
 import Fuse from "fuse.js";
 import fetch from "node-fetch";
 
-export async function nameAbilityTEST(input, interaction) {
+export async function findAbilityName(input, interaction) {
 	let excList = {
 		aph: "Aphelios",
 		asol: "Aurelion_Sol",
@@ -148,7 +148,7 @@ export async function nameAbilityTEST(input, interaction) {
 	return final; // need to rewrite to spit out array
 };
 
-export async function nameChampionTEST(input, interaction) {
+export async function findChampionName(input, interaction) {
 	let excList = {
 		aph: "Aphelios",
 		asol: "Aurelion_Sol",

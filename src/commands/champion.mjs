@@ -73,8 +73,8 @@ export default {
 
 		let champion = interaction.options.getString("champion");
 
-		let displayName = await tests.nameAbilityTEST(champion, interaction);
-		let championName = await tests.nameChampionTEST(displayName, interaction);
+		let displayName = await tests.findAbilityName(champion, interaction);
+		let championName = await tests.findChampionName(displayName, interaction);
 
 		let stat = interaction.options.getString("stat");
 		let level = interaction.options.getString("level");

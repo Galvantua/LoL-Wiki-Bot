@@ -41,7 +41,7 @@ export default {
 
 		//parse options from command
 		let champion = interaction.options.getString("champion");
-		let championName = await tests.nameAbilityTEST(champion, interaction);
+		let championName = await tests.findAbilityName(champion, interaction);
 		let ability = interaction.options.getString("ability");
 		let abilityProperties = [
 			"cast time",
