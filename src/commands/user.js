@@ -8,8 +8,8 @@ module.exports = {
 	},
 
 	data: new SlashCommandBuilder()
-		.setName(`${this.information.name}`)
-		.setDescription(`${this.information.name}`)
+		.setName(`${information.name}`)
+		.setDescription(`${information.name}`)
 	, //end of SCB data
 
 	async execute(interaction) {
