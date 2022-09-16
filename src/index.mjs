@@ -27,7 +27,7 @@ async function loadSlashCommands() {
 
 	};
 
-	console.log(`[✔️] Loaded ${client.slashCommands.length} slash commands.`);
+	console.log(`[✔️] Loaded ${client.slashCommands.size} slash commands.`);
 
 	return;
 
