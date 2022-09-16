@@ -1,15 +1,15 @@
 import { SlashCommandBuilder, EmbedBuilder } from "discord.js";
 
-module.exports = {
+export const information = {
+	name: "help",
+	description: "Shows you all the commands",
+};
 
-	information: {
-		name: "help",
-		description: "Shows you all the commands",
-	},
+export default {
 
 	data: new SlashCommandBuilder()
-		.setName(`${this.information.name}`)
-		.setDescription(`${this.information.name}`)
+		.setName(`${information.name}`)
+		.setDescription(`${information.name}`)
 
 		.addStringOption((option) => option
 			.setName("command")
