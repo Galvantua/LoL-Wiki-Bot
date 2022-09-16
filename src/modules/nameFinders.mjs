@@ -1,8 +1,7 @@
-const tests = function () {};
-const Fuse = require("fuse.js");
-const fetch = require("node-fetch");
+import Fuse from "fuse.js";
+import fetch from "node-fetch";
 
-tests.nameAbilityTEST = async function (input, interaction) {
+export async function findAbilityName(input, interaction) {
 	let excList = {
 		aph: "Aphelios",
 		asol: "Aurelion_Sol",
@@ -95,7 +94,7 @@ tests.nameAbilityTEST = async function (input, interaction) {
 	}; //arrays of champs that will be randomized
 
 	//regex and return taken from eramsorgr. I'm too lazy to type those
-	args = input.trim().split(/\s+/);
+	let args = input.trim().split(/\s+/);
 	let championName = "";
 
 	for (let i = 0; i < args.length; i++) {
@@ -143,12 +142,13 @@ tests.nameAbilityTEST = async function (input, interaction) {
 	const result = fuse.search(championName);
 
 	const final = bodyJSON[result[0].item].name;
-	console.log(final);
+	//console.log(final);
 	//console.log(result[0]);
 
 	return final; // need to rewrite to spit out array
 };
-tests.nameChampionTEST = async function (input, interaction) {
+
+export async function findChampionName(input, interaction) {
 	let excList = {
 		aph: "Aphelios",
 		asol: "Aurelion_Sol",
@@ -241,7 +241,7 @@ tests.nameChampionTEST = async function (input, interaction) {
 	}; //arrays of champs that will be randomized
 
 	//regex and return taken from eramsorgr. I'm too lazy to type those
-	args = input.trim().split(/\s+/);
+	let args = input.trim().split(/\s+/);
 	let championName = "";
 
 	for (let i = 0; i < args.length; i++) {
@@ -290,5 +290,5 @@ tests.nameChampionTEST = async function (input, interaction) {
 
 	return result[0].item; // need to rewrite to spit out array
 };
-//export default helpers;
-module.exports = tests;
+
+export default {}
