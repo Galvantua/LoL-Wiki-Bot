@@ -1,8 +1,8 @@
 import { ActionRowBuilder, SlashCommandBuilder, EmbedBuilder } from "discord.js";
 import fetch from "node-fetch";
 import jsdom from "jsdom";
-import tests from "../modules/tests.js";
-import handlers from "../modules/handlers.js";
+import tests from "../modules/tests";
+import handlers from "../modules/handlers";
 const { JSDOM } = jsdom;
 
 export const information = {
