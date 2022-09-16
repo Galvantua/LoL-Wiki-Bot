@@ -1,7 +1,7 @@
 import { ActionRowBuilder, SlashCommandBuilder, EmbedBuilder } from "discord.js";
 import fetch from "node-fetch";
 import jsdom from "jsdom";
-import tests from "../modules/nameFinders.mjs";
+import { findAbilityName } from "../modules/nameFinders.mjs";
 import handlers from "../modules/handlers.mjs";
 const { JSDOM } = jsdom;
 
@@ -41,7 +41,7 @@ export default {
 
 		//parse options from command
 		let champion = interaction.options.getString("champion");
-		let championName = await tests.findAbilityName(champion, interaction);
+		let championName = await findAbilityName(champion, interaction);
 		let ability = interaction.options.getString("ability");
 		let abilityProperties = [
 			"cast time",

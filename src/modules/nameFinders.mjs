@@ -94,7 +94,7 @@ export async function findAbilityName(input, interaction) {
 	}; //arrays of champs that will be randomized
 
 	//regex and return taken from eramsorgr. I'm too lazy to type those
-	args = input.trim().split(/\s+/);
+	let args = input.trim().split(/\s+/);
 	let championName = "";
 
 	for (let i = 0; i < args.length; i++) {
@@ -241,7 +241,7 @@ export async function findChampionName(input, interaction) {
 	}; //arrays of champs that will be randomized
 
 	//regex and return taken from eramsorgr. I'm too lazy to type those
-	args = input.trim().split(/\s+/);
+	let args = input.trim().split(/\s+/);
 	let championName = "";
 
 	for (let i = 0; i < args.length; i++) {

@@ -1,6 +1,6 @@
 import { SlashCommandBuilder, EmbedBuilder } from "discord.js";
 import fetch from "node-fetch";
-import tests from "../modules/nameFinders.mjs";
+import { findChampionName, findAbilityName } from "../modules/nameFinders.mjs";
 
 export const information = {
 	name: "champion",
@@ -73,8 +73,8 @@ export default {
 
 		let champion = interaction.options.getString("champion");
 
-		let displayName = await tests.findAbilityName(champion, interaction);
-		let championName = await tests.findChampionName(displayName, interaction);
+		let displayName = await findAbilityName(champion, interaction);
+		let championName = await findChampionName(displayName, interaction);
 
 		let stat = interaction.options.getString("stat");
 		let level = interaction.options.getString("level");
