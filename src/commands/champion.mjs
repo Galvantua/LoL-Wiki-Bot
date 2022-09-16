@@ -1,6 +1,6 @@
 import { SlashCommandBuilder, EmbedBuilder } from "discord.js";
 import fetch from "node-fetch";
-import tests from "../modules/tests.mjs";
+import tests from "../modules/nameFinders.mjs";
 
 export const information = {
 	name: "champion",
