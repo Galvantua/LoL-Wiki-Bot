@@ -1,10 +1,10 @@
-const fetch = require("node-fetch");
-const jsdom = require("jsdom");
+import fetch from "node-fetch";
+import jsdom from "jsdom";
 const { JSDOM } = jsdom;
-const {	ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } = require("discord.js");
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } from "discord.js";
 
 //Define the handler
-class handler {
+export default class handler {
 
 	constructor() { }
 
@@ -176,6 +176,3 @@ class handler {
 	};
 
 };
-
-
-module.exports = handler;
