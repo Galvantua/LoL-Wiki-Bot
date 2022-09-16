@@ -1,8 +1,7 @@
-const tests = function () {};
-const Fuse = require("fuse.js");
-const fetch = require("node-fetch");
+import Fuse from "fuse.js";
+import fetch from "node-fetch";
 
-tests.nameAbilityTEST = async function (input, interaction) {
+export async function nameAbilityTEST(input, interaction) {
 	let excList = {
 		aph: "Aphelios",
 		asol: "Aurelion_Sol",
@@ -148,7 +147,8 @@ tests.nameAbilityTEST = async function (input, interaction) {
 
 	return final; // need to rewrite to spit out array
 };
-tests.nameChampionTEST = async function (input, interaction) {
+
+export async function nameChampionTEST(input, interaction) {
 	let excList = {
 		aph: "Aphelios",
 		asol: "Aurelion_Sol",
@@ -290,5 +290,5 @@ tests.nameChampionTEST = async function (input, interaction) {
 
 	return result[0].item; // need to rewrite to spit out array
 };
-//export default helpers;
-module.exports = tests;
+
+export default {}
