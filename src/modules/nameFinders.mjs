@@ -142,7 +142,7 @@ export async function findAbilityName(input, interaction) {
 	const result = fuse.search(championName);
 
 	const final = bodyJSON[result[0].item].name;
-	console.log(final);
+	//console.log(final);
 	//console.log(result[0]);
 
 	return final; // need to rewrite to spit out array
