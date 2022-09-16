@@ -1,17 +1,17 @@
-const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
-const fetch = require("node-fetch");
-const tests = require("../modules/tests");
+import { SlashCommandBuilder, EmbedBuilder } from "discord.js";
+import fetch from "node-fetch";
+import tests from "../modules/tests.js";
 
-module.exports = {
+export const information = {
+	name: "champion",
+	description: "Gets a champion info from the wiki",
+};
 
-	information: {
-		name: "champion",
-		description: "Gets a champion info from the wiki",
-	},
+export default {
 
 	data: new SlashCommandBuilder()
-		.setName(`${this.information.name}`)
-		.setDescription(`${this.information.name}`)
+		.setName(`${information.name}`)
+		.setDescription(`${information.name}`)
 
 		.addStringOption((option) => option
 			.setName("champion")
@@ -65,8 +65,7 @@ module.exports = {
 				{ name: "17", value: "17" },
 				{ name: "18", value: "18" }
 			)
-		)
-	, //end of SCB data
+	),
 
 	async execute(interaction) {
 
@@ -211,8 +210,6 @@ module.exports = {
 		};
 
 		await interaction.editReply({ embeds: [embed] });
-		//await interaction.reply("done");
-
-	},
+	}
 
 };
