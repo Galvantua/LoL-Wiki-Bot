@@ -1,9 +1,9 @@
 {
-  "token": "Bot token as provided by Discord",
-  "testingGuilds": [
-      {
-          "name": "A guild name",
-          "id": "the guild id"
-      }
-  ]
+	"token": "Bot token as provided by Discord",
+	"testingGuilds": [
+		{
+			"name": "A guild name",
+			"id": "the guild id"
+		}
+	]
 }

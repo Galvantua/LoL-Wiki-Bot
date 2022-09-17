@@ -6,14 +6,12 @@ export const information = {
 };
 
 export default {
-
 	data: new SlashCommandBuilder()
 		.setName(`${information.name}`)
-		.setDescription(`${information.name}`)
-	, //end of SCB data
-
+		.setDescription(`${information.name}`), //end of SCB data
 	async execute(interaction) {
-		await interaction.reply(`Your tag: ${interaction.user.tag}\nYour id: ${interaction.user.id}`);
+		await interaction.reply(
+			`Your tag: ${interaction.user.tag}\nYour id: ${interaction.user.id}`
+		);
 	},
-
 };

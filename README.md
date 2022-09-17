@@ -2,10 +2,9 @@
 
 A Discord bot that allows you to search for League of Legends champions, items, runes, and more.
 
+## Documentation
 
-## Documentation 
-
-Can be found [here](). 
+Can be found [here]().
 
 ## Contributing
 
@@ -29,8 +28,9 @@ To build and run the bot, you will need to have [Node.js](https://nodejs.org/en/
 ## Configuration
 
 The bot uses a `config.json` file to store configuration options. The `config.example.json` file contains all the options that can be configured.
-* `token` - The bot token. You can get this from the [Discord Developer Portal](https://discord.com/developers/applications).
-* `testingGuilds` - An array of objects that the bot will MANUALLY register slash commands for. This is useful for testing slash commands in a testing server. The object should contain the name and ID of the guild: 
+
+-   `token` - The bot token. You can get this from the [Discord Developer Portal](https://discord.com/developers/applications).
+-   `testingGuilds` - An array of objects that the bot will MANUALLY register slash commands for. This is useful for testing slash commands in a testing server. The object should contain the name and ID of the guild:
     ```json
     ...: {
         "name": "Guild Name",

@@ -146,7 +146,7 @@ export async function findAbilityName(input, interaction) {
 	//console.log(result[0]);
 
 	return final; // need to rewrite to spit out array
-};
+}
 
 export async function findChampionName(input, interaction) {
 	let excList = {
@@ -289,6 +289,6 @@ export async function findChampionName(input, interaction) {
 	//console.log(result[0].item);
 
 	return result[0].item; // need to rewrite to spit out array
-};
+}
 
-export default {}
+export default {};

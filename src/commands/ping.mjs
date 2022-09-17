@@ -6,14 +6,10 @@ export const information = {
 };
 
 export default {
-
 	data: new SlashCommandBuilder()
 		.setName(`${information.name}`)
-		.setDescription(`${information.name}`)
-	, //end of SCB data
-
+		.setDescription(`${information.name}`), //end of SCB data
 	async execute(interaction) {
-		await interaction.reply('Pong!');
+		await interaction.reply("Pong!");
 	},
-
 };

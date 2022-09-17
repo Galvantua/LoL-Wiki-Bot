@@ -1,22 +1,22 @@
 {
-  "name": "lol-wiki-bot",
-  "version": "1.0.1",
-  "description": "",
-  "main": "src/index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "cd src&& SET NODE_ENV=production&&node --no-warnings index.mjs",
-    "start:dev": "cd src&& SET NODE_ENV=dev&&node index.mjs",
-    "start:dev:mon": "cd src&& SET NODE_ENV=dev&&nodemon index.mjs"
-  },
-  "author": "Gavin Morton",
-  "license": "ISC",
-  "dependencies": {
-    "@discordjs/rest": "^1.1.0",
-    "discord.js": "^14.3.0",
-    "fuse.js": "^6.6.2",
-    "jsdom": "^20.0.0",
-    "jsdom-global": "^3.0.2",
-    "node-fetch": "^2.6.1"
-  }
+	"name": "lol-wiki-bot",
+	"version": "1.0.1",
+	"description": "",
+	"main": "src/index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": "cd src&& SET NODE_ENV=production&&node --no-warnings --experimental-json-modules index.mjs",
+		"start:dev": "cd src&& SET NODE_ENV=dev&&node --experimental-json-modules index.mjs",
+		"start:dev:mon": "cd src&& SET NODE_ENV=dev&&nodemon --experimental-json-modules index.mjs"
+	},
+	"author": "Gavin Morton",
+	"license": "ISC",
+	"dependencies": {
+		"@discordjs/rest": "^1.1.0",
+		"discord.js": "^14.3.0",
+		"fuse.js": "^6.6.2",
+		"jsdom": "^20.0.0",
+		"jsdom-global": "^3.0.2",
+		"node-fetch": "^2.6.1"
+	}
 }

@@ -1,4 +1,8 @@
-import { ActionRowBuilder, SlashCommandBuilder, EmbedBuilder } from "discord.js";
+import {
+	ActionRowBuilder,
+	SlashCommandBuilder,
+	EmbedBuilder,
+} from "discord.js";
 import fetch from "node-fetch";
 import jsdom from "jsdom";
 import { findAbilityName } from "../modules/nameFinders.mjs";
@@ -11,31 +15,30 @@ export const information = {
 };
 
 export default {
-
 	data: new SlashCommandBuilder()
 		.setName(`${information.name}`)
 		.setDescription(`${information.name}`)
 
-		.addStringOption((option) => option
-			.setName("champion")
-			.setDescription("Champions Name")
-			.setRequired(true)
+		.addStringOption((option) =>
+			option
+				.setName("champion")
+				.setDescription("Champions Name")
+				.setRequired(true)
 		)
 
-		.addStringOption((option) => option
-			.setName("ability")
-			.setDescription("Which ability to fetch info for?")
-			.setRequired(true)
-			.addChoices(
-				{ name: "Passive", value: "innate" },
-				{ name: "Q", value: "q" },
-				{ name: "W", value: "w" },
-				{ name: "E", value: "e" },
-				{ name: "R", value: "r" }
-			)
-		)
-	, //end of SCB data
-
+		.addStringOption((option) =>
+			option
+				.setName("ability")
+				.setDescription("Which ability to fetch info for?")
+				.setRequired(true)
+				.addChoices(
+					{ name: "Passive", value: "innate" },
+					{ name: "Q", value: "q" },
+					{ name: "W", value: "w" },
+					{ name: "E", value: "e" },
+					{ name: "R", value: "r" }
+				)
+		), //end of SCB data
 	async execute(interaction, channel) {
 		//defer to give time for slow api calls
 
@@ -93,18 +96,23 @@ export default {
 			default:
 				//TODO error for invalid ability
 				break;
-		};
+		}
 
 		//check if we are getting info for aphelios.
-		if (championName == "Aphelios" &&  (abilityLetter == "I" || abilityLetter == "Q")) {
-
-			const components = await new handlers().apheliosHandler(abilityLetter, interaction);
+		if (
+			championName == "Aphelios" &&
+			(abilityLetter == "I" || abilityLetter == "Q")
+		) {
+			const components = await new handlers().apheliosHandler(
+				abilityLetter,
+				interaction
+			);
 
 			let tempButtons = [];
 
 			for (let i = 0; i < components.buttons.length; i++) {
 				tempButtons[i] = components.buttons[i];
-			};
+			}
 
 			tempButtons.splice(0, 1);
 
@@ -125,45 +133,44 @@ export default {
 			});
 
 			collector.on("collect", async (i) => {
-
 				await i.deferUpdate();
 
-				if (process.env.NODE_ENV === 'dev') console.log(parseInt(i.customId));
+				if (process.env.NODE_ENV === "dev")
+					console.log(parseInt(i.customId));
 
 				let intId = parseInt(i.customId);
 
-				if (process.env.NODE_ENV === 'dev') console.log(i.user.id, typeof i.customId);
+				if (process.env.NODE_ENV === "dev")
+					console.log(i.user.id, typeof i.customId);
 
 				tempButtons = [];
 
 				for (i = 0; i < components.buttons.length; i++) {
 					tempButtons[i] = components.buttons[i];
-				};
+				}
 
 				tempButtons.splice(intId, 1);
 
 				row = new ActionRowBuilder().addComponents(tempButtons);
 
-				if (process.env.NODE_ENV === 'dev') console.log(components.embeds[intId]);
+				if (process.env.NODE_ENV === "dev")
+					console.log(components.embeds[intId]);
 
 				let finalEmbeds = components.embeds[intId];
 				await interaction.editReply({
 					embeds: [finalEmbeds],
 					components: [row],
 				});
-
 			});
 
 			collector.on("end", async (collection) => {
-
 				await interaction.editReply({
 					components: [],
 				});
-
 			});
 
 			return;
-		};
+		}
 
 		await interaction.deferReply();
 
@@ -182,7 +189,7 @@ export default {
 		} catch (error) {
 			interaction.editReply("**Please choose a valid Champion Name**");
 			return;
-		};
+		}
 
 		const dom = new JSDOM(bodyJSON.parse.text["*"], {
 			contentType: "text/html",
@@ -200,29 +207,35 @@ export default {
 			"ability-info-container"
 		);
 
-		if (abilitySub.length > 1 &&abilitySub[0].getElementsByClassName("mw-headline")[0].textContent == abilitySub[1].getElementsByClassName("mw-headline")[0].textContent) abilitySub[1].parentNode.removeChild(abilitySub[1]);
+		if (
+			abilitySub.length > 1 &&
+			abilitySub[0].getElementsByClassName("mw-headline")[0]
+				.textContent ==
+				abilitySub[1].getElementsByClassName("mw-headline")[0]
+					.textContent
+		)
+			abilitySub[1].parentNode.removeChild(abilitySub[1]);
 
 		for (let i = 0; i < abilitySub.length; i++) {
-
 			const embed = new EmbedBuilder();
 			//name of ability
 
 			const ability = abilitySub[i];
 
-			abilityHeader = ability.getElementsByClassName("mw-headline")[0].textContent;
+			abilityHeader =
+				ability.getElementsByClassName("mw-headline")[0].textContent;
 
 			embed.setTitle(`**${abilityHeader}**`);
 
 			abilityStats = ability.getElementsByTagName("aside")[0];
 
 			if (abilityStats) {
-
 				for (let i = 0; i < abilityProperties.length; i++) {
-
-					const element = abilityStats.querySelector(`div[data-source="${abilityProperties[i]}"]`);
+					const element = abilityStats.querySelector(
+						`div[data-source="${abilityProperties[i]}"]`
+					);
 
 					if (element) {
-
 						const elementText = element.textContent.split(":");
 
 						embed.addFields({
@@ -230,30 +243,26 @@ export default {
 							value: `${elementText[1].trim()}`,
 							inline: true,
 						});
-
-					};
-				};
-			};
+					}
+				}
+			}
 
 			//grabs the array of tables in the ability
 			abilityTables = ability.getElementsByTagName("table");
 
 			//process the tables in the array and create fields for each subtable
 			for (let i = 0; i < abilityTables.length; i++) {
-
 				const table = abilityTables[i];
 
 				const subTables = table.getElementsByTagName("dl");
 
 				for (let i = 0; i < subTables.length; i++) {
-
 					const subTable = subTables[i];
 
 					const subTableHeaders = subTable.getElementsByTagName("dt");
 					const subTableData = subTable.getElementsByTagName("dd");
 
 					for (let i = 0; i < subTableHeaders.length; i++) {
-
 						const header = subTableHeaders[i].textContent;
 						const data = subTableData[i].textContent;
 
@@ -264,30 +273,26 @@ export default {
 							value: `${data.trim()}`,
 							inline: true,
 						});
-
-					};
-				};
-			};
+					}
+				}
+			}
 
 			abilityDetails = ability.querySelectorAll("p, ul");
 			detailText = "";
 
 			for (let i = 0; i < abilityDetails.length; i++) {
-
 				const detail = abilityDetails[i];
 
 				detailText = detail.textContent;
 				// console.log(detailText);
 
 				if (detailText) {
-
 					embed.addFields({
 						name: `​`,
 						value: `${detailText}`,
 					});
-
-				};
-			};
+				}
+			}
 
 			abilityImage = ability
 				.getElementsByTagName("img")[0]
@@ -295,20 +300,15 @@ export default {
 			embed.setThumbnail(abilityImage);
 
 			myEmbeds.push(embed);
-
-		};
+		}
 
 		try {
-
 			await interaction.editReply({ embeds: myEmbeds });
-
 		} catch (error) {
-
 			//TODO add actual error handling
-			await interaction.editReply("**Please select a valid champion/ability pair**");
-
-		};
-
+			await interaction.editReply(
+				"**Please select a valid champion/ability pair**"
+			);
+		}
 	},
-
 };
