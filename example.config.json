@@ -1,5 +1,6 @@
 {
 	"token": "Bot token as provided by Discord",
+	"clientId": "Client ID as provided by Discord",
 	"testingGuilds": [
 		{
 			"name": "A guild name",

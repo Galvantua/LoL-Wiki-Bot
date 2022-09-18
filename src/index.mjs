@@ -104,7 +104,10 @@ client.on("ready", async () => {
 	console.log(`Logged in as '${client.user.tag}'!`);
 
 	await registerSlashCommands();
-
+	await client.user.setPresence({
+		activities: [{ name: "Theorycrafting!", type: 0 }],
+		status: "online",
+	});
 	console.log(`✅ Bot is ready!`);
 });
 
