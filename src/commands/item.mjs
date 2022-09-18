@@ -1,13 +1,13 @@
 import { SlashCommandBuilder, EmbedBuilder } from "discord.js";
 import fetch from "node-fetch";
-import { findChampionName, findAbilityName } from "../modules/nameFinders.mjs";
+import { findItemName } from "../modules/nameFinders.mjs";
 
 export const information = {
 	name: "item",
 	description: "Queries Item info from the LoL wiki",
 };
 
-module.exports = {
+export default {
 	data: new SlashCommandBuilder()
 		.setName(`${information.name}`)
 		.setDescription(`${information.description}`)
@@ -22,7 +22,7 @@ module.exports = {
 		await interaction.deferReply();
 
 		const item = interaction.options.getString("item");
-		const itemId = await tests.nameItemTEST(item, interaction);
+		const itemId = await findItemName(item, interaction);
 		const embed = new EmbedBuilder();
 
 		const request = await fetch(

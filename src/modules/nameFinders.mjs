@@ -290,5 +290,42 @@ export async function findChampionName(input, interaction) {
 
 	return result[0].item; // need to rewrite to spit out array
 }
+export async function findItemName(input, interaction) {
+	const itemReq = await fetch(
+		`https://cdn.merakianalytics.com/riot/lol/resources/latest/en-US/items.json`
+	).catch((err) => {
+		interaction.editReply("Error getting items names");
+		return;
+	});
+	const itemBody = await itemReq.text();
+	let bodyJSON;
+	try {
+		bodyJSON = JSON.parse(itemBody);
+	} catch (error) {
+		console.log(error);
+		interaction.editReply("**Error getting item names**");
+		return;
+	}
+	const itemNames = [];
+	const itemObj = [];
+	for (const item in bodyJSON) {
+		if (Object.hasOwnProperty.call(bodyJSON, item)) {
+			itemObj.push(item);
+		}
+	}
+
+	for (let i = 0; i < itemObj.length; i++) {
+		const item = itemObj[i];
+		itemNames.push(bodyJSON[item].name);
+	}
+
+	const fuse = new Fuse(itemNames);
+	const result = fuse.search(input);
+	if (result.length === 0) {
+		await interaction.editReply("**Item not found**");
+		return;
+	}
+	return itemObj[itemNames.indexOf(result[0].item)];
+};
 
 export default {};
