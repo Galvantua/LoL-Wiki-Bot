@@ -47,7 +47,6 @@ export default {
 
 		for (const stat in bodyJSON.stats) {
 			for (const type in bodyJSON.stats[stat]) {
-				console.log(bodyJSON.stats[stat][type]);
 				if (bodyJSON.stats[stat][type] !== 0.0) {
 					embed.addFields({
 						name: `${type} ${stat}`,
