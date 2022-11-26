@@ -1,6 +1,8 @@
 import { SlashCommandBuilder, EmbedBuilder } from "discord.js";
 import fetch from "node-fetch";
 import { findItemName } from "../modules/nameFinders.mjs";
+import jsdom from "jsdom";
+const { JSDOM } = jsdom;
 
 export const information = {
 	name: "item",
@@ -53,6 +55,66 @@ export default {
 						value: `${bodyJSON.stats[stat][type]}`,
 					});
 				}
+			}
+		}
+
+		for (const passive in bodyJSON.passives) {
+			let passiveName
+			if (bodyJSON.passives[passive].name) {
+				passiveName = bodyJSON.passives[passive].name;
+			} else {
+				passiveName = "";
+			}
+			let passiveEffects;
+			if (bodyJSON.passives[passive].effects != null) {
+				passiveEffects = bodyJSON.passives[passive].effects.replace(/\+/g, "%2b");
+				const passiveUrl = `https://leagueoflegends.fandom.com/api.php?action=parse&text=${passiveEffects}&contentmodel=wikitext&format=json`;
+				const passiveRequest = await fetch(passiveUrl).catch((err) => {
+					console.log(err);
+				});
+				const passiveBody = await passiveRequest.text();
+				let passivebodyJSON;
+				try {
+					passivebodyJSON = JSON.parse(passiveBody);
+				} catch (error) {
+					interaction.editReply("**Error parseing passive**");
+					return;
+				}
+
+				const passivedom = new JSDOM(passivebodyJSON.parse.text["*"], {
+					contentType: "text/html",
+				});
+
+				let passiveDocument = passivedom.window.document;
+				passiveEffects = passiveDocument.querySelector("p").textContent;
+			}
+			if (bodyJSON.passives[passive].mythic == true) {
+				embed.addFields({
+					name: `Mythic Passive: `,
+					value: `Embues each of your legendary items with:`,
+				});
+				for (const stat in bodyJSON.passives[passive].stats) {
+					for (const type in bodyJSON.passives[passive].stats[stat]) {
+						if (bodyJSON.passives[passive].stats[stat][type] !== 0.0) {
+							embed.addFields({
+								name: `${type} ${stat}`,
+								value: `${bodyJSON.passives[passive].stats[stat][type]}`,
+							});
+						}
+					}
+				}
+				
+			} else if (bodyJSON.passives[passive].unique == true) {
+
+				embed.addFields({
+					name: `Unique Passive: ${passiveName}`,
+					value: `${passiveEffects}`,
+				});
+			} else if (bodyJSON.passives[passive].unique == false) {
+				embed.addFields({
+					name: `Passive: ${passiveName}`,
+					value: `${passiveEffects}`,
+				});
 			}
 		}
 
