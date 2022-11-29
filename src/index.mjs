@@ -1,23 +1,23 @@
-import fs from "node:fs";
-import { Client, GatewayIntentBits, EmbedBuilder } from "discord.js";
-import { REST } from "@discordjs/rest";
-import { Routes } from "discord-api-types/v9";
-import config from "../config.json" assert { type: "json" };
-import Package from "../package.json" assert { type: "json" };
+import fs from 'node:fs';
+import { Client, GatewayIntentBits, EmbedBuilder } from 'discord.js';
+import { REST } from '@discordjs/rest';
+import { Routes } from 'discord-api-types/v9';
+import config from '../config.json' assert { type: 'json' };
+import Package from '../package.json' assert { type: 'json' };
 
 // Create a new client instance
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
-const rest = new REST({ version: "9" }).setToken(config.token);
+const rest = new REST({ version: '9' }).setToken(config.token);
 
 //Register commands and events
 client.slashCommands = new Map();
 
 async function loadSlashCommands() {
-	console.log("[⌛] Loading slash commands...");
+	console.log('[⌛] Loading slash commands...');
 
 	const commandFiles = fs
 		.readdirSync(`./commands`)
-		.filter((file) => file.endsWith(".mjs"));
+		.filter((file) => file.endsWith('.mjs'));
 
 	for (const file of commandFiles) {
 		const command = await import(`./commands/${file}`);
@@ -35,7 +35,7 @@ async function loadSlashCommands() {
 
 async function registerSlashCommands() {
 	console.log(
-		`Attempting to load and register slash commands for ${client.user.tag}`
+		`Attempting to load and register slash commands for ${client.user.tag}`,
 	);
 
 	try {
@@ -69,49 +69,49 @@ async function registerSlashCommands() {
 			console.log(`[✔️] Successfully registered global slash commands.`);
 
 			//Register per-guild slash commands [DEV ONLY]
-			if (process.env.NODE_ENV === "dev") {
+			if (process.env.NODE_ENV === 'dev') {
 				console.log(
-					`[⌛] Registering per-guild (${config.testingGuilds.length}) slash commands...`
+					`[⌛] Registering per-guild (${config.testingGuilds.length}) slash commands...`,
 				);
 
 				for (const guild of config.testingGuilds) {
 					await rest.put(
 						Routes.applicationGuildCommands(
 							client.user.id,
-							guild.id
+							guild.id,
 						),
-						{ body: slashCommands }
+						{ body: slashCommands },
 					);
 
 					console.log(
-						`[✔️] Successfully registered slash commands for guild ${guild.name}.`
+						`[✔️] Successfully registered slash commands for guild ${guild.name}.`,
 					);
 				}
 			}
 		} catch (err) {
-			console.log("[❌] Failed to register slash commands.");
+			console.log('[❌] Failed to register slash commands.');
 			console.error(err);
 		}
 	} catch (err) {
-		console.log("[❌] Failed to load slash commands.");
+		console.log('[❌] Failed to load slash commands.');
 		console.error(err);
 		process.exit(1);
 	}
 }
 
 //Bot ready event
-client.on("ready", async () => {
+client.on('ready', async () => {
 	console.log(`Logged in as '${client.user.tag}'!`);
 
 	await registerSlashCommands();
 	await client.user.setPresence({
-		activities: [{ name: "Theorycrafting!", type: 0 }],
-		status: "online",
+		activities: [{ name: 'Theorycrafting!', type: 0 }],
+		status: 'online',
 	});
 	console.log(`✅ Bot is ready!`);
 });
 
-client.on("interactionCreate", async (interaction) => {
+client.on('interactionCreate', async (interaction) => {
 	if (interaction.isChatInputCommand()) {
 		try {
 			const command = client.slashCommands.get(interaction.commandName);
@@ -121,7 +121,7 @@ client.on("interactionCreate", async (interaction) => {
 			await command.execute(interaction, interaction.channel);
 		} catch (error) {
 			console.log(
-				`[⚠️] Error executing command '${interaction.commandName}'`
+				`[⚠️] Error executing command '${interaction.commandName}'`,
 			);
 
 			const interactionInformation = {
@@ -149,13 +149,13 @@ client.on("interactionCreate", async (interaction) => {
 
 			//Embed
 			const embed = new EmbedBuilder();
-			embed.setColor("#ff0000");
-			embed.setTitle("❌ Error during command execution");
+			embed.setColor('#ff0000');
+			embed.setTitle('❌ Error during command execution');
 			embed.setDescription(
-				`An error occured while executing the command '${interaction.commandName}'.`
+				`An error occured while executing the command '${interaction.commandName}'.`,
 			);
 			embed.setFooter({
-				text: "Our team has been notified of this error. Still having issues? Contact us! Check /help for more info.",
+				text: 'Our team has been notified of this error. Still having issues? Contact us! Check /help for more info.',
 			});
 
 			//Send embed
@@ -165,7 +165,7 @@ client.on("interactionCreate", async (interaction) => {
 });
 
 //App clilogs
-if (process.env.NODE_ENV !== "production" && process.env.NODE_ENV !== "dev")
+if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'dev')
 	throw new Error('NODE_ENV is not set to "dev" or "production"');
 console.log(`------------------------------------------------------`);
 console.log(`|                                                    |`);
@@ -176,11 +176,11 @@ console.log(`|                                                    |`);
 console.log(`------------------------------------------------------`);
 console.log(``);
 console.log(
-	`Starting Lol Wiki bot running version v${Package.version} in ${process.env.NODE_ENV} mode.`
+	`Starting Lol Wiki bot running version v${Package.version} in ${process.env.NODE_ENV} mode.`,
 );
 console.log(``);
 console.log(
-	`==================================================================`
+	`==================================================================`,
 );
 
 //Login to Discord

@@ -18,6 +18,15 @@
 		"jsdom": "^20.0.0",
 		"jsdom-global": "^3.0.2",
 		"node-fetch": "^2.6.1",
-		"prettier": "^2.7.1"
+		"prettier": "^2.8.0"
+	},
+	"prettier": {
+		"singleQuote": true,
+		"trailingComma": "all",
+		"printWidth": 80,
+		"tabWidth": 4,
+		"useTabs": true,
+		"semi": true,
+		"bracketSpacing": true
 	}
 }

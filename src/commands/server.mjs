@@ -1,8 +1,8 @@
-import { SlashCommandBuilder } from "discord.js";
+import { SlashCommandBuilder } from 'discord.js';
 
 export const information = {
-	name: "server",
-	description: "Shows you some information about the server",
+	name: 'server',
+	description: 'Shows you some information about the server',
 };
 
 export default {
@@ -11,7 +11,7 @@ export default {
 		.setDescription(`${information.name}`), //end of SCB data
 	async execute(interaction) {
 		await interaction.reply(
-			`Server name: ${interaction.guild.name}\nTotal members: ${interaction.guild.memberCount}`
+			`Server name: ${interaction.guild.name}\nTotal members: ${interaction.guild.memberCount}`,
 		);
 	},
 };
