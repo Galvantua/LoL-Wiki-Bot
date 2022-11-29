@@ -49,7 +49,7 @@ export default {
         const runes = await runeReq.json();
         let tree = runes.find(t => t.name.toLowerCase().replace(/([^a-z])/g, '') === givenRune);
         if (tree !== undefined) {
-            const url = `https://leagueoflegends.fandom.com/api.php?action=parse&text={{Rune%20path%20infobox/Resolve}}&contentmodel=wikitext&format=json`;
+            const url = `https://leagueoflegends.fandom.com/api.php?action=parse&text={{Rune%20path%20infobox/${tree.name}}}&contentmodel=wikitext&format=json`;
             const request = await fetch(url).catch(err => {console.log(err);});
             const body = await request.json();
             let dom = new JSDOM(body.parse.text['*'], {contentType: 'text/html'});
