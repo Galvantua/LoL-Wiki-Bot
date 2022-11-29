@@ -11,7 +11,7 @@ const { JSDOM } = jsdom;
 
 export const information = {
 	name: 'ability',
-	description: 'Gets the information fo ran ability from the wiki',
+	description: 'Gets the information for an ability from the wiki',
 };
 
 export default {

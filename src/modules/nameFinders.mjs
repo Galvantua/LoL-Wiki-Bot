@@ -1,3 +1,4 @@
+import { underscore } from 'discord.js';
 import Fuse from 'fuse.js';
 import fetch from 'node-fetch';
 
@@ -290,6 +291,7 @@ export async function findChampionName(input, interaction) {
 
 	return result[0].item; // need to rewrite to spit out array
 }
+
 export async function findItemName(input, interaction) {
 	const itemReq = await fetch(
 		`https://cdn.merakianalytics.com/riot/lol/resources/latest/en-US/items.json`,
@@ -327,5 +329,6 @@ export async function findItemName(input, interaction) {
 	}
 	return itemObj[itemNames.indexOf(result[0].item)];
 }
+
 
 export default {};
