@@ -58,7 +58,7 @@ export default {
 				}
 			}
 		}
-
+		let mythic;
 		for (const passive in bodyJSON.passives) {
 			let passiveName;
 			if (bodyJSON.passives[passive].name) {
@@ -121,33 +121,94 @@ export default {
 			}
 
 			if (bodyJSON.passives[passive].mythic == true) {
-				embed.addFields({
-					name: `Mythic Passive: `,
-					value: `Embues each of your legendary items with:`,
-				});
-				for (const stat in bodyJSON.passives[passive].stats) {
-					for (const type in bodyJSON.passives[passive].stats[stat]) {
-						if (
-							bodyJSON.passives[passive].stats[stat][type] !== 0.0
-						) {
-							embed.addFields({
-								name: `${type} ${stat}`,
-								value: `${bodyJSON.passives[passive].stats[stat][type]}`,
-								inline: true,
-							});
-						}
-					}
-				}
+				mythic = true;
 			} else if (bodyJSON.passives[passive].unique == true) {
+				mythic = false;
 				embed.addFields({
 					name: `Unique Passive: ${passiveName}`,
 					value: `${passiveEffects} ${passiveCooldown}`,
 				});
 			} else if (bodyJSON.passives[passive].unique == false) {
+				mythic = false;
 				embed.addFields({
 					name: `Passive: ${passiveName}`,
 					value: `${passiveEffects} ${passiveCooldown}`,
 				});
+			}
+		}
+
+		for (const active in bodyJSON.active) {
+			let activeName;
+			if (bodyJSON.active[active].name) {
+				activeName = bodyJSON.active[active].name;
+			}
+			let activeEffects;
+			if (bodyJSON.active[active].effects != null) {
+				activeEffects = bodyJSON.active[active].effects.replace(
+					/\+/g,
+					'%2b',
+				);
+				const activeUrl = `https://leagueoflegends.fandom.com/api.php?action=parse&text=${activeEffects}&contentmodel=wikitext&format=json`;
+				const activeRequest = await fetch(activeUrl).catch((err) => {
+					console.log(err);
+				});
+				const activeBody = await activeRequest.text();
+				let activebodyJSON;
+				try {
+					activebodyJSON = JSON.parse(activeBody);
+				} catch (error) {
+					interaction.editReply('**Error parseing active**');
+					return;
+				}
+
+				const activedom = new JSDOM(activebodyJSON.parse.text['*'], {
+					contentType: 'text/html',
+				});
+
+				let activeDocument = activedom.window.document;
+				activeEffects = activeDocument.querySelector('p').textContent;
+			}
+			let activeCooldown;
+			console.log(bodyJSON.active[active].cooldown);
+			if (bodyJSON.active[active].cooldown != null) {
+				activeCooldown = bodyJSON.active[active].cooldown;
+				console.log(activeCooldown);
+				if (activeCooldown != 'Global') {
+					activeCooldown = `(${activeCooldown} second cooldown)`;
+				}
+			} else {
+				activeCooldown = '';
+			}
+			embed.addFields({
+				name: `Active: ${activeName}`,
+				value: `${activeEffects} ${activeCooldown}`,
+			});
+		}
+		if (mythic) {
+			embed.addFields({
+				name: `Mythic Passive: `,
+				value: `Embues each of your legendary items with:`,
+			});
+			for (const passive in bodyJSON.passives) {
+				if (bodyJSON.passives[passive].mythic == true) {
+					for (const stat in bodyJSON.passives[passive].stats) {
+						for (const type in bodyJSON.passives[passive].stats[
+							stat
+						]) {
+							if (
+								bodyJSON.passives[passive].stats[stat][type] !==
+								0.0
+							) {
+								embed.addFields({
+									name: `${type} ${stat}`,
+									value: `${bodyJSON.passives[passive].stats[stat][type]}`,
+									inline: true,
+								});
+							}
+						}
+					}
+					continue;
+				}
 			}
 		}
 
