@@ -113,9 +113,9 @@ export default {
 				});
 
 				let passiveDocument = passivedom.window.document;
-				passiveCooldown = `(${passiveDocument
+				passiveCooldown = `Cooldown: ${passiveDocument
 					.querySelector('p')
-					.textContent.trim()} second cooldown)`;
+					.textContent.trim()} seconds`;
 			} else {
 				passiveCooldown = '';
 			}
