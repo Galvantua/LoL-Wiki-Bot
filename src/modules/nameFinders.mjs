@@ -2,6 +2,62 @@ import { underscore } from 'discord.js';
 import Fuse from 'fuse.js';
 import fetch from 'node-fetch';
 
+export async function findRune(input, ref) {
+	try {
+		input = input.toLowerCase().replace(/([^a-z])/g, '');
+		let rtn = false;
+
+		let excList = {
+			mana: 'Manaflow Band'
+		};
+
+		let randomList = {
+			cash: ['First Strike', 'Future\'s Market']
+		}
+
+		if (excList[input])
+			input = excList[input];
+		else if (randomList[input])
+			input = randomList[input][Math.floor(Math.random() * randomList[input].length)];
+		input = input.toLowerCase().replace(/([^a-z])/g, '');
+
+		const runes = await fetch('https://ddragon.leagueoflegends.com/cdn/12.21.1/data/en_US/runesReforged.json')
+							.then(async(res) => {return await res.json()})
+							.catch(err => {console.error(err); rtn = true;});
+		if (rtn)
+			return undefined;
+
+		const tree = runes.find(t => t.name.toLowerCase().replace(/([^a-z])/g, '') === input)
+		if (tree) {
+			ref.isRune = false;
+			return tree;
+		}
+
+		let rune;
+		runes.forEach(t => {
+            t.slots.forEach(s => {
+                s.runes.forEach(r => {
+                    if (r.name.toLowerCase().replace(/([^a-z])/g, '') === input) {
+                        rune = r;
+                    }
+                });
+            });
+        });
+
+		if (rune) {
+			ref.isRune = true;
+			return rune;
+		}
+
+		return null;
+
+	} catch (error) {
+		console.error(error);
+		return undefined;
+	}
+	
+}
+
 export async function findAbilityName(input, interaction) {
 	let excList = {
 		aph: 'Aphelios',

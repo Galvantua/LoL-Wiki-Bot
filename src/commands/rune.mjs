@@ -4,7 +4,8 @@ import {
 	EmbedBuilder,
     EmbedAssertions,
 } from 'discord.js';
-import { JSDOM } from 'jsdom'
+import { JSDOM } from 'jsdom';
+import { findRune } from '../modules/nameFinders.mjs';
 
 export const informaton = {
     name: 'rune',
@@ -22,42 +23,45 @@ export default {
                 return option;
             })
     , async execute (interaction, channel) {
-        let givenRune = interaction.options.getString('rune');
-        givenRune = givenRune.toLowerCase().replace(/([^a-z])/g, '');
 
-        const treeDescriptions = {precision: 'Improved attacks and sustained damage.',
-                              domination: 'Burst damage and target access.',
-                              sorcery: 'Empowered abilities and resource manipulation.',
-                              inspiration: 'Creative tools and rule bending.',
-                              resolve: 'Durability and crowd control.'}
         let rtnEmbeds = [];
         let embed = new EmbedBuilder();
 
         await interaction.deferReply();
 
-        
-
         try {
-        const runeReq = await fetch('http://ddragon.leagueoflegends.com/cdn/12.21.1/data/en_US/runesReforged.json')
-        .catch(err => {
+        let ref = {isRune: true};
+        let givenRune = interaction.options.getString('rune');
+        let rune = await findRune(givenRune, ref);
+        
+        if (rune === undefined) {
             embed.setTitle('**Error getting rune or rune tree**');
             rtnEmbeds.push(embed);
-            interaction.editReply({embeds: rtnEmbeds});
+            await interaction.editReply({embeds: rtnEmbeds});
             return;
-        });
-
-        const runes = await runeReq.json();
-        let tree = runes.find(t => t.name.toLowerCase().replace(/([^a-z])/g, '') === givenRune);
-        if (tree !== undefined) {
-            const url = `https://leagueoflegends.fandom.com/api.php?action=parse&text={{Rune%20path%20infobox/${tree.name}}}&contentmodel=wikitext&format=json`;
+        } if (rune === null) {
+            embed.setTitle('**Rune or rune tree not found**');
+            rtnEmbeds.push(embed);
+            await interaction.editReply({embeds: rtnEmbeds});
+            return;
+        }
+    
+        if (!ref.isRune) {
+            const treeDescriptions = {precision: 'Improved attacks and sustained damage.',
+                                    domination: 'Burst damage and target access.',
+                                    sorcery: 'Empowered abilities and resource manipulation.',
+                                    inspiration: 'Creative tools and rule bending.',
+                                    resolve: 'Durability and crowd control.'};
+            
+            const url = `https://leagueoflegends.fandom.com/api.php?action=parse&text={{Rune%20path%20infobox/${rune.name}}}&contentmodel=wikitext&format=json`;
             const request = await fetch(url).catch(err => {console.log(err);});
             const body = await request.json();
             let dom = new JSDOM(body.parse.text['*'], {contentType: 'text/html'});
             let document = dom.window.document;
 
-            embed.setTitle(tree.name);
-            embed.setThumbnail(`https://ddragon.leagueoflegends.com/cdn/img/${tree.icon}`);
-            embed.setDescription(`_${treeDescriptions[tree.name.toLowerCase()] || ''}_`)
+            embed.setTitle(rune.name);
+            embed.setThumbnail(`https://ddragon.leagueoflegends.com/cdn/img/${rune.icon}`);
+            embed.setDescription(`_${treeDescriptions[rune.name.toLowerCase()] || ''}_`)
 
             let index = 0;
             while (document.getElementsByClassName('pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background')[index] !== undefined && document.getElementsByClassName(`pi-smart-group-body pi-border-color`)[index] !== undefined && document.getElementsByClassName(`pi-smart-group-body pi-border-color`)[index].textContent.trim()) {
@@ -68,23 +72,9 @@ export default {
             rtnEmbeds.push(embed);
             interaction.editReply({embeds: rtnEmbeds});
             return;
-        }
-
-        let rune;
-        runes.forEach(t => {
-            t.slots.forEach(s => {
-                s.runes.forEach(r => {
-                    if (r.name.toLowerCase().replace(/([^a-z])/g, '') === givenRune) {
-                        rune = r;
-                        tree = t;
-                    }
-                });
-            });
-        });
-
-        if ( rune !== undefined ) {
+        } else {
             const url = `https://leagueoflegends.fandom.com/api.php?action=parse&text={{rune%20header|${rune.name}}}&contentmodel=wikitext&format=json`;
-            const request = await fetch(url).catch(err => {console.log(err);});
+            const request = await fetch(url).catch(err => {console.error(err);});
             const body = await request.json();
             let dom = new JSDOM(body.parse.text['*'], {contentType: 'text/html'});
             let document = dom.window.document;
@@ -109,16 +99,12 @@ export default {
             interaction.editReply({embeds: rtnEmbeds});
             return;
         }
-
-        embed.setTitle('**Rune or rune tree not found**');
+    } catch (error) {
+        console.error(error);
+        embed.setTitle('**Error getting rune or rune tree**');
         rtnEmbeds.push(embed);
-        await interaction.editReply({embeds: rtnEmbeds});
-        } catch (err) {
-            embed.setTitle('**Error getting rune or rune tree**');
-            rtnEmbeds.push(embed);
-            interaction.editReply({embeds: rtnEmbeds});
-            return;
-        }
+        interaction.editReply({embeds: rtnEmbeds});
+        return;
     }
-    
+    }
 };
