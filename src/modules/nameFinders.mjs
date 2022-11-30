@@ -1,6 +1,7 @@
 import { underscore } from 'discord.js';
 import Fuse from 'fuse.js';
 import fetch from 'node-fetch';
+import { version } from '../index.mjs';
 
 export async function findRune(input, ref) {
 	try {
@@ -8,7 +9,8 @@ export async function findRune(input, ref) {
 		let rtn = false;
 
 		let excList = {
-			mana: 'Manaflow Band'
+			mana: 'Manaflow Band',
+			ice: 'Glacial Augment'
 		};
 
 		let randomList = {
@@ -21,7 +23,7 @@ export async function findRune(input, ref) {
 			input = randomList[input][Math.floor(Math.random() * randomList[input].length)];
 		input = input.toLowerCase().replace(/([^a-z])/g, '');
 
-		const runes = await fetch('https://ddragon.leagueoflegends.com/cdn/12.21.1/data/en_US/runesReforged.json')
+		const runes = await fetch(`https://ddragon.leagueoflegends.com/cdn/${version}/data/en_US/runesReforged.json`)
 							.then(async(res) => {return await res.json()})
 							.catch(err => {console.error(err); rtn = true;});
 		if (rtn)
