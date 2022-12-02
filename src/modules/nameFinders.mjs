@@ -9,8 +9,7 @@ export async function findRune(input, ref) {
 		let rtn = false;
 
 		let excList = {
-			mana: 'Manaflow Band',
-			ice: 'Glacial Augment'
+			mana: 'Manaflow Band'
 		};
 
 		let randomList = {
