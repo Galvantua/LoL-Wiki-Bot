@@ -1,5 +1,63 @@
+import { underscore } from 'discord.js';
 import Fuse from 'fuse.js';
 import fetch from 'node-fetch';
+import { version } from '../index.mjs';
+
+export async function findRune(input, ref) {
+	try {
+		input = input.toLowerCase().replace(/([^a-z])/g, '');
+		let rtn = false;
+
+		let excList = {
+			mana: 'Manaflow Band'
+		};
+
+		let randomList = {
+			cash: ['First Strike', 'Future\'s Market']
+		}
+
+		if (excList[input])
+			input = excList[input];
+		else if (randomList[input])
+			input = randomList[input][Math.floor(Math.random() * randomList[input].length)];
+		input = input.toLowerCase().replace(/([^a-z])/g, '');
+
+		const runes = await fetch(`https://ddragon.leagueoflegends.com/cdn/${version}/data/en_US/runesReforged.json`)
+							.then(async(res) => {return await res.json()})
+							.catch(err => {console.error(err); rtn = true;});
+		if (rtn)
+			return undefined;
+
+		const tree = runes.find(t => t.name.toLowerCase().replace(/([^a-z])/g, '') === input)
+		if (tree) {
+			ref.isRune = false;
+			return tree;
+		}
+
+		let rune;
+		runes.forEach(t => {
+            t.slots.forEach(s => {
+                s.runes.forEach(r => {
+                    if (r.name.toLowerCase().replace(/([^a-z])/g, '') === input) {
+                        rune = r;
+                    }
+                });
+            });
+        });
+
+		if (rune) {
+			ref.isRune = true;
+			return rune;
+		}
+
+		return null;
+
+	} catch (error) {
+		console.error(error);
+		return undefined;
+	}
+	
+}
 
 export async function findAbilityName(input, interaction) {
 	let excList = {
@@ -290,6 +348,7 @@ export async function findChampionName(input, interaction) {
 
 	return result[0].item; // need to rewrite to spit out array
 }
+
 export async function findItemName(input, interaction) {
 	const itemReq = await fetch(
 		`https://cdn.merakianalytics.com/riot/lol/resources/latest/en-US/items.json`,
@@ -327,5 +386,6 @@ export async function findItemName(input, interaction) {
 	}
 	return itemObj[itemNames.indexOf(result[0].item)];
 }
+
 
 export default {};

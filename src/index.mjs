@@ -5,6 +5,22 @@ import { Routes } from 'discord-api-types/v9';
 import config from '../config.json' assert { type: 'json' };
 import Package from '../package.json' assert { type: 'json' };
 
+export let version;
+
+async function checkVersion() {
+    let versions;
+    do {
+        versions = await fetch('https://ddragon.leagueoflegends.com/api/versions.json')
+                            .then(async(res) => {return await res.json()})
+                            .catch(err => {console.error(err); return undefined});
+    } while (!versions || !versions[0]);
+    version = versions[0];
+	console.log(`Checked version, new version: ${version}`);
+}
+
+setInterval(checkVersion, 86400000);
+checkVersion();
+
 // Create a new client instance
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 const rest = new REST({ version: '9' }).setToken(config.token);
