@@ -122,7 +122,7 @@ client.on('ready', async () => {
 	await registerSlashCommands();
 	await client.user.setPresence({
 		activities: [{ name: 'Theorycrafting!', type: 0 }],
-		status: 'online',
+		status: 'idle',
 	});
 	console.log(`✅ Bot is ready!`);
 });
