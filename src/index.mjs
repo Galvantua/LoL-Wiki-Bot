@@ -165,7 +165,7 @@ client.on('interactionCreate', async (interaction) => {
 
 			//Embed
 			const embed = new EmbedBuilder();
-			embed.setColor('#ff0000');
+			embed.setColor(0XF7A4A4);
 			embed.setTitle('❌ Error during command execution');
 			embed.setDescription(
 				`An error occured while executing the command '${interaction.commandName}'.`,
