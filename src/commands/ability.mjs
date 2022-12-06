@@ -283,8 +283,10 @@ export default {
 			for (let i = 0; i < abilityDetails.length; i++) {
 				const detail = abilityDetails[i];
 
-				detailText = detail.textContent;
-				// console.log(detailText);
+				const detailText = new handlers().wikiFormat(
+					detail
+				).textContent;
+				//console.log(detailText);
 
 				if (detailText) {
 					embed.addFields({

@@ -7,7 +7,7 @@ import {
 } from 'discord.js';
 import { JSDOM } from 'jsdom';
 import { findRune } from '../modules/nameFinders.mjs';
-import { format, linkify } from '../modules/format.mjs';
+import handlers from '../modules/handlers.mjs';
 
 export const informaton = {
     name: 'rune',
@@ -113,7 +113,7 @@ export default {
                             new ButtonBuilder()
                                 .setCustomId(`${10 + ind}`)
                                 .setLabel(r)
-                                .setStyle(ButtonStyle.Secondary)
+                                .setStyle(ButtonStyle.Primary)
                         );
                     });
                     
@@ -154,8 +154,8 @@ export default {
                 if (document.getElementsByClassName('pi-item pi-data pi-item-spacing pi-border-color')[index].childElementCount === 2)
                     embed.addFields({name: document.getElementsByClassName('pi-item pi-data pi-item-spacing pi-border-color')[index].children[0].textContent, value: document.getElementsByClassName('pi-item pi-data pi-item-spacing pi-border-color')[index].children[1].textContent});
                 else {
-                    const linkless = format(document.getElementsByClassName('pi-item pi-data pi-item-spacing pi-border-color')[index]).textContent;
-                    const content = linkify(document.getElementsByClassName('pi-item pi-data pi-item-spacing pi-border-color')[index]).textContent;
+                    handlers().wikiFormat(document.getElementsByClassName('pi-item pi-data pi-item-spacing pi-border-color')[index]).textContent;
+                    const content = handlers().wikiLinkify(document.getElementsByClassName('pi-item pi-data pi-item-spacing pi-border-color')[index]).textContent;
                     
                     description += content;
                     // if (content.length > 1024)
