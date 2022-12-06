@@ -157,7 +157,7 @@ export default {
                     new handlers().wikiFormat(document.getElementsByClassName('pi-item pi-data pi-item-spacing pi-border-color')[index]);
                     const content = new handlers().wikiLinkify(document.getElementsByClassName('pi-item pi-data pi-item-spacing pi-border-color')[index]).textContent.trim();
                     
-                    description += content;
+                    description += content + '\n\n';
                 }
                 index++;
             }
