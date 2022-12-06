@@ -237,14 +237,12 @@ export default {
 						const linkless = new handlers().wikiFormat(
 							document.getElementsByClassName(
 								'pi-item pi-data pi-item-spacing pi-border-color',
-							)[index],
-							false,
+							)[index]
 						).textContent;
-						const content = new handlers().wikiFormat(
+						const content = new handlers().wikiLinkify(
 							document.getElementsByClassName(
 								'pi-item pi-data pi-item-spacing pi-border-color',
-							)[index],
-							true,
+							)[index]
 						).textContent;
 						if (content.length <= 1024)
 							embed.addFields({ name: '​', value: content });

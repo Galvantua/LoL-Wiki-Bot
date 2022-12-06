@@ -92,8 +92,7 @@ export default {
 
 				let passiveDocument = passivedom.window.document;
 				passiveEffects = new handlers().wikiFormat(
-					passiveDocument.querySelector('p'),
-					false,
+					passiveDocument.querySelector('p')
 				).textContent;
 			}
 			let passiveCooldown;
@@ -171,8 +170,7 @@ export default {
 
 				let activeDocument = activedom.window.document;
 				activeEffects = new handlers().wikiFormat(
-					activeDocument.querySelector('p'),
-					false,
+					activeDocument.querySelector('p')
 				).textContent;
 			}
 			let activeCooldown;

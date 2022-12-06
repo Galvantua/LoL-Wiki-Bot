@@ -284,8 +284,7 @@ export default {
 				const detail = abilityDetails[i];
 
 				const detailText = new handlers().wikiFormat(
-					detail,
-					false,
+					detail
 				).textContent;
 				//console.log(detailText);
 
