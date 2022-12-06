@@ -11,12 +11,12 @@ export async function findRune(input, ref) {
 		let excList = {
 			mana: 'Manaflow Band',
 			pta: 'Press the Attack',
-			hextechflash: 'Hextech Flashtraption'
+			hextechflash: 'Hextech Flashtraption',
 		};
 
 		let randomList = {
-			cash: ['First Strike', 'Future\'s Market']
-		}
+			cash: ['First Strike', "Future's Market"],
+		};
 
 		if (excList[input]) input = excList[input];
 		else if (randomList[input])
@@ -25,7 +25,6 @@ export async function findRune(input, ref) {
 					Math.floor(Math.random() * randomList[input].length)
 				];
 		input = input.toLowerCase().replace(/([^a-z])/g, '');
-
 
 		const runes = await fetch(
 			`https://ddragon.leagueoflegends.com/cdn/${version}/data/en_US/runesReforged.json`,

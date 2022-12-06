@@ -13,66 +13,76 @@ export default class handler {
 	constructor() {}
 
 	wikiFormat(element) {
-		
-		const icons = element.querySelectorAll("img");
+		const icons = element.querySelectorAll('img');
 
-		icons.forEach(icon => {
+		icons.forEach((icon) => {
 			switch (icon.getAttribute('data-image-name')) {
 				case 'Hybrid resistances icon.png':
-					icon.parentElement.innerHTML = '<:Hybrid_resistances:1049644163680981022>';
+					icon.parentElement.innerHTML =
+						'<:Hybrid_resistances:1049644163680981022>';
 					break;
 				case 'Gold.png':
-					icon.parentElement.innerHTML = '<:Gold:1049630454266998804>';
+					icon.parentElement.innerHTML =
+						'<:Gold:1049630454266998804>';
 					break;
 				case 'Ranged role.png':
-					icon.parentElement.innerHTML = '<:Ranged:1049627230776602655>';
+					icon.parentElement.innerHTML =
+						'<:Ranged:1049627230776602655>';
 					break;
 				case 'Melee role.png':
-					icon.parentElement.innerHTML = '<:Melee:1049626581271851008>';
+					icon.parentElement.innerHTML =
+						'<:Melee:1049626581271851008>';
 					break;
 				case 'Slow icon.png':
-					icon.parentElement.innerHTML = '<:Slow:1049627228239040532>';
+					icon.parentElement.innerHTML =
+						'<:Slow:1049627228239040532>';
 					break;
 				case 'Champion icon.png':
-					icon.parentElement.innerHTML = '<:Champion:1049627894101577748>';
+					icon.parentElement.innerHTML =
+						'<:Champion:1049627894101577748>';
 					break;
 				case 'Stun icon.png':
 					icon.parentElement.innerHTML = '<:CC:1049627891673071677>';
 					break;
 				case 'Movement speed icon.png':
-					icon.parentElement.innerHTML = '<:Movement_speed:1049626078236397568>';
+					icon.parentElement.innerHTML =
+						'<:Movement_speed:1049626078236397568>';
 					break;
 				case 'Heal power icon.png':
-					icon.parentElement.innerHTML = '<:Heal:1049623247383183400>';
+					icon.parentElement.innerHTML =
+						'<:Heal:1049623247383183400>';
 					break;
 			}
 		});
 
 		for (const node of element.querySelectorAll('b')) {
-			if (node.textContent)
-				node.innerHTML = `​**​${node.innerHTML}​**​`;
+			if (node.textContent) node.innerHTML = `​**​${node.innerHTML}​**​`;
 		}
 		for (const node of element.querySelectorAll('a')) {
-			if (node.parentElement.nodeName !== 'B' && node.textContent && !node.textContent.match(/:.+:/g))
+			if (
+				node.parentElement.nodeName !== 'B' &&
+				node.textContent &&
+				!node.textContent.match(/:.+:/g)
+			)
 				node.textContent = `​**​${node.textContent}​**​`;
 		}
 		for (const node of element.querySelectorAll('.template_sbc')) {
-			if (node.childElementCount === 1 && node.children[0].nodeName === 'B')
-                node.innerHTML = `​*​${node.innerHTML.toUpperCase()}​*​`;
-            else if (node.textContent)
-                node.innerHTML = `​_​${node.innerHTML.toUpperCase()}​_​`;
+			if (
+				node.childElementCount === 1 &&
+				node.children[0].nodeName === 'B'
+			)
+				node.innerHTML = `​*​${node.innerHTML.toUpperCase()}​*​`;
+			else if (node.textContent)
+				node.innerHTML = `​_​${node.innerHTML.toUpperCase()}​_​`;
 		}
 		for (const node of element.querySelectorAll('ul')) {
-			if (node.textContent)
-				node.textContent = node.textContent + '\n';
+			if (node.textContent) node.textContent = node.textContent + '\n';
 		}
 		for (const node of element.querySelectorAll('ol')) {
-			if (node.textContent)
-				node.textContent = node.textContent + '\n';
+			if (node.textContent) node.textContent = node.textContent + '\n';
 		}
 		for (const node of element.querySelectorAll('li')) {
-			if (node.textContent)
-				node.textContent = '\n• ' + node.textContent;
+			if (node.textContent) node.textContent = '\n• ' + node.textContent;
 		}
 
 		return element;
@@ -80,14 +90,13 @@ export default class handler {
 
 	wikiLinkify(element) {
 		const links = element.querySelectorAll('a');
-		links.forEach(link => {
+		links.forEach((link) => {
 			if (link.textContent && !link.textContent.match(/:.+:/g))
-				link.textContent = `[${link.textContent}](https://leagueoflegends.fandom.com${link.href})`;	
-		})
+				link.textContent = `[${link.textContent}](https://leagueoflegends.fandom.com${link.href})`;
+		});
 
 		return element;
 	}
-	
 
 	//Special handler for aphelios weapon system
 	async apheliosHandler(abilityLetter, interaction) {
