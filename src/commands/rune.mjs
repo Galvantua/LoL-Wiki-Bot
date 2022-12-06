@@ -149,19 +149,15 @@ export default {
             embed.setThumbnail(`https://ddragon.leagueoflegends.com/cdn/img/${rune.icon}`);
             
             let index = 0;
-            let description = '';
+            let description = '\n';
             while ( document.getElementsByClassName('pi-item pi-data pi-item-spacing pi-border-color')[index + 1] !== undefined) {
                 if (document.getElementsByClassName('pi-item pi-data pi-item-spacing pi-border-color')[index].childElementCount === 2)
                     embed.addFields({name: document.getElementsByClassName('pi-item pi-data pi-item-spacing pi-border-color')[index].children[0].textContent, value: document.getElementsByClassName('pi-item pi-data pi-item-spacing pi-border-color')[index].children[1].textContent});
                 else {
-                    new handlers().wikiFormat(document.getElementsByClassName('pi-item pi-data pi-item-spacing pi-border-color')[index]).textContent;
+                    new handlers().wikiFormat(document.getElementsByClassName('pi-item pi-data pi-item-spacing pi-border-color')[index]);
                     const content = new handlers().wikiLinkify(document.getElementsByClassName('pi-item pi-data pi-item-spacing pi-border-color')[index]).textContent;
                     
                     description += content;
-                    // if (content.length > 1024)
-                    //     embed.addFields({name: '​', value: linkless});
-                    // else
-                    //     embed.addFields({name: '​', value: content});
                 }
                 index++;
             }
