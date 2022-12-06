@@ -10,12 +10,14 @@ export async function findRune(input, ref) {
 
 		let excList = {
 			mana: 'Manaflow Band',
+			pta: 'Press the Attack',
+			hextechflash: 'Hextech Flashtraption'
 		};
 
 		let randomList = {
-			cash: ['First Strike', "Future's Market"],
-		};
-		let names = [];
+			cash: ['First Strike', 'Future\'s Market']
+		}
+
 		if (excList[input]) input = excList[input];
 		else if (randomList[input])
 			input =
@@ -35,6 +37,8 @@ export async function findRune(input, ref) {
 				rtn = true;
 			});
 		if (rtn) return undefined;
+
+		let names = [];
 		runes.forEach((t) => {
 			names.push(t.name.toLowerCase().replace(/([^a-z])/g, ''));
 			t.slots.forEach((s) => {
@@ -45,10 +49,10 @@ export async function findRune(input, ref) {
 		});
 
 		const fuse = new Fuse(names);
-		const result = fuse.search(input);
-		const final = result[0].item;
+		const results = fuse.search(input);
+		const final = results[0].item || input;
 
-		const tree = runes.find(
+		let tree = runes.find(
 			(t) => t.name.toLowerCase().replace(/([^a-z])/g, '') === final,
 		);
 		if (tree) {
@@ -64,6 +68,7 @@ export async function findRune(input, ref) {
 						r.name.toLowerCase().replace(/([^a-z])/g, '') === final
 					) {
 						rune = r;
+						tree = t;
 					}
 				});
 			});
@@ -71,6 +76,7 @@ export async function findRune(input, ref) {
 
 		if (rune) {
 			ref.isRune = true;
+			rune.tree = tree;
 			return rune;
 		}
 
