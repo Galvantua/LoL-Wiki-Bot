@@ -61,7 +61,8 @@ export default {
 				Sorcery: '<:Sorcery:1049646552131575848>',
 				Inspiration: '<:Inspiration:1049646545127096371>',
 			};
-
+			let haveFields = false;
+			let description = '​';
 			if (!ref.isRune) {
 				const treeDescriptions = {
 					precision: 'Improved attacks and sustained damage.',
@@ -232,10 +233,8 @@ export default {
 					`https://ddragon.leagueoflegends.com/cdn/img/${rune.icon}`,
 				);
 
-				let haveFields = false;
 				let index = 0;
 
-				let description = '​';
 				while (
 					document.getElementsByClassName(
 						'pi-item pi-data pi-item-spacing pi-border-color',
@@ -255,28 +254,31 @@ export default {
 							)[index].children[1].textContent,
 						});
 						haveFields = true;
-					} else
+					} else {
 						new handlers().wikiFormat(
 							document.getElementsByClassName(
 								'pi-item pi-data pi-item-spacing pi-border-color',
 							)[index],
 						);
-					const content = new handlers()
-						.wikiLinkify(
-							document.getElementsByClassName(
-								'pi-item pi-data pi-item-spacing pi-border-color',
-							)[index],
-						)
-						.textContent.trim();
 
-					description += '\n' + content + '\n';
+						const content = new handlers()
+							.wikiLinkify(
+								document.getElementsByClassName(
+									'pi-item pi-data pi-item-spacing pi-border-color',
+								)[index],
+							)
+							.textContent.trim();
+						//console.log(content);
+						description += '\n' + content + '\n';
+					}
+					index++;
 				}
-				index++;
 			}
 
 			if (haveFields) description += '​';
 
 			embed.setDescription(description);
+
 			rtnEmbeds.push(embed);
 			interaction.editReply({ embeds: rtnEmbeds });
 			return;
