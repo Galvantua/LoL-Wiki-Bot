@@ -78,7 +78,7 @@ export default class handler {
 
 		for (const node of element.querySelectorAll('b')) {
 			if (node.textContent)
-				node.textContent = `​**​${node.textContent}​**​`;
+				node.innerHTML = `​**​${node.innerHTML}​**​`;
 		}
 		for (const node of element.querySelectorAll('a')) {
 			if (node.parentElement.nodeName !== 'B' && node.textContent && !node.textContent.match(/:.+:/g))
