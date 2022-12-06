@@ -3,6 +3,9 @@ export function format(element) {
         let child = element.children[i];
         format(child);
         switch (child.getAttribute('data-image-name')) {
+            case 'Hybrid resistances icon.png':
+                child.parentElement.innerHTML = '<:Hybrid_resistances:1049644163680981022>';
+                break;
             case 'Gold.png':
                 child.parentElement.innerHTML = '<:Gold:1049630454266998804>';
                 break;

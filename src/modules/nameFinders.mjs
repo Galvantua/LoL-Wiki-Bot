@@ -28,7 +28,23 @@ export async function findRune(input, ref) {
 		if (rtn)
 			return undefined;
 
-		const tree = runes.find(t => t.name.toLowerCase().replace(/([^a-z])/g, '') === input)
+		let names = [];
+		runes.forEach((t) => {
+			names.push(t.name.toLowerCase().replace(/([^a-z])/g, ''));
+			t.slots.forEach((s) => {
+				s.runes.forEach((r) => {
+					names.push(r.name.toLowerCase().replace(/([^a-z])/g, ''));
+				});
+			});
+		});
+
+		const fuse = new Fuse(names);
+		const results = fuse.search(input);
+		const final = results[0].item || input;
+		console.log(results);
+		console.log(final);
+
+		let tree = runes.find(t => t.name.toLowerCase().replace(/([^a-z])/g, '') === final)
 		if (tree) {
 			ref.isRune = false;
 			return tree;
@@ -38,8 +54,9 @@ export async function findRune(input, ref) {
 		runes.forEach(t => {
             t.slots.forEach(s => {
                 s.runes.forEach(r => {
-                    if (r.name.toLowerCase().replace(/([^a-z])/g, '') === input) {
+                    if (r.name.toLowerCase().replace(/([^a-z])/g, '') === final) {
                         rune = r;
+						tree = t;
                     }
                 });
             });
@@ -47,6 +64,7 @@ export async function findRune(input, ref) {
 
 		if (rune) {
 			ref.isRune = true;
+			rune.tree = tree;
 			return rune;
 		}
 

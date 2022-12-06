@@ -53,6 +53,12 @@ export default {
         
         embed.setColor(0xB6E2A1);
 
+        const treeIcons = { Precision: '<:Precision:1049646550462242866>',
+                            Resolve: '<:Resolve:1049646547131969536>',
+                            Domination: '<:Domination:1049646548868407316>',
+                            Sorcery: '<:Sorcery:1049646552131575848>',
+                            Inspiration: '<:Inspiration:1049646545127096371>'};
+
         if (!ref.isRune) {
             const treeDescriptions = {precision: 'Improved attacks and sustained damage.',
                                     domination: 'Burst damage and target access.',
@@ -65,7 +71,7 @@ export default {
             const dom = new JSDOM(body.parse.text['*'], {contentType: 'text/html'});
             const document = dom.window.document;
 
-            embed.setTitle(rune.name);
+            embed.setTitle(`**${rune.name}**`);
             embed.setThumbnail(`https://ddragon.leagueoflegends.com/cdn/img/${rune.icon}`);
             embed.setDescription(`_${treeDescriptions[rune.name.toLowerCase()] || ''}_`)
 
@@ -139,10 +145,11 @@ export default {
                 return;
             }
 
-            embed.setTitle(`**${rune.name}**`);
+            embed.setTitle(`**${treeIcons[rune.tree.name]} ${rune.name}**`);
             embed.setThumbnail(`https://ddragon.leagueoflegends.com/cdn/img/${rune.icon}`);
             
             let index = 0;
+            let description = '';
             while ( document.getElementsByClassName('pi-item pi-data pi-item-spacing pi-border-color')[index + 1] !== undefined) {
                 if (document.getElementsByClassName('pi-item pi-data pi-item-spacing pi-border-color')[index].childElementCount === 2)
                     embed.addFields({name: document.getElementsByClassName('pi-item pi-data pi-item-spacing pi-border-color')[index].children[0].textContent, value: document.getElementsByClassName('pi-item pi-data pi-item-spacing pi-border-color')[index].children[1].textContent});
@@ -150,14 +157,16 @@ export default {
                     const linkless = format(document.getElementsByClassName('pi-item pi-data pi-item-spacing pi-border-color')[index]).textContent;
                     const content = linkify(document.getElementsByClassName('pi-item pi-data pi-item-spacing pi-border-color')[index]).textContent;
                     
-                    if (content.length > 1024)
-                        embed.addFields({name: '​', value: linkless});
-                    else
-                        embed.addFields({name: '​', value: content});
+                    description += content;
+                    // if (content.length > 1024)
+                    //     embed.addFields({name: '​', value: linkless});
+                    // else
+                    //     embed.addFields({name: '​', value: content});
                 }
                 index++;
             }
 
+            embed.setDescription(description);
             rtnEmbeds.push(embed);
             interaction.editReply({embeds: rtnEmbeds});
             return;
