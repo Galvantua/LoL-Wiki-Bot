@@ -149,7 +149,7 @@ export default {
                 else {
                     const linkless = format(document.getElementsByClassName('pi-item pi-data pi-item-spacing pi-border-color')[index]).textContent;
                     const content = linkify(document.getElementsByClassName('pi-item pi-data pi-item-spacing pi-border-color')[index]).textContent;
-
+                    
                     if (content.length > 1024)
                         embed.addFields({name: '​', value: linkless});
                     else
