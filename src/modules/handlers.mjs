@@ -14,7 +14,7 @@ export default class handler {
 
 	wikiFormat(element) {
 		
-		icons = element.querySelectorAll("img");
+		const icons = element.querySelectorAll("img");
 
 		icons.forEach(icon => {
 			switch (icon.getAttribute('data-image-name')) {
