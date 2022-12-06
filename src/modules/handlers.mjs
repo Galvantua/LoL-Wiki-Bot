@@ -11,103 +11,110 @@ import {
 //Define the handler
 export default class handler {
 	constructor() {}
-	wikiFormat(element, linkify) {
-		if (!linkify) {
-			if (element.querySelectorAll("img[alt='Ranged role.png']")) {
-				let query = element.querySelectorAll(
-					"img[alt='Ranged role.png']",
-				);
 
-				for (let i = 0; i < query.length; i++) {
-					query[i].parentNode.innerHTML = ':dart:';
-				}
-			}
+	wikiFormat(element) {
+		
+		if (element.querySelectorAll("img[alt='Ranged role.png']")) {
+			let query = element.querySelectorAll(
+				"img[alt='Ranged role.png']",
+			);
 
-			if (element.querySelectorAll("img[alt='Melee role.png']")) {
-				let query = element.querySelectorAll(
-					"img[alt='Melee role.png']",
-				);
-				for (let i = 0; i < query.length; i++) {
-					query[i].parentNode.innerHTML = ':crossed_swords:';
-				}
+			for (let i = 0; i < query.length; i++) {
+				query[i].parentNode.innerHTML = ':dart:';
 			}
+		}
 
-			if (element.querySelectorAll("img[alt='Slow icon.png']")) {
-				let query = element.querySelectorAll(
-					"img[alt='Slow icon.png']",
-				);
-				for (let i = 0; i < query.length; i++) {
-					query[i].parentNode.innerHTML = ':snowflake:';
-				}
+		if (element.querySelectorAll("img[alt='Melee role.png']")) {
+			let query = element.querySelectorAll(
+				"img[alt='Melee role.png']",
+			);
+			for (let i = 0; i < query.length; i++) {
+				query[i].parentNode.innerHTML = ':crossed_swords:';
 			}
-			if (element.querySelectorAll("img[alt='Champion icon.png']")) {
-				let query = element.querySelectorAll(
-					"img[alt='Champion icon.png']",
-				);
-				for (let i = 0; i < query.length; i++) {
-					query[i].parentNode.innerHTML = ':fairy:';
-				}
-			}
-			if (element.querySelectorAll("img[alt='Stun icon.png']")) {
-				let query = element.querySelectorAll(
-					"img[alt='Stun icon.png']",
-				);
-				for (let i = 0; i < query.length; i++) {
-					query[i].parentNode.innerHTML = ':cloud_tornado:';
-				}
-			}
-			if (
-				element.querySelectorAll("img[alt='Movement speed icon.png']")
-			) {
-				let query = element.querySelectorAll(
-					"img[alt='Movement speed icon.png']",
-				);
-				for (let i = 0; i < query.length; i++) {
-					query[i].parentNode.innerHTML = ':athletic_shoe:';
-				}
-			}
-			if (element.querySelectorAll("img[alt='Heal power icon.png']")) {
-				let query = element.querySelectorAll(
-					"img[alt='Heal power icon.png']",
-				);
-				for (let i = 0; i < query.length; i++) {
-					query[i].parentNode.innerHTML = ':revolving_hearts:';
-				}
-			}
+		}
 
-			for (const node of element.querySelectorAll('b')) {
-				if (node.textContent)
-					node.textContent = `​**​${node.textContent}​**​`;
+		if (element.querySelectorAll("img[alt='Slow icon.png']")) {
+			let query = element.querySelectorAll(
+				"img[alt='Slow icon.png']",
+			);
+			for (let i = 0; i < query.length; i++) {
+				query[i].parentNode.innerHTML = ':snowflake:';
 			}
-			for (const node of element.querySelectorAll('a')) {
-				if (node.parentElement.nodeName !== 'B' && node.textContent)
-					node.textContent = `​**​${node.textContent}​**​`;
+		}
+		if (element.querySelectorAll("img[alt='Champion icon.png']")) {
+			let query = element.querySelectorAll(
+				"img[alt='Champion icon.png']",
+			);
+			for (let i = 0; i < query.length; i++) {
+				query[i].parentNode.innerHTML = ':fairy:';
 			}
-			for (const node of element.querySelectorAll('.template_sbc')) {
-				if (node.textContent)
-					node.textContent = `​_​${node.textContent.toUpperCase()}​_​`;
+		}
+		if (element.querySelectorAll("img[alt='Stun icon.png']")) {
+			let query = element.querySelectorAll(
+				"img[alt='Stun icon.png']",
+			);
+			for (let i = 0; i < query.length; i++) {
+				query[i].parentNode.innerHTML = ':cloud_tornado:';
 			}
-			for (const node of element.querySelectorAll('ul')) {
-				if (node.textContent)
-					node.textContent = node.textContent + '\n';
+		}
+		if (
+			element.querySelectorAll("img[alt='Movement speed icon.png']")
+		) {
+			let query = element.querySelectorAll(
+				"img[alt='Movement speed icon.png']",
+			);
+			for (let i = 0; i < query.length; i++) {
+				query[i].parentNode.innerHTML = ':athletic_shoe:';
 			}
-			for (const node of element.querySelectorAll('ol')) {
-				if (node.textContent)
-					node.textContent = node.textContent + '\n';
+		}
+		if (element.querySelectorAll("img[alt='Heal power icon.png']")) {
+			let query = element.querySelectorAll(
+				"img[alt='Heal power icon.png']",
+			);
+			for (let i = 0; i < query.length; i++) {
+				query[i].parentNode.innerHTML = ':revolving_hearts:';
 			}
-			for (const node of element.querySelectorAll('li')) {
-				if (node.textContent)
-					node.textContent = '\n• ' + node.textContent;
-			}
-		} else {
-			for (const node of element.querySelectorAll('a')) {
-				if (node.textContent)
-					node.textContent = `[${node.textContent}](https://leagueoflegends.fandom.com${node.href})`;
-			}
+		}
+
+		for (const node of element.querySelectorAll('b')) {
+			if (node.textContent)
+				node.textContent = `​**​${node.textContent}​**​`;
+		}
+		for (const node of element.querySelectorAll('a')) {
+			if (node.parentElement.nodeName !== 'B' && node.textContent)
+				node.textContent = `​**​${node.textContent}​**​`;
+		}
+		for (const node of element.querySelectorAll('.template_sbc')) {
+			if (node.textContent)
+				node.textContent = `​_​${node.textContent.toUpperCase()}​_​`;
+		}
+		for (const node of element.querySelectorAll('ul')) {
+			if (node.textContent)
+				node.textContent = node.textContent + '\n';
+		}
+		for (const node of element.querySelectorAll('ol')) {
+			if (node.textContent)
+				node.textContent = node.textContent + '\n';
+		}
+		for (const node of element.querySelectorAll('li')) {
+			if (node.textContent)
+				node.textContent = '\n• ' + node.textContent;
 		}
 
 		return element;
 	}
+
+	wikiLinkify(element) {
+		const links = element.querySelectorAll('a');
+		links.forEach(link => {
+			if (link.textContent && !link.textContent.match(/:.+:/g))
+				link.textContent = `[${link.textContent}](https://leagueoflegends.fandom.com${link.href})`;	
+		})
+
+		return element;
+	}
+	
+
 	//Special handler for aphelios weapon system
 	async apheliosHandler(abilityLetter, interaction) {
 		//Prevent discord from ending the interaction
