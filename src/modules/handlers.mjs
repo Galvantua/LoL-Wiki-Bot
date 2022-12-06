@@ -3,7 +3,6 @@ import jsdom from 'jsdom';
 const { JSDOM } = jsdom;
 import {
 	ActionRowBuilder,
-	bold,
 	ButtonBuilder,
 	ButtonStyle,
 	EmbedBuilder,
