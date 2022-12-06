@@ -175,7 +175,10 @@ client.on('interactionCreate', async (interaction) => {
 			});
 
 			//Send embed
-			await interaction.reply({ embeds: [embed], ephemeral: true });
+			if (interaction.replied)
+				await interaction.editReply({ embeds: [embed], ephemeral: true });
+			else
+				await interaction.reply({ embeds: [embed], ephemeral: true });
 		}
 	}
 });
