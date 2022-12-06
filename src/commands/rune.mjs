@@ -148,24 +148,27 @@ export default {
             embed.setTitle(`**${treeIcons[rune.tree.name]} ${rune.name}**`);
             embed.setThumbnail(`https://ddragon.leagueoflegends.com/cdn/img/${rune.icon}`);
             
+            let haveFields = false;
             let index = 0;
-            let description = '';
+            
+            let description = '​';
             while ( document.getElementsByClassName('pi-item pi-data pi-item-spacing pi-border-color')[index + 1] !== undefined) {
-                if (document.getElementsByClassName('pi-item pi-data pi-item-spacing pi-border-color')[index].childElementCount === 2)
+                if (document.getElementsByClassName('pi-item pi-data pi-item-spacing pi-border-color')[index].childElementCount === 2) {
                     embed.addFields({name: document.getElementsByClassName('pi-item pi-data pi-item-spacing pi-border-color')[index].children[0].textContent, value: document.getElementsByClassName('pi-item pi-data pi-item-spacing pi-border-color')[index].children[1].textContent});
-                else {
-                    new handlers().wikiFormat(document.getElementsByClassName('pi-item pi-data pi-item-spacing pi-border-color')[index]).textContent;
-                    const content = new handlers().wikiLinkify(document.getElementsByClassName('pi-item pi-data pi-item-spacing pi-border-color')[index]).textContent;
+                    haveFields = true;
+                }
+                else 
+                    new handlers().wikiFormat(document.getElementsByClassName('pi-item pi-data pi-item-spacing pi-border-color')[index]);
+                    const content = new handlers().wikiLinkify(document.getElementsByClassName('pi-item pi-data pi-item-spacing pi-border-color')[index]).textContent.trim();
                     
-                    description += content;
-                    // if (content.length > 1024)
-                    //     embed.addFields({name: '​', value: linkless});
-                    // else
-                    //     embed.addFields({name: '​', value: content});
+                    description += '\n' + content + '\n';
                 }
                 index++;
             }
 
+            if (haveFields)
+                description += '​';
+         
             embed.setDescription(description);
             rtnEmbeds.push(embed);
             interaction.editReply({embeds: rtnEmbeds});

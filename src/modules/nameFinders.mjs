@@ -26,6 +26,7 @@ export async function findRune(input, ref) {
 				];
 		input = input.toLowerCase().replace(/([^a-z])/g, '');
 
+
 		const runes = await fetch(
 			`https://ddragon.leagueoflegends.com/cdn/${version}/data/en_US/runesReforged.json`,
 		)
