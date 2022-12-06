@@ -80,11 +80,11 @@ export default {
             const slots = new ActionRowBuilder();
             let index = 0;
             while (document.getElementsByClassName('pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background')[index] !== undefined && document.getElementsByClassName(`pi-smart-group-body pi-border-color`)[index] !== undefined && document.getElementsByClassName(`pi-smart-group-body pi-border-color`)[index].textContent.trim()) {
-                embed.addFields({name: document.getElementsByClassName('pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background')[index].textContent, value: document.getElementsByClassName(`pi-smart-group-body pi-border-color`)[index].textContent.trim().replace(/\n/g, ' ').replace(/ {2,}/g, ', ')})
+                embed.addFields({name: document.getElementsByClassName('pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background')[index].textContent.includes('Keystone') ? 'Keystone' : document.getElementsByClassName('pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background')[index].textContent, value: document.getElementsByClassName(`pi-smart-group-body pi-border-color`)[index].textContent.trim().replace(/\n/g, ' ').replace(/ {2,}/g, ', ')})
                 slots.addComponents(
                     new ButtonBuilder()
                         .setCustomId(`${index}`)
-                        .setLabel(document.getElementsByClassName('pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background')[index].textContent)
+                        .setLabel(document.getElementsByClassName('pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background')[index].textContent.includes('Keystone') ? 'Keystone' : document.getElementsByClassName('pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background')[index].textContent)
                         .setStyle(ButtonStyle.Primary)
                 );
                 index++;
@@ -113,7 +113,7 @@ export default {
                             new ButtonBuilder()
                                 .setCustomId(`${10 + ind}`)
                                 .setLabel(r)
-                                .setStyle(ButtonStyle.Primary)
+                                .setStyle(ButtonStyle.Secondary)
                         );
                     });
                     
