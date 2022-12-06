@@ -14,7 +14,9 @@ export default class handler {
 
 	wikiFormat(element) {
 		
-		const icons = element.querySelectorAll("img");
+		const icons = element.querySelectorAll("img") || [];
+
+		console.log(icons);
 
 		icons.forEach(icon => {
 			switch (icon.getAttribute('data-image-name')) {
@@ -47,68 +49,6 @@ export default class handler {
 					break;
 			}
 		});
-
-		// if (element.querySelectorAll("img[alt='Ranged role.png']")) {
-		// 	let query = element.querySelectorAll(
-		// 		"img[alt='Ranged role.png']",
-		// 	);
-
-		// 	for (let i = 0; i < query.length; i++) {
-		// 		query[i].parentNode.innerHTML = ':dart:';
-		// 	}
-		// }
-
-		// if (element.querySelectorAll("img[alt='Melee role.png']")) {
-		// 	let query = element.querySelectorAll(
-		// 		"img[alt='Melee role.png']",
-		// 	);
-		// 	for (let i = 0; i < query.length; i++) {
-		// 		query[i].parentNode.innerHTML = ':crossed_swords:';
-		// 	}
-		// }
-
-		// if (element.querySelectorAll("img[alt='Slow icon.png']")) {
-		// 	let query = element.querySelectorAll(
-		// 		"img[alt='Slow icon.png']",
-		// 	);
-		// 	for (let i = 0; i < query.length; i++) {
-		// 		query[i].parentNode.innerHTML = ':snowflake:';
-		// 	}
-		// }
-		// if (element.querySelectorAll("img[alt='Champion icon.png']")) {
-		// 	let query = element.querySelectorAll(
-		// 		"img[alt='Champion icon.png']",
-		// 	);
-		// 	for (let i = 0; i < query.length; i++) {
-		// 		query[i].parentNode.innerHTML = ':fairy:';
-		// 	}
-		// }
-		// if (element.querySelectorAll("img[alt='Stun icon.png']")) {
-		// 	let query = element.querySelectorAll(
-		// 		"img[alt='Stun icon.png']",
-		// 	);
-		// 	for (let i = 0; i < query.length; i++) {
-		// 		query[i].parentNode.innerHTML = ':cloud_tornado:';
-		// 	}
-		// }
-		// if (
-		// 	element.querySelectorAll("img[alt='Movement speed icon.png']")
-		// ) {
-		// 	let query = element.querySelectorAll(
-		// 		"img[alt='Movement speed icon.png']",
-		// 	);
-		// 	for (let i = 0; i < query.length; i++) {
-		// 		query[i].parentNode.innerHTML = ':athletic_shoe:';
-		// 	}
-		// }
-		// if (element.querySelectorAll("img[alt='Heal power icon.png']")) {
-		// 	let query = element.querySelectorAll(
-		// 		"img[alt='Heal power icon.png']",
-		// 	);
-		// 	for (let i = 0; i < query.length; i++) {
-		// 		query[i].parentNode.innerHTML = ':revolving_hearts:';
-		// 	}
-		// }
 
 		for (const node of element.querySelectorAll('b')) {
 			if (node.textContent)
