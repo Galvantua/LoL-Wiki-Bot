@@ -86,9 +86,9 @@ export default class handler {
 		}
 		for (const node of element.querySelectorAll('.template_sbc')) {
 			if (node.childElementCount === 1 && node.children[0].nodeName === 'B')
-                node.textContent = `​*​${node.textContent.toUpperCase()}​*​`;
+                node.innerHTML = `​*​${node.innerHTML.toUpperCase()}​*​`;
             else if (node.textContent)
-                node.textContent = `​_​${node.textContent.toUpperCase()}​_​`;
+                node.innerHTML = `​_​${node.innerHTML.toUpperCase()}​_​`;
 		}
 		for (const node of element.querySelectorAll('ul')) {
 			if (node.textContent)
