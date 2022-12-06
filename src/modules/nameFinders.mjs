@@ -18,17 +18,26 @@ export async function findRune(input, ref) {
 			cash: ['First Strike', 'Future\'s Market']
 		}
 
-		if (excList[input])
-			input = excList[input];
+		if (excList[input]) input = excList[input];
 		else if (randomList[input])
-			input = randomList[input][Math.floor(Math.random() * randomList[input].length)];
+			input =
+				randomList[input][
+					Math.floor(Math.random() * randomList[input].length)
+				];
 		input = input.toLowerCase().replace(/([^a-z])/g, '');
 
-		const runes = await fetch(`https://ddragon.leagueoflegends.com/cdn/${version}/data/en_US/runesReforged.json`)
-							.then(async(res) => {return await res.json()})
-							.catch(err => {console.error(err); rtn = true;});
-		if (rtn)
-			return undefined;
+
+		const runes = await fetch(
+			`https://ddragon.leagueoflegends.com/cdn/${version}/data/en_US/runesReforged.json`,
+		)
+			.then(async (res) => {
+				return await res.json();
+			})
+			.catch((err) => {
+				console.error(err);
+				rtn = true;
+			});
+		if (rtn) return undefined;
 
 		let names = [];
 		runes.forEach((t) => {
@@ -44,23 +53,27 @@ export async function findRune(input, ref) {
 		const results = fuse.search(input);
 		const final = results[0].item || input;
 
-		let tree = runes.find(t => t.name.toLowerCase().replace(/([^a-z])/g, '') === final)
+		let tree = runes.find(
+			(t) => t.name.toLowerCase().replace(/([^a-z])/g, '') === final,
+		);
 		if (tree) {
 			ref.isRune = false;
 			return tree;
 		}
 
 		let rune;
-		runes.forEach(t => {
-            t.slots.forEach(s => {
-                s.runes.forEach(r => {
-                    if (r.name.toLowerCase().replace(/([^a-z])/g, '') === final) {
-                        rune = r;
+		runes.forEach((t) => {
+			t.slots.forEach((s) => {
+				s.runes.forEach((r) => {
+					if (
+						r.name.toLowerCase().replace(/([^a-z])/g, '') === final
+					) {
+						rune = r;
 						tree = t;
-                    }
-                });
-            });
-        });
+					}
+				});
+			});
+		});
 
 		if (rune) {
 			ref.isRune = true;
@@ -69,12 +82,10 @@ export async function findRune(input, ref) {
 		}
 
 		return null;
-
 	} catch (error) {
 		console.error(error);
 		return undefined;
 	}
-	
 }
 
 export async function findAbilityName(input, interaction) {
@@ -404,6 +415,5 @@ export async function findItemName(input, interaction) {
 	}
 	return itemObj[itemNames.indexOf(result[0].item)];
 }
-
 
 export default {};

@@ -92,7 +92,7 @@ export default {
 
 				let passiveDocument = passivedom.window.document;
 				passiveEffects = new handlers().wikiFormat(
-					passiveDocument.querySelector('p')
+					passiveDocument.querySelector('p'),
 				).textContent;
 			}
 			let passiveCooldown;
@@ -170,7 +170,7 @@ export default {
 
 				let activeDocument = activedom.window.document;
 				activeEffects = new handlers().wikiFormat(
-					activeDocument.querySelector('p')
+					activeDocument.querySelector('p'),
 				).textContent;
 			}
 			let activeCooldown;
@@ -204,6 +204,7 @@ export default {
 								bodyJSON.passives[passive].stats[stat][type] !==
 								0.0
 							) {
+								embed.setColor(0xb6e2a1);
 								embed.addFields({
 									name: `${type} ${stat}`,
 									value: `${bodyJSON.passives[passive].stats[stat][type]}`,

@@ -150,13 +150,14 @@ export default {
             
             let haveFields = false;
             let index = 0;
+            
             let description = '​';
             while ( document.getElementsByClassName('pi-item pi-data pi-item-spacing pi-border-color')[index + 1] !== undefined) {
                 if (document.getElementsByClassName('pi-item pi-data pi-item-spacing pi-border-color')[index].childElementCount === 2) {
                     embed.addFields({name: document.getElementsByClassName('pi-item pi-data pi-item-spacing pi-border-color')[index].children[0].textContent, value: document.getElementsByClassName('pi-item pi-data pi-item-spacing pi-border-color')[index].children[1].textContent});
                     haveFields = true;
                 }
-                else {
+                else 
                     new handlers().wikiFormat(document.getElementsByClassName('pi-item pi-data pi-item-spacing pi-border-color')[index]);
                     const content = new handlers().wikiLinkify(document.getElementsByClassName('pi-item pi-data pi-item-spacing pi-border-color')[index]).textContent.trim();
                     
@@ -167,6 +168,7 @@ export default {
 
             if (haveFields)
                 description += '​';
+         
             embed.setDescription(description);
             rtnEmbeds.push(embed);
             interaction.editReply({embeds: rtnEmbeds});
