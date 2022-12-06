@@ -9,7 +9,9 @@ export async function findRune(input, ref) {
 		let rtn = false;
 
 		let excList = {
-			mana: 'Manaflow Band'
+			mana: 'Manaflow Band',
+			pta: 'Press the Attack',
+			hextechflash: 'Hextech Flashcontraception'
 		};
 
 		let randomList = {
@@ -41,8 +43,6 @@ export async function findRune(input, ref) {
 		const fuse = new Fuse(names);
 		const results = fuse.search(input);
 		const final = results[0].item || input;
-		console.log(results);
-		console.log(final);
 
 		let tree = runes.find(t => t.name.toLowerCase().replace(/([^a-z])/g, '') === final)
 		if (tree) {
