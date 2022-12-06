@@ -11,7 +11,7 @@ export async function findRune(input, ref) {
 		let excList = {
 			mana: 'Manaflow Band',
 			pta: 'Press the Attack',
-			hextechflash: 'Hextech Flashcontraception'
+			hextechflash: 'Hextech Flashtraption'
 		};
 
 		let randomList = {
