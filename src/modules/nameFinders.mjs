@@ -15,7 +15,7 @@ export async function findRune(input, ref) {
 		let randomList = {
 			cash: ['First Strike', "Future's Market"],
 		};
-
+		let names = [];
 		if (excList[input]) input = excList[input];
 		else if (randomList[input])
 			input =
@@ -35,9 +35,22 @@ export async function findRune(input, ref) {
 				rtn = true;
 			});
 		if (rtn) return undefined;
+		runes.forEach((t) => {
+			names.push(t.name.toLowerCase().replace(/([^a-z])/g, ''));
+			t.slots.forEach((s) => {
+				s.runes.forEach((r) => {
+					names.push(r.name.toLowerCase().replace(/([^a-z])/g, ''));
+				});
+			});
+		});
+
+		const fuse = new Fuse(names);
+		const result = fuse.search(input);
+		console.log(result);
+		const final = result[0].item;
 
 		const tree = runes.find(
-			(t) => t.name.toLowerCase().replace(/([^a-z])/g, '') === input,
+			(t) => t.name.toLowerCase().replace(/([^a-z])/g, '') === final,
 		);
 		if (tree) {
 			ref.isRune = false;
@@ -49,7 +62,7 @@ export async function findRune(input, ref) {
 			t.slots.forEach((s) => {
 				s.runes.forEach((r) => {
 					if (
-						r.name.toLowerCase().replace(/([^a-z])/g, '') === input
+						r.name.toLowerCase().replace(/([^a-z])/g, '') === final
 					) {
 						rune = r;
 					}

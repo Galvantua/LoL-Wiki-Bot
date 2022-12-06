@@ -185,7 +185,7 @@ export default {
 		const body = await request.text();
 		let bodyJSON;
 		try {
-			bodyJSON = JSON.parse(body);
+			s;
 		} catch (error) {
 			interaction.editReply('**Please choose a valid Champion Name**');
 			return;

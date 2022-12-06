@@ -9,59 +9,12 @@ import {
 } from 'discord.js';
 import { JSDOM } from 'jsdom';
 import { findRune } from '../modules/nameFinders.mjs';
+import handlers from '../modules/handlers.mjs';
 
 export const informaton = {
 	name: 'rune',
 	description: 'Gets the information for a rune / rune tree from the wiki',
 };
-
-function format(element, linkify) {
-	for (let i = 0; i < element.children.length; i++) {
-		let child = element.children[i];
-		format(child, linkify);
-		if (!linkify) {
-			switch (child.getAttribute('alt')) {
-				case 'Ranged role.png':
-					child.parentElement.innerHTML = ':dart:';
-					break;
-				case 'Melee role.png':
-					child.parentElement.innerHTML = ':crossed_swords:';
-					break;
-				case 'Slow icon.png':
-					child.parentElement.innerHTML = ':snowflake:';
-					break;
-				case 'Champion icon.png':
-					child.parentElement.innerHTML = ':fairy:';
-					break;
-				case 'Stun icon.png':
-					child.parentElement.innerHTML = ':cloud_tornado:';
-					break;
-				case 'Movement speed icon.png':
-					child.parentElement.innerHTML = ':athletic_shoe:';
-					break;
-				case 'Heal power icon.png':
-					child.parentElement.innerHTML = ':revolving_hearts:';
-					break;
-			}
-			if (child.nodeName === 'B' && child.textContent)
-				child.textContent = `​**​${child.textContent}​**​`;
-			if (
-				child.nodeName === 'A' &&
-				child.parentElement.nodeName !== 'B' &&
-				child.textContent
-			)
-				child.textContent = `​**​${child.textContent}​**​`;
-			if (child.classList.contains('template_sbc'))
-				child.textContent = `​_​${child.textContent.toUpperCase()}​_​`;
-			if (child.nodeName === 'UL' || child.nodeName === 'OL')
-				child.textContent = child.textContent + '\n';
-			if (child.nodeName === 'LI')
-				child.textContent = '\n• ' + child.textContent;
-		} else if (child.nodeName === 'A' && child.textContent)
-			child.textContent = `[${child.textContent}](https://leagueoflegends.fandom.com${child.href})`;
-	}
-	return element;
-}
 
 export default {
 	data: new SlashCommandBuilder()
@@ -267,14 +220,6 @@ export default {
 						'pi-item pi-data pi-item-spacing pi-border-color',
 					)[index + 1] !== undefined
 				) {
-					//for (let I = 0; I < document.getElementsByClassName('pi-item pi-data pi-item-spacing pi-border-color')[index].textContent.trim().replace(/^[a-z][A-Z]/g, '').split(' ')[0].length; I++)
-
-					// console.log('>' + document.getElementsByClassName('pi-item pi-data pi-item-spacing pi-border-color')[index].textContent.trim().split(' ')[0].charCodeAt(I) + '<');
-					//    console.log(document.getElementsByClassName('pi-item pi-data pi-item-spacing pi-border-color')[index].getAttribute('data-source'));
-					//    if (document.getElementsByClassName('pi-item pi-data pi-item-spacing pi-border-color')[index].getAttribute('data-source') === 'cooldown'){//[index].textContent.trim().replace(/^[a-z][A-Z]/g, '').split(' ')[0] === 'Cooldown') {
-					//         embed.addFields({name: 'Cooldown', value: document.getElementsByClassName('pi-item pi-data pi-item-spacing pi-border-color')[index].children[1].textContent});
-					//         break;
-					//     }
 					if (
 						document.getElementsByClassName(
 							'pi-item pi-data pi-item-spacing pi-border-color',
@@ -289,24 +234,18 @@ export default {
 							)[index].children[1].textContent,
 						});
 					else {
-						const linkless = format(
+						const linkless = handlers.wikiFormat(
 							document.getElementsByClassName(
 								'pi-item pi-data pi-item-spacing pi-border-color',
 							)[index],
 							false,
 						).textContent;
-						const content = format(
+						const content = handlers.wikiFormat(
 							document.getElementsByClassName(
 								'pi-item pi-data pi-item-spacing pi-border-color',
 							)[index],
 							true,
 						).textContent;
-
-						// if (document.getElementsByClassName('pi-item pi-data pi-item-spacing pi-border-color')[index + 1].childElementCount === 2) {
-						//     linkless += '\n';
-						//     content += '\n';
-						// }
-
 						if (content.length > 1024)
 							embed.addFields({ name: '​', value: linkless });
 						else embed.addFields({ name: '​', value: content });

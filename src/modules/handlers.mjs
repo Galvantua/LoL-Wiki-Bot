@@ -3,6 +3,7 @@ import jsdom from 'jsdom';
 const { JSDOM } = jsdom;
 import {
 	ActionRowBuilder,
+	bold,
 	ButtonBuilder,
 	ButtonStyle,
 	EmbedBuilder,
@@ -11,7 +12,71 @@ import {
 //Define the handler
 export default class handler {
 	constructor() {}
+	async wikiFormat(element, linkify) {
+		const dom = new JSDOM(element, {
+			contentType: 'text/html',
+		});
+		document = dom.window.document;
 
+		if (!linkify) {
+			querySelectorAll(
+				"img[alt='Ranged role.png']",
+			)[0].parentElement.innerHTML = ':dart:';
+			querySelectorAll(
+				"img[alt='Melee role.png']",
+			)[0].parentElement.innerHTML = ':crossed_swords:';
+			querySelectorAll(
+				"img[alt='Slow icon.png']",
+			)[0].parentElement.innerHTML = ':snowflake:';
+			querySelectorAll(
+				"img[alt='Champion icon.png']",
+			)[0].parentElement.innerHTML = ':fairy:';
+			querySelectorAll(
+				"img[alt='Stun icon.png']",
+			)[0].parentElement.innerHTML = ':cloud_tornado:';
+			querySelectorAll(
+				"img[alt='Movement speed icon.png']",
+			)[0].parentElement.innerHTML = ':athletic_shoe:';
+			querySelectorAll(
+				"img[alt='Heal power icon.png']",
+			)[0].parentElement.innerHTML = ':revolving_hearts:';
+
+			for (const element of querySelectorAll('b')) {
+				if (element.textContent)
+					element.textContent = `​**​${element.textContent}​**​`;
+			}
+			for (const element of querySelectorAll('a')) {
+				if (
+					element.parentElement.nodeName !== 'B' &&
+					element.textContent
+				)
+					element.textContent = `​**​${element.textContent}​**​`;
+			}
+			for (const element of querySelectorAll('.template_sbc')) {
+				if (element.textContent)
+					element.textContent = `​_​${element.textContent.toUpperCase()}​_​`;
+			}
+			for (const element of querySelectorAll('ul')) {
+				if (element.textContent)
+					element.textContent = element.textContent + '\n';
+			}
+			for (const element of querySelectorAll('ol')) {
+				if (element.textContent)
+					element.textContent = element.textContent + '\n';
+			}
+			for (const element of querySelectorAll('li')) {
+				if (element.textContent)
+					element.textContent = '\n• ' + element.textContent;
+			}
+		} else {
+			for (const element of querySelectorAll('a')) {
+				if (element.textContent)
+					element.textContent = `[${element.textContent}](https://leagueoflegends.fandom.com${element.href})`;
+			}
+		}
+
+		return element;
+	}
 	//Special handler for aphelios weapon system
 	async apheliosHandler(abilityLetter, interaction) {
 		//Prevent discord from ending the interaction
