@@ -46,7 +46,6 @@ export async function findRune(input, ref) {
 
 		const fuse = new Fuse(names);
 		const result = fuse.search(input);
-		console.log(result);
 		const final = result[0].item;
 
 		const tree = runes.find(
