@@ -11,66 +11,98 @@ import {
 //Define the handler
 export default class handler {
 	constructor() {}
-	async wikiFormat(element, linkify) {
-		const dom = new JSDOM(element, {
-			contentType: 'text/html',
-		});
-		document = dom.window.document;
-
+	wikiFormat(element, linkify) {
 		if (!linkify) {
-			querySelectorAll(
-				"img[alt='Ranged role.png']",
-			)[0].parentElement.innerHTML = ':dart:';
-			querySelectorAll(
-				"img[alt='Melee role.png']",
-			)[0].parentElement.innerHTML = ':crossed_swords:';
-			querySelectorAll(
-				"img[alt='Slow icon.png']",
-			)[0].parentElement.innerHTML = ':snowflake:';
-			querySelectorAll(
-				"img[alt='Champion icon.png']",
-			)[0].parentElement.innerHTML = ':fairy:';
-			querySelectorAll(
-				"img[alt='Stun icon.png']",
-			)[0].parentElement.innerHTML = ':cloud_tornado:';
-			querySelectorAll(
-				"img[alt='Movement speed icon.png']",
-			)[0].parentElement.innerHTML = ':athletic_shoe:';
-			querySelectorAll(
-				"img[alt='Heal power icon.png']",
-			)[0].parentElement.innerHTML = ':revolving_hearts:';
+			if (element.querySelectorAll("img[alt='Ranged role.png']")) {
+				let query = element.querySelectorAll(
+					"img[alt='Ranged role.png']",
+				);
 
-			for (const element of querySelectorAll('b')) {
-				if (element.textContent)
-					element.textContent = `​**​${element.textContent}​**​`;
+				for (let i = 0; i < query.length; i++) {
+					query[i].parentNode.innerHTML = ':dart:';
+				}
 			}
-			for (const element of querySelectorAll('a')) {
-				if (
-					element.parentElement.nodeName !== 'B' &&
-					element.textContent
-				)
-					element.textContent = `​**​${element.textContent}​**​`;
+
+			if (element.querySelectorAll("img[alt='Melee role.png']")) {
+				let query = element.querySelectorAll(
+					"img[alt='Melee role.png']",
+				);
+				for (let i = 0; i < query.length; i++) {
+					query[i].parentNode.innerHTML = ':crossed_swords:';
+				}
 			}
-			for (const element of querySelectorAll('.template_sbc')) {
-				if (element.textContent)
-					element.textContent = `​_​${element.textContent.toUpperCase()}​_​`;
+
+			if (element.querySelectorAll("img[alt='Slow icon.png']")) {
+				let query = element.querySelectorAll(
+					"img[alt='Slow icon.png']",
+				);
+				for (let i = 0; i < query.length; i++) {
+					query[i].parentNode.innerHTML = ':snowflake:';
+				}
 			}
-			for (const element of querySelectorAll('ul')) {
-				if (element.textContent)
-					element.textContent = element.textContent + '\n';
+			if (element.querySelectorAll("img[alt='Champion icon.png']")) {
+				let query = element.querySelectorAll(
+					"img[alt='Champion icon.png']",
+				);
+				for (let i = 0; i < query.length; i++) {
+					query[i].parentNode.innerHTML = ':fairy:';
+				}
 			}
-			for (const element of querySelectorAll('ol')) {
-				if (element.textContent)
-					element.textContent = element.textContent + '\n';
+			if (element.querySelectorAll("img[alt='Stun icon.png']")) {
+				let query = element.querySelectorAll(
+					"img[alt='Stun icon.png']",
+				);
+				for (let i = 0; i < query.length; i++) {
+					query[i].parentNode.innerHTML = ':cloud_tornado:';
+				}
 			}
-			for (const element of querySelectorAll('li')) {
-				if (element.textContent)
-					element.textContent = '\n• ' + element.textContent;
+			if (
+				element.querySelectorAll("img[alt='Movement speed icon.png']")
+			) {
+				let query = element.querySelectorAll(
+					"img[alt='Movement speed icon.png']",
+				);
+				for (let i = 0; i < query.length; i++) {
+					query[i].parentNode.innerHTML = ':athletic_shoe:';
+				}
+			}
+			if (element.querySelectorAll("img[alt='Heal power icon.png']")) {
+				let query = element.querySelectorAll(
+					"img[alt='Heal power icon.png']",
+				);
+				for (let i = 0; i < query.length; i++) {
+					query[i].parentNode.innerHTML = ':revolving_hearts:';
+				}
+			}
+
+			for (const node of element.querySelectorAll('b')) {
+				if (node.textContent)
+					node.textContent = `​**​${node.textContent}​**​`;
+			}
+			for (const node of element.querySelectorAll('a')) {
+				if (node.parentElement.nodeName !== 'B' && node.textContent)
+					node.textContent = `​**​${node.textContent}​**​`;
+			}
+			for (const node of element.querySelectorAll('.template_sbc')) {
+				if (node.textContent)
+					node.textContent = `​_​${node.textContent.toUpperCase()}​_​`;
+			}
+			for (const node of element.querySelectorAll('ul')) {
+				if (node.textContent)
+					node.textContent = node.textContent + '\n';
+			}
+			for (const node of element.querySelectorAll('ol')) {
+				if (node.textContent)
+					node.textContent = node.textContent + '\n';
+			}
+			for (const node of element.querySelectorAll('li')) {
+				if (node.textContent)
+					node.textContent = '\n• ' + node.textContent;
 			}
 		} else {
-			for (const element of querySelectorAll('a')) {
-				if (element.textContent)
-					element.textContent = `[${element.textContent}](https://leagueoflegends.fandom.com${element.href})`;
+			for (const node of element.querySelectorAll('a')) {
+				if (node.textContent)
+					node.textContent = `[${node.textContent}](https://leagueoflegends.fandom.com${node.href})`;
 			}
 		}
 

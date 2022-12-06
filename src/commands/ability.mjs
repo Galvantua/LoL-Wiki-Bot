@@ -185,7 +185,7 @@ export default {
 		const body = await request.text();
 		let bodyJSON;
 		try {
-			s;
+			bodyJSON = JSON.parse(body);
 		} catch (error) {
 			interaction.editReply('**Please choose a valid Champion Name**');
 			return;
@@ -283,8 +283,11 @@ export default {
 			for (let i = 0; i < abilityDetails.length; i++) {
 				const detail = abilityDetails[i];
 
-				detailText = detail.textContent;
-				// console.log(detailText);
+				const detailText = new handlers().wikiFormat(
+					detail,
+					false,
+				).textContent;
+				//console.log(detailText);
 
 				if (detailText) {
 					embed.addFields({

@@ -234,21 +234,23 @@ export default {
 							)[index].children[1].textContent,
 						});
 					else {
-						const linkless = handlers.wikiFormat(
+						const linkless = new handlers().wikiFormat(
 							document.getElementsByClassName(
 								'pi-item pi-data pi-item-spacing pi-border-color',
 							)[index],
 							false,
 						).textContent;
-						const content = handlers.wikiFormat(
+						const content = new handlers().wikiFormat(
 							document.getElementsByClassName(
 								'pi-item pi-data pi-item-spacing pi-border-color',
 							)[index],
 							true,
 						).textContent;
-						if (content.length > 1024)
+						if (content.length <= 1024)
+							embed.addFields({ name: '​', value: content });
+						else {
 							embed.addFields({ name: '​', value: linkless });
-						else embed.addFields({ name: '​', value: content });
+						}
 						//console.log(content);
 					}
 					index++;

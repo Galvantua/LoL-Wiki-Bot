@@ -3,6 +3,7 @@ import fetch from 'node-fetch';
 import { findItemName } from '../modules/nameFinders.mjs';
 import jsdom from 'jsdom';
 const { JSDOM } = jsdom;
+import handlers from '../modules/handlers.mjs';
 
 export const information = {
 	name: 'item',
@@ -90,7 +91,10 @@ export default {
 				});
 
 				let passiveDocument = passivedom.window.document;
-				passiveEffects = passiveDocument.querySelector('p').textContent;
+				passiveEffects = new handlers().wikiFormat(
+					passiveDocument.querySelector('p'),
+					false,
+				).textContent;
 			}
 			let passiveCooldown;
 			if (bodyJSON.passives[passive].cooldown != null) {
@@ -166,7 +170,10 @@ export default {
 				});
 
 				let activeDocument = activedom.window.document;
-				activeEffects = activeDocument.querySelector('p').textContent;
+				activeEffects = new handlers().wikiFormat(
+					activeDocument.querySelector('p'),
+					false,
+				).textContent;
 			}
 			let activeCooldown;
 			console.log(bodyJSON.active[active].cooldown);
