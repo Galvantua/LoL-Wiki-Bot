@@ -284,7 +284,7 @@ export default {
 				const detail = abilityDetails[i];
 
 				const detailText = new handlers().wikiFormat(
-					detail
+					detail,
 				).textContent;
 				//console.log(detailText);
 
@@ -300,7 +300,7 @@ export default {
 				.getElementsByTagName('img')[0]
 				.getAttribute('src');
 			embed.setThumbnail(abilityImage);
-
+			embed.setColor(0xb6e2a1);
 			myEmbeds.push(embed);
 		}
 
