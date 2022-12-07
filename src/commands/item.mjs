@@ -210,16 +210,22 @@ export default {
 			}
 			let activeCooldown;
 			if (bodyJSON.active[active].cooldown != null) {
-				activeCooldown = bodyJSON.active[active].cooldown;
-				if (activeCooldown != 'Global') {
-					activeCooldown = `(${activeCooldown} second cooldown)`;
-				}
+				activeCooldown = `**Cooldown:** ${bodyJSON.active[active].cooldown} seconds\n`;
 			} else {
 				activeCooldown = '';
 			}
+			let activeRange;
+			if (
+				bodyJSON.active[active].range != null &&
+				bodyJSON.active[active].range != 0
+			) {
+				activeRange = `**Range:** ${bodyJSON.active[active].range}`;
+			} else {
+				activeRange = '';
+			}
 			embed.addFields({
 				name: `Active: ${activeName}`,
-				value: `${activeEffects} ${activeCooldown}`,
+				value: `${activeEffects.trim()}\n${activeCooldown}${activeRange}`,
 			});
 		}
 		if (mythic) {
