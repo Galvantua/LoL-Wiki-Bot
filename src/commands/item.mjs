@@ -4,7 +4,7 @@ import { findItemName } from '../modules/nameFinders.mjs';
 import jsdom from 'jsdom';
 const { JSDOM } = jsdom;
 import handlers from '../modules/handlers.mjs';
-
+import Fuse from 'fuse.js';
 export const information = {
 	name: 'item',
 	description: 'Queries Item info from the LoL wiki',
@@ -47,13 +47,48 @@ export default {
 		}
 
 		embed.setTitle(bodyJSON.name).setThumbnail(bodyJSON.icon);
-
+		let statName;
+		let statValue;
+		let statNameArray = [
+			'Attack Damage',
+			'Ability Power',
+			'Armor',
+			'Magic Resist',
+			'Health',
+			'Health Regen',
+			'Mana',
+			'Mana Regen',
+			'Ability Haste',
+			'Lethality',
+			'Armor Penetration',
+			'Magic Penetration',
+			'Critical Strike Chance',
+			'Life Steal',
+			'Movement Speed',
+			'Attack Speed',
+		];
 		for (const stat in bodyJSON.stats) {
 			for (const type in bodyJSON.stats[stat]) {
 				if (bodyJSON.stats[stat][type] !== 0.0) {
+					let fuse = new Fuse(statNameArray);
+					let result = fuse.search(stat)[0].item;
+
+					if (
+						result == 'Attack Speed' ||
+						result == 'Armor Penetration' ||
+						(type == 'percent' &&
+							(result == 'Movement Speed' ||
+								result == 'Magic Penetration' ||
+								result == 'Critical Strike Chance'))
+					) {
+						statValue = `${bodyJSON.stats[stat][type]}%`;
+					} else {
+						statValue = bodyJSON.stats[stat][type];
+					}
+
 					embed.addFields({
-						name: `${type} ${stat}`,
-						value: `${bodyJSON.stats[stat][type]}`,
+						name: `${result}`,
+						value: `${statValue}`,
 						inline: true,
 					});
 				}
@@ -174,10 +209,8 @@ export default {
 				).textContent;
 			}
 			let activeCooldown;
-			console.log(bodyJSON.active[active].cooldown);
 			if (bodyJSON.active[active].cooldown != null) {
 				activeCooldown = bodyJSON.active[active].cooldown;
-				console.log(activeCooldown);
 				if (activeCooldown != 'Global') {
 					activeCooldown = `(${activeCooldown} second cooldown)`;
 				}
@@ -204,10 +237,28 @@ export default {
 								bodyJSON.passives[passive].stats[stat][type] !==
 								0.0
 							) {
+								let fuse = new Fuse(statNameArray);
+								let result = fuse.search(stat)[0].item;
+
+								if (
+									result == 'Attack Speed' ||
+									result == 'Armor Penetration' ||
+									(type == 'percent' &&
+										(result == 'Movement Speed' ||
+											result == 'Magic Penetration' ||
+											result == 'Critical Strike Chance'))
+								) {
+									statValue = `${bodyJSON.passives[passive].stats[stat][type]}%`;
+								} else {
+									statValue =
+										bodyJSON.passives[passive].stats[stat][
+											type
+										];
+								}
 								embed.setColor(0xb6e2a1);
 								embed.addFields({
-									name: `${type} ${stat}`,
-									value: `${bodyJSON.passives[passive].stats[stat][type]}`,
+									name: `${result}`,
+									value: `${statValue}`,
 									inline: true,
 								});
 							}
