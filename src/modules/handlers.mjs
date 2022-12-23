@@ -19,38 +19,39 @@ export default class handler {
 			switch (icon.getAttribute('data-image-name')) {
 				case 'Hybrid resistances icon.png':
 					icon.parentElement.innerHTML =
-						'<:Hybrid_resistances:1049644163680981022>';
+						'<:hybridresist:1049873538355576924>';
 					break;
 				case 'Gold.png':
 					icon.parentElement.innerHTML =
-						'<:Gold:1049630454266998804>';
+						'<:gold:1049873537462173797>';
 					break;
 				case 'Ranged role.png':
 					icon.parentElement.innerHTML =
-						'<:Ranged:1049627230776602655>';
+						'<:ranged:1049873680555065354>';
 					break;
 				case 'Melee role.png':
 					icon.parentElement.innerHTML =
-						'<:Melee:1049626581271851008>';
+						'<:melee:1049873678424350780>';
 					break;
 				case 'Slow icon.png':
 					icon.parentElement.innerHTML =
-						'<:Slow:1049627228239040532>';
+						'<:slow:1049873681704304712>';
 					break;
 				case 'Champion icon.png':
 					icon.parentElement.innerHTML =
-						'<:Champion:1049627894101577748>';
+						'<:champion:1049873534765236318>';
 					break;
 				case 'Stun icon.png':
-					icon.parentElement.innerHTML = '<:CC:1049627891673071677>';
+					icon.parentElement.innerHTML =
+						'<:stun:1049873684304769086>';
 					break;
 				case 'Movement speed icon.png':
 					icon.parentElement.innerHTML =
-						'<:Movement_speed:1049626078236397568>';
+						'<:movespeed:1049873679447756861>';
 					break;
 				case 'Heal power icon.png':
 					icon.parentElement.innerHTML =
-						'<:Heal:1049623247383183400>';
+						'<:Heal:1049873210461655071>';
 					break;
 			}
 		});
@@ -120,18 +121,18 @@ export default class handler {
 
 		//Emojis for weapons and 'props'
 		let emojis = [
-			'<:Aphelios_The_Hitman_and_the_Seer:1012902419081986048>',
-			'<:Aphelios_Weapons_of_the_Faithful:1012902419925061663>',
-			'<:Aphelios_Calibrum:1012902406863982592>',
-			'<:Aphelios_Moonshot:1012902414757670952>',
-			'<:Aphelios_Severum:1012902417987272836>',
-			'<:Aphelios_Onslaught:1012902415852380311>',
-			'<:Aphelios_Gravitum:1012902412782153769>',
-			'<:Aphelios_Binding_Eclipse:1012902404364185660>',
-			'<:Aphelios_Infernum:1012902413298040843>',
-			'<:Aphelios_Duskwave:1012902410399781015>',
-			'<:Aphelios_Crescendum:1012902408311013408>',
-			'<:Aphelios_Sentry:1012902416942891119>',
+			'<:Aphelios_The_Hitman_and_the_Seer:1049873532185755718>',
+			'<:Aphelios_Weapons_of_the_Faithful:1049873533506957333>',
+			'<:Aphelios_Calibrum:1049873197564174396>',
+			'<:Aphelios_Moonshot:1049873204056965230>',
+			'<:Aphelios_Severum:1049873206909083699> ',
+			'<:Aphelios_Onslaught:1049873205415915531>',
+			'<:Aphelios_Gravitum:1049873202022727701>',
+			'<:Aphelios_Binding_Eclipse:1049873195915804736>',
+			'<:Aphelios_Infernum:1049873202718969930>',
+			'<:Aphelios_Duskwave:1049873200202395718>',
+			'<:Aphelios_Crescendum:1049873198923141120>',
+			'<:Aphelios_Sentry:1049873531158134855>',
 		];
 
 		if (abilityLetter == 'I') {
