@@ -1,0 +1,8 @@
+beautifulsoup4
+dataclasses-json
+lxml
+natsort
+requests
+slpp
+fuzzywuzzy
+stringcase
