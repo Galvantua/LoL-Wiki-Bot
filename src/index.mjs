@@ -2,9 +2,10 @@ import fs from 'node:fs';
 import { Client, GatewayIntentBits, EmbedBuilder } from 'discord.js';
 import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v9';
+import spawn from 'node:child_process';
 import config from '../config.json' assert { type: 'json' };
 import Package from '../package.json' assert { type: 'json' };
-
+import usedVersions from '../version.json' assert { type: 'json' };
 export let version;
 
 async function checkVersion() {
@@ -14,8 +15,13 @@ async function checkVersion() {
                             .then(async(res) => {return await res.json()})
                             .catch(err => {console.error(err); return undefined});
     } while (!versions || !versions[0]);
-    version = versions[0];
-	console.log(`Checked version, new version: ${version}`);
+    currentLoLVersion = versions[0];
+	if (currentLoLVersion == usedVersions.lolVersion) {
+		console.log(`Checked version, new version: ${version}`);
+		
+	} else {
+		console.log(`Checked version, using current version: ${version}`)
+	}
 }
 
 setInterval(checkVersion, 86400000);
