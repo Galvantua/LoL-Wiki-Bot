@@ -1,5 +1,6 @@
 import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
 import fetch from 'node-fetch';
+import fs from 'node:fs'
 import { findChampionName, findAbilityName } from '../modules/nameFinders.mjs';
 
 export const information = {
@@ -85,24 +86,25 @@ export default {
 		const embed = new EmbedBuilder();
 
 		//TODO convert to custom solution
-		const request = await fetch(
-			`https://cdn.merakianalytics.com/riot/lol/resources/latest/en-US/champions/${championName}.json`,
-		).catch((err) => {
-			interaction.editReply('Please choose a valid Champion name');
-			return;
-		});
+		// const request = await fetch(
+		// 	`https://cdn.merakianalytics.com/riot/lol/resources/latest/en-US/champions/${championName}.json`,
+		// ).catch((err) => {
+		// 	interaction.editReply('Please choose a valid Champion name');
+		// 	return;
+		// });
 
-		const body = await request.text();
+		// const body = await request.text();
 
-		let bodyJSON = '';
-		try {
-			bodyJSON = JSON.parse(body);
-		} catch (error) {
-			console.log(error);
-			interaction.editReply('**Please choose a valid Champion name**');
-			return;
-		}
+		// let bodyJSON = '';
+		// try {
+		// 	bodyJSON = JSON.parse(body);
+		// } catch (error) {
+		// 	console.log(error);
+		// 	interaction.editReply('**Please choose a valid Champion name**');
+		// 	return;
+		// }
 
+		const bodyJSON = JSON.parse(fs.readFileSync(`./loldata/champions/${championName}.json`).toString());
 		const stats = bodyJSON.stats;
 
 		embed.setTitle(displayName).setThumbnail(bodyJSON['icon']);

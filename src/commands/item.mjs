@@ -5,6 +5,7 @@ import jsdom from 'jsdom';
 const { JSDOM } = jsdom;
 import handlers from '../modules/handlers.mjs';
 import Fuse from 'fuse.js';
+import fs from 'node:fs'
 export const information = {
 	name: 'item',
 	description: 'Queries Item info from the LoL wiki',
@@ -28,25 +29,27 @@ export default {
 		const itemId = await findItemName(item, interaction);
 		const embed = new EmbedBuilder();
 
-		const request = await fetch(
-			`https://cdn.merakianalytics.com/riot/lol/resources/latest/en-US/items/${itemId}.json`,
-		).catch((err) => {
-			interaction.editReply('Please choose a valid item name');
-			return;
-		});
+		// const request = await fetch(
+		// 	`https://cdn.merakianalytics.com/riot/lol/resources/latest/en-US/items/${itemId}.json`,
+		// ).catch((err) => {
+		// 	interaction.editReply('Please choose a valid item name');
+		// 	return;
+		// });
 
-		const body = await request.text();
+		// const body = await request.text();
 
-		let bodyJSON;
-		try {
-			bodyJSON = JSON.parse(body);
-		} catch (error) {
-			console.log(error);
-			interaction.editReply('**Please choose a valid Item name**');
-			return;
-		}
+		// let bodyJSON;
+		// try {
+		// 	bodyJSON = JSON.parse(body);
+		// } catch (error) {
+		// 	console.log(error);
+		// 	interaction.editReply('**Please choose a valid Item name**');
+		// 	return;
+		// }
 
-		embed.setTitle(bodyJSON.name).setThumbnail(bodyJSON.icon);
+		const items = JSON.parse(fs.readFileSync(`./loldata/items/${itemId}.json`).toString());
+
+		embed.setTitle(items.name).setThumbnail(items.icon);
 		let statName;
 		let statValue;
 		let statNameArray = [
@@ -67,9 +70,9 @@ export default {
 			'Movement Speed',
 			'Attack Speed',
 		];
-		for (const stat in bodyJSON.stats) {
-			for (const type in bodyJSON.stats[stat]) {
-				if (bodyJSON.stats[stat][type] !== 0.0) {
+		for (const stat in items.stats) {
+			for (const type in items.stats[stat]) {
+				if (items.stats[stat][type] !== 0.0) {
 					let fuse = new Fuse(statNameArray);
 					let result = fuse.search(stat)[0].item;
 
@@ -81,9 +84,9 @@ export default {
 								result == 'Magic Penetration' ||
 								result == 'Critical Strike Chance'))
 					) {
-						statValue = `${bodyJSON.stats[stat][type]}%`;
+						statValue = `${items.stats[stat][type]}%`;
 					} else {
-						statValue = bodyJSON.stats[stat][type];
+						statValue = items.stats[stat][type];
 					}
 
 					embed.addFields({
@@ -95,16 +98,16 @@ export default {
 			}
 		}
 		let mythic;
-		for (const passive in bodyJSON.passives) {
+		for (const passive in items.passives) {
 			let passiveName;
-			if (bodyJSON.passives[passive].name) {
-				passiveName = bodyJSON.passives[passive].name;
+			if (items.passives[passive].name) {
+				passiveName = items.passives[passive].name;
 			} else {
 				passiveName = '';
 			}
 			let passiveEffects;
-			if (bodyJSON.passives[passive].effects != null) {
-				passiveEffects = bodyJSON.passives[passive].effects.replace(
+			if (items.passives[passive].effects != null) {
+				passiveEffects = items.passives[passive].effects.replace(
 					/\+/g,
 					'%2b',
 				);
@@ -131,8 +134,8 @@ export default {
 				).textContent;
 			}
 			let passiveCooldown;
-			if (bodyJSON.passives[passive].cooldown != null) {
-				passiveCooldown = bodyJSON.passives[passive].cooldown;
+			if (items.passives[passive].cooldown != null) {
+				passiveCooldown = items.passives[passive].cooldown;
 				const passiveUrl = `https://leagueoflegends.fandom.com/api.php?action=parse&text=${passiveCooldown}&contentmodel=wikitext&format=json`;
 				const passiveRequest = await fetch(passiveUrl).catch((err) => {
 					console.log(err);
@@ -158,15 +161,15 @@ export default {
 				passiveCooldown = '';
 			}
 
-			if (bodyJSON.passives[passive].mythic == true) {
+			if (items.passives[passive].mythic == true) {
 				mythic = true;
-			} else if (bodyJSON.passives[passive].unique == true) {
+			} else if (items.passives[passive].unique == true) {
 				mythic = false;
 				embed.addFields({
 					name: `Unique Passive: ${passiveName}`,
 					value: `${passiveEffects} ${passiveCooldown}`,
 				});
-			} else if (bodyJSON.passives[passive].unique == false) {
+			} else if (items.passives[passive].unique == false) {
 				mythic = false;
 				embed.addFields({
 					name: `Passive: ${passiveName}`,
@@ -175,14 +178,14 @@ export default {
 			}
 		}
 
-		for (const active in bodyJSON.active) {
+		for (const active in items.active) {
 			let activeName;
-			if (bodyJSON.active[active].name) {
-				activeName = bodyJSON.active[active].name;
+			if (items.active[active].name) {
+				activeName = items.active[active].name;
 			}
 			let activeEffects;
-			if (bodyJSON.active[active].effects != null) {
-				activeEffects = bodyJSON.active[active].effects.replace(
+			if (items.active[active].effects != null) {
+				activeEffects = items.active[active].effects.replace(
 					/\+/g,
 					'%2b',
 				);
@@ -209,17 +212,17 @@ export default {
 				).textContent;
 			}
 			let activeCooldown;
-			if (bodyJSON.active[active].cooldown != null) {
-				activeCooldown = `**Cooldown:** ${bodyJSON.active[active].cooldown} seconds\n`;
+			if (items.active[active].cooldown != null) {
+				activeCooldown = `**Cooldown:** ${items.active[active].cooldown} seconds\n`;
 			} else {
 				activeCooldown = '';
 			}
 			let activeRange;
 			if (
-				bodyJSON.active[active].range != null &&
-				bodyJSON.active[active].range != 0
+				items.active[active].range != null &&
+				items.active[active].range != 0
 			) {
-				activeRange = `**Range:** ${bodyJSON.active[active].range}`;
+				activeRange = `**Range:** ${items.active[active].range}`;
 			} else {
 				activeRange = '';
 			}
@@ -233,14 +236,14 @@ export default {
 				name: `Mythic Passive: `,
 				value: `Embues each of your legendary items with:`,
 			});
-			for (const passive in bodyJSON.passives) {
-				if (bodyJSON.passives[passive].mythic == true) {
-					for (const stat in bodyJSON.passives[passive].stats) {
-						for (const type in bodyJSON.passives[passive].stats[
+			for (const passive in items.passives) {
+				if (items.passives[passive].mythic == true) {
+					for (const stat in items.passives[passive].stats) {
+						for (const type in items.passives[passive].stats[
 							stat
 						]) {
 							if (
-								bodyJSON.passives[passive].stats[stat][type] !==
+								items.passives[passive].stats[stat][type] !==
 								0.0
 							) {
 								let fuse = new Fuse(statNameArray);
@@ -254,10 +257,10 @@ export default {
 											result == 'Magic Penetration' ||
 											result == 'Critical Strike Chance'))
 								) {
-									statValue = `${bodyJSON.passives[passive].stats[stat][type]}%`;
+									statValue = `${items.passives[passive].stats[stat][type]}%`;
 								} else {
 									statValue =
-										bodyJSON.passives[passive].stats[stat][
+										items.passives[passive].stats[stat][
 											type
 										];
 								}

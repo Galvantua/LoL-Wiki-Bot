@@ -2,26 +2,48 @@ import fs from 'node:fs';
 import { Client, GatewayIntentBits, EmbedBuilder } from 'discord.js';
 import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v9';
-import spawn from 'node:child_process';
+import child_process from 'node:child_process';
 import config from '../config.json' assert { type: 'json' };
 import Package from '../package.json' assert { type: 'json' };
 import usedVersions from '../version.json' assert { type: 'json' };
-export let version;
+export let currentLoLVersion;
 
 async function checkVersion() {
-    let versions;
-    do {
-        versions = await fetch('https://ddragon.leagueoflegends.com/api/versions.json')
-                            .then(async(res) => {return await res.json()})
-                            .catch(err => {console.error(err); return undefined});
-    } while (!versions || !versions[0]);
-    currentLoLVersion = versions[0];
-	if (currentLoLVersion == usedVersions.lolVersion) {
-		console.log(`Checked version, new version: ${version}`);
-		
+	let versions;
+	do {
+		versions = await fetch(
+			'https://ddragon.leagueoflegends.com/api/versions.json',
+		)
+			.then(async (res) => {
+				return await res.json();
+			})
+			.catch((err) => {
+				console.error(err);
+				return undefined;
+			});
+	} while (!versions || !versions[0]);
+	currentLoLVersion = versions[0];
+	if (currentLoLVersion != usedVersions.lolVersion) {
+		console.log(`Checked version, new version: ${currentLoLVersion}`);
 	} else {
-		console.log(`Checked version, using current version: ${version}`)
+		console.log(
+			`Checked version, using current version: ${currentLoLVersion}`,
+		);
 	}
+	const loldataChamps = child_process.spawn('python', [
+		'-m',
+		'loldata.lolstaticdata.champions',
+	]);
+	loldataChamps.stdout.on('data', (data) => {
+		console.log(data.toString());
+	});
+	const loldataItems = child_process.spawn('python', [
+		'-m',
+		'loldata.lolstaticdata.items',
+	]);
+	loldataItems.stdout.on('data', (data) => {
+		console.log(data.toString());
+	});
 }
 
 setInterval(checkVersion, 86400000);
@@ -171,7 +193,7 @@ client.on('interactionCreate', async (interaction) => {
 
 			//Embed
 			const embed = new EmbedBuilder();
-			embed.setColor(0XF7A4A4);
+			embed.setColor(0xf7a4a4);
 			embed.setTitle('❌ Error during command execution');
 			embed.setDescription(
 				`An error occured while executing the command '${interaction.commandName}'.`,
@@ -182,9 +204,11 @@ client.on('interactionCreate', async (interaction) => {
 
 			//Send embed
 			if (interaction.replied)
-				await interaction.editReply({ embeds: [embed], ephemeral: true });
-			else
-				await interaction.reply({ embeds: [embed], ephemeral: true });
+				await interaction.editReply({
+					embeds: [embed],
+					ephemeral: true,
+				});
+			else await interaction.reply({ embeds: [embed], ephemeral: true });
 		}
 	}
 });

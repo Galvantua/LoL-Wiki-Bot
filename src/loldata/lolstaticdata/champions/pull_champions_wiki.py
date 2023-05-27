@@ -4,6 +4,8 @@ from bs4 import BeautifulSoup
 from collections import Counter
 from slpp import slpp as lua
 from datetime import datetime
+import sys
+
 
 from ..common.modelcommon import (
     DamageType,
@@ -158,6 +160,7 @@ class LolWikiDataHandler:
 
         for name, d in data.items():
             print(name)
+            sys.stdout.flush()
             if name in [
                 "Kled & Skaarl",
                 "GnarBig",
@@ -257,14 +260,14 @@ class LolWikiDataHandler:
                 selection_radius=Stat(flat=data["stats"].get("selection_radius", 100)),
                 pathing_radius=Stat(flat=data["stats"].get("pathing_radius", 35)),
                 gameplay_radius=Stat(flat=data["stats"].get("gameplay_radius", 65)),
-                aram_damage_taken=Stat(flat=data["stats"].get("aram_dmg_taken", 1.0)),
-                aram_damage_dealt=Stat(flat=data["stats"].get("aram_dmg_dealt", 1.0)),
-                aram_healing=Stat(flat=data["stats"].get("aram_healing", 1.0)),
-                aram_shielding=Stat(flat=data["stats"].get("aram_shielding", 1.0)),
-                urf_damage_taken=Stat(flat=data["stats"].get("urf_dmg_taken", 1.0)),
-                urf_damage_dealt=Stat(flat=data["stats"].get("urf_dmg_dealt", 1.0)),
-                urf_healing=Stat(flat=data["stats"].get("urf_healing", 1.0)),
-                urf_shielding=Stat(flat=data["stats"].get("urf_shielding", 1.0)),
+                aram_damage_taken=Stat(flat=data["stats"].get("aram",{}).get("dmg_taken", 1.0)),
+                aram_damage_dealt=Stat(flat=data["stats"].get("aram",{}).get("dmg_dealt", 1.0)),
+                aram_healing=Stat(flat=data["stats"].get("aram",{}).get("healing", 1.0)),
+                aram_shielding=Stat(flat=data["stats"].get("aram",{}).get("shielding", 1.0)),
+                urf_damage_taken=Stat(flat=data["stats"].get("urf",{}).get("dmg_taken", 1.0)),
+                urf_damage_dealt=Stat(flat=data["stats"].get("urf",{}).get("dmg_dealt", 1.0)),
+                urf_healing=Stat(flat=data["stats"].get("urf",{}).get("healing", 1.0)),
+                urf_shielding=Stat(flat=data["stats"].get("urf",{}).get("shielding", 1.0)),
             ),
             roles=sorted(
                 {
@@ -601,7 +604,9 @@ class LolWikiDataHandler:
             parsed_modifiers = ParsingAndRegex.split_modifiers(mods)
         except Exception as error:
             print("ERROR: FAILURE TO SPLIT MODIFIER")
+            sys.stdout.flush()
             print("ERROR:", error)
+            sys.stdout.flush()
             return modifiers
 
         for lvling in parsed_modifiers:
@@ -610,7 +615,9 @@ class LolWikiDataHandler:
                 modifiers.append(modifier)
             except Exception as error:
                 print(f"ERROR: FAILURE TO PARSE MODIFIER:  {lvling}")
+                sys.stdout.flush()
                 print("ERROR:", error)
+                sys.stdout.flush()
                 while "  " in lvling:
                     lvling = lvling.replace("  ", " ")
                 value = 0
@@ -915,6 +922,7 @@ class ParsingAndRegex:
                     values = [values[0], values[2], values[4]]
                 if nvalues is not None and len(values) != nvalues:
                     print(f"WARNING: Unexpected number of modifier values: {values} (expected {nvalues})")
+                    sys.stdout.flush()
                 return not_parsed, values
         raise ValueError(f"Could not parse slash-separated string: {string}")
 

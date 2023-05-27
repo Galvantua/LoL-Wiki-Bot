@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import re
 from collections import OrderedDict
 from slpp import slpp as lua
+import sys
 
 from .modelitem import (
     Stats,
@@ -107,7 +108,7 @@ class WikiItem:
         if passive:
             (
                 unique,
-				mythic,
+                mythic,
                 passive_name,
                 passive_effects,
                 item_range,
@@ -149,9 +150,9 @@ class WikiItem:
         passive = passive
 
         if "radius" in passive:
-            item_range = passive["radius"]
+            item_range = cls._parse_int(passive["radius"])
         elif "range" in passive:
-            item_range = passive["range"]
+            item_range = cls._parse_int(passive["range"])
         else:
             item_range = None
         return unique, mythic, name, passive["description"], item_range, cd
@@ -161,8 +162,8 @@ class WikiItem:
         # Regex stuff
         cdr = re.compile(r"\d.* cooldown reduction")
         crit = re.compile(r"\d.* critical strike chance")
-        lethality = re.compile(r"(\d.*) (?:lethality|Lethality)", re.IGNORECASE)
-        movespeed = re.compile(r"(\d+)(?: bonus |% | |% bonus )movement speed", re.IGNORECASE)  # movespeed needs fixing
+        lethality = re.compile(r"(?:lethality|Lethality)\|(\d*)", re.IGNORECASE)
+        movespeed = re.compile(r"(\d+)(?: '*bonus'* |% | |% '*bonus'* )movement speed", re.IGNORECASE) 
         armorpen = re.compile(r"(\d+)% armor penetration")
         magicpen = re.compile(r"(\d+).*? magic penetration")
         lifesteal = re.compile(r"\d+.*? life steal")
@@ -177,14 +178,14 @@ class WikiItem:
         # onHit = re.compile(r"basic attack (?:.*?)(?: (?:as|in))?\d+ (?:bonus|seconds |deals).*? (\d+.*) (?:bonus|seconds|deals) (?:magic|physical)")
         # test = re.compile(r"basic attack (?:.*?)(?: (?:as|in))?(\d+) (?:bonus|deals).*?")#taken from https://github.com/TheKevJames/league/blob/a62f5e3697392094aedd3d0bd1df37012824963b/league_utils/models/item/stats.py
         health = Health(flat=cls._parse_float(0.0))
-        ad = AttackDamage(flat=cls._parse_float(0.0)),
+        ad = AttackDamage(flat=cls._parse_float(0.0))
         tenacity_re = re.compile(r"(\d+)% TENACITY")
         # print(passive)
         if "Empowers each of your other Legendary items" in passive:
             if health_re.search(passive):
                 print(passive)
+                sys.stdout.flush()
                 health = Health(flat=float(health_re.search(passive).groups()[0]))
-
             else:
                 health = Health(flat=cls._parse_float(0.0))
 
@@ -202,14 +203,12 @@ class WikiItem:
 
         if movespeed.search(passive):
             mvspeed = movespeed.search(passive).group(0)
-
             if "%" in mvspeed:
-
                 movespeed = Movespeed(percent=float(movespeed.search(passive).groups()[0]))
             else:
                 movespeed = Movespeed(flat=float(movespeed.search(passive).groups()[0]))
         else:
-            movespeed = 0.0
+            movespeed = Movespeed(flat=cls._parse_float(0.0))
         if crit.search(passive):
             crit = crit.search(passive).group(0).split("%")[0]
             crit = cls._parse_float(crit)
@@ -609,7 +608,6 @@ class WikiItem:
                     try:
                         item_data[x] = wiki_data[item_data[x].replace("=>", "")][x]
                     except KeyError as e:
-                        print(item_data[x],"ERRRRROOOORRRRR",e)
                         clear_keys.append(x)
             if x in "effects":
                 for l in item_data[x]:
@@ -643,15 +641,15 @@ class WikiItem:
                 removed = False
         else:
             removed = False
-        if "rank" in item_data:
+        if "type" in item_data:
             rank = []
-            if item_data["rank"]:
-                if "," in item_data["rank"]:
-                    ranks = item_data["rank"].split(",")
+            if item_data["type"]:
+                if "," in item_data["type"][0]:
+                    ranks = item_data["type"][0].split(",")
                     for i in ranks:
                         rank.append(ItemRanks.from_string(i.strip()))
                 else:
-                    rank.append(ItemRanks.from_string(item_data["rank"]))
+                    rank.append(ItemRanks.from_string(item_data["type"][0]))
             else:
                 rank = None
         else:
@@ -750,17 +748,20 @@ def get_item_urls(use_cache: bool) -> List[str]:
     start = None
     spans = spans.text.split("\n")
 
+    # Find beginning of item data
     for i, span in enumerate(spans):
         if str(span) == "return {":
             start = i
             spans[i] = "{"
-    split_stuff = re.compile("({)|(})")
+            break
     spans = spans[start:]
-    for i, span in enumerate(spans):
+
+    # Find end of item data
+    for i, span in enumerate(reversed(spans)):
         if span in ["-- </pre>", "-- [[Category:Lua]]"]:
-            spans[i] = ""
+            spans[len(spans) - i - 1] = ""
+            break
 
     spans = "".join(spans)
     data = lua.decode(spans)
-    menus = []
     return data

@@ -1,6 +1,7 @@
 import os
 import shutil
 import json
+import sys
 
 from .pull_items_wiki import WikiItem, get_item_urls
 from .pull_items_dragon import DragonItem
@@ -8,7 +9,6 @@ from collections import OrderedDict
 
 def main():
     directory = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), "../.."))
-    use_cache = False
     if not os.path.exists(os.path.join(directory, "items")):
         os.mkdir(os.path.join(directory, "items"))
 
@@ -24,6 +24,7 @@ def main():
     for name,data in wikiItems.items():
         item = None
         print(name)
+        sys.stdout.flush()
         l = [x for x in cdragon if "id" in data and x["id"] == data["id"]]
 
         for i in l:
@@ -53,6 +54,7 @@ def main():
                     f.write(j)
                 jsons[int(item.id)] = json.loads(item.__json__(ensure_ascii=False))
                 print(item.id)
+                sys.stdout.flush()
     if os.path.exists(os.path.join(directory, "__wiki__")):
         shutil.rmtree(os.path.join(directory, "__wiki__"))
     jsonfn = os.path.join(directory, "items.json")
@@ -65,3 +67,4 @@ def main():
 if __name__ == "__main__":
     main()
     print("Hello! What a surprise, it worked!")
+    sys.stdout.flush()

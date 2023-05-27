@@ -4,3 +4,17 @@ package.json
 /node_modules
 items.bin.json
 pretty.json
+/src/loldata/items/
+/src/loldata/champions/
+/src/loldata/__pycache__/
+/src/loldata/__cache__/
+/src/loldata/champions.json
+/src/loldata/items.json
+/src/loldata/.vscode/
+/src/loldata/.env
+/src/loldata/.venv
+/src/loldata/env/
+/src/loldata/venv/
+/src/loldata/ENV/
+/src/loldata/env.bak/
+/src/loldata/venv.bak/

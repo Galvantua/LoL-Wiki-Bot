@@ -1,7 +1,9 @@
 import { underscore } from 'discord.js';
 import Fuse from 'fuse.js';
 import fetch from 'node-fetch';
-import { version } from '../index.mjs';
+import { currentLoLVersion } from '../index.mjs';
+import champions from '../loldata/champions.json' assert { type: 'json' };
+import items from '../loldata/items.json' assert { type: 'json' };
 
 export async function findRune(input, ref) {
 	try {
@@ -27,7 +29,7 @@ export async function findRune(input, ref) {
 		input = input.toLowerCase().replace(/([^a-z])/g, '');
 
 		const runes = await fetch(
-			`https://ddragon.leagueoflegends.com/cdn/${version}/data/en_US/runesReforged.json`,
+			`https://ddragon.leagueoflegends.com/cdn/${currentLoLVersion}/data/en_US/runesReforged.json`,
 		)
 			.then(async (res) => {
 				return await res.json();
@@ -201,33 +203,33 @@ export async function findAbilityName(input, interaction) {
 	} //check if cancer
 	//console.log(championName);
 
-	const champReq = await fetch(
-		`https://cdn.merakianalytics.com/riot/lol/resources/latest/en-US/champions.json`,
-	).catch((err) => {
-		interaction.editReply('Error getting champion names');
-		return;
-	});
-	const champBody = await champReq.text();
-	let bodyJSON;
-	try {
-		bodyJSON = JSON.parse(champBody);
-	} catch (error) {
-		console.log(error);
-		interaction.editReply('**Error getting champion names**');
-		return;
-	}
-
-	const champs = [];
-	for (const champ in bodyJSON) {
-		if (Object.hasOwnProperty.call(bodyJSON, champ)) {
-			champs.push(champ);
+	// const champReq = await fetch(
+	// 	`https://cdn.merakianalytics.com/riot/lol/resources/latest/en-US/champions.json`,
+	// ).catch((err) => {
+	// 	interaction.editReply('Error getting champion names');
+	// 	return;
+	// });
+	// const champBody = await champReq.text();
+	// let bodyJSON;
+	// try {
+	// 	bodyJSON = JSON.parse(champBody);
+	// } catch (error) {
+	// 	console.log(error);
+	// 	interaction.editReply('**Error getting champion names**');
+	// 	return;
+	// }
+	
+	const champNames = [];
+	for (const champ in champions) {
+		if (Object.hasOwnProperty.call(champions, champ)) {
+			champNames.push(champ);
 		}
 	}
 
-	const fuse = new Fuse(champs);
+	const fuse = new Fuse(champNames);
 	const result = fuse.search(championName);
 
-	const final = bodyJSON[result[0].item].name;
+	const final = champions[result[0].item].name;
 	//console.log(final);
 	//console.log(result[0]);
 
@@ -347,30 +349,30 @@ export async function findChampionName(input, interaction) {
 			];
 	}
 
-	const champReq = await fetch(
-		`https://cdn.merakianalytics.com/riot/lol/resources/latest/en-US/champions.json`,
-	).catch((err) => {
-		interaction.editReply('Error getting champion names');
-		return;
-	});
-	const champBody = await champReq.text();
-	let bodyJSON;
-	try {
-		bodyJSON = JSON.parse(champBody);
-	} catch (error) {
-		console.log(error);
-		interaction.editReply('**Error getting champion names**');
-		return;
-	}
+	// const champReq = await fetch(
+	// 	`https://cdn.merakianalytics.com/riot/lol/resources/latest/en-US/champions.json`,
+	// ).catch((err) => {
+	// 	interaction.editReply('Error getting champion names');
+	// 	return;
+	// });
+	// const champBody = await champReq.text();
+	// let bodyJSON;
+	// try {
+	// 	bodyJSON = JSON.parse(champBody);
+	// } catch (error) {
+	// 	console.log(error);
+	// 	interaction.editReply('**Error getting champion names**');
+	// 	return;
+	// }
 
-	const champs = [];
-	for (const champ in bodyJSON) {
-		if (Object.hasOwnProperty.call(bodyJSON, champ)) {
-			champs.push(champ);
+	const champNames = [];
+	for (const champ in champions) {
+		if (Object.hasOwnProperty.call(champions, champ)) {
+			champNames.push(champ);
 		}
 	}
 
-	const fuse = new Fuse(champs);
+	const fuse = new Fuse(champNames);
 	const result = fuse.search(championName);
 	//console.log(result[0].item);
 
@@ -378,32 +380,32 @@ export async function findChampionName(input, interaction) {
 }
 
 export async function findItemName(input, interaction) {
-	const itemReq = await fetch(
-		`https://cdn.merakianalytics.com/riot/lol/resources/latest/en-US/items.json`,
-	).catch((err) => {
-		interaction.editReply('Error getting items names');
-		return;
-	});
-	const itemBody = await itemReq.text();
-	let bodyJSON;
-	try {
-		bodyJSON = JSON.parse(itemBody);
-	} catch (error) {
-		console.log(error);
-		interaction.editReply('**Error getting item names**');
-		return;
-	}
+	// const itemReq = await fetch(
+	// 	`https://cdn.merakianalytics.com/riot/lol/resources/latest/en-US/items.json`,
+	// ).catch((err) => {
+	// 	interaction.editReply('Error getting items names');
+	// 	return;
+	// });
+	// const itemBody = await itemReq.text();
+	// let bodyJSON;
+	// try {
+	// 	bodyJSON = JSON.parse(itemBody);
+	// } catch (error) {
+	// 	console.log(error);
+	// 	interaction.editReply('**Error getting item names**');
+	// 	return;
+	// }
 	const itemNames = [];
 	const itemObj = [];
-	for (const item in bodyJSON) {
-		if (Object.hasOwnProperty.call(bodyJSON, item)) {
+	for (const item in items) {
+		if (Object.hasOwnProperty.call(items, item)) {
 			itemObj.push(item);
 		}
 	}
 
 	for (let i = 0; i < itemObj.length; i++) {
 		const item = itemObj[i];
-		itemNames.push(bodyJSON[item].name);
+		itemNames.push(items[item].name);
 	}
 
 	const fuse = new Fuse(itemNames);
