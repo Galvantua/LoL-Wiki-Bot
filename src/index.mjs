@@ -50,7 +50,6 @@ async function checkVersion() {
 	const loldataItems = child_process.spawn(
 		'python',
 		['-X', 'utf8', '-m', 'loldata.lolstaticdata.items'],
-		{ stdio: 'ignore' },
 	);
 	loldataItems.stdout.on('data', (data) => {
 		console.log(`stdout: ${data}`);

@@ -69,11 +69,16 @@ export default {
 			'Life Steal',
 			'Movement Speed',
 			'Attack Speed',
+			'Heal and Shield Power'
 		];
 		for (const stat in items.stats) {
 			for (const type in items.stats[stat]) {
 				if (items.stats[stat][type] !== 0.0) {
+					console.log(`itemID: ${itemId}`);
+
 					let fuse = new Fuse(statNameArray);
+					let results = fuse.search(stat);
+					console.log(`fuse Results: ${results}`)
 					let result = fuse.search(stat)[0].item;
 
 					if (
