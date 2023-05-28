@@ -31,18 +31,36 @@ async function checkVersion() {
 		);
 	}
 	const loldataChamps = child_process.spawn('python', [
+		'-X',
+		'utf8',
 		'-m',
 		'loldata.lolstaticdata.champions',
 	]);
 	loldataChamps.stdout.on('data', (data) => {
-		console.log(data.toString());
+		console.log(`stdout: ${data}`);
 	});
-	const loldataItems = child_process.spawn('python', [
-		'-m',
-		'loldata.lolstaticdata.items',
-	]);
+
+	loldataChamps.stderr.on('data', (data) => {
+		console.error(`stderr: ${data}`);
+	});
+
+	loldataChamps.on('close', (code) => {
+		console.log(`child process exited with code ${code}`);
+	});
+	const loldataItems = child_process.spawn(
+		'python',
+		['-X', 'utf8', '-m', 'loldata.lolstaticdata.items'],
+		{ stdio: 'ignore' },
+	);
 	loldataItems.stdout.on('data', (data) => {
-		console.log(data.toString());
+		console.log(`stdout: ${data}`);
+	});
+
+	loldataItems.stderr.on('data', (data) => {
+		console.error(`stderr: ${data}`);
+	});
+	loldataItems.on('close', (code) => {
+		console.log(`items process exited with code ${code}`);
 	});
 }
 
