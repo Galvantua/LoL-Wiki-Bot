@@ -7,6 +7,9 @@ pretty.json
 /src/loldata/items/
 /src/loldata/champions/
 /src/loldata/__pycache__/
+/src/loldata/lolstaticdata/champions/__pycache__/
+/src/loldata/lolstaticdata/common/__pycache__/
+/src/loldata/lolstaticdata/items/__pycache__/
 /src/loldata/__cache__/
 /src/loldata/champions.json
 /src/loldata/items.json
