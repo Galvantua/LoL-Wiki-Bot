@@ -29,7 +29,6 @@ from ..common.utils import OrderedEnum, ExtendedEncoder
 
 class Resource(OrderedEnum):
     NO_COST = "NO_COST"
-    BLOODTHIRST = "BLOODTHIRST"
     MANA = "MANA"
     ENERGY = "ENERGY"
     RAGE = "RAGE"
@@ -50,12 +49,19 @@ class Resource(OrderedEnum):
     NONE = "NONE"
     SOUL_UNBOUND = "SOUL_UNBOUND"
     BLOOD_WELL = "BLOOD_WELL"
-
+    CRIMSON_RUSH = "CRIMSON_RUSH"
+    FRENZY = "FRENZY"
 
 class AttackType(OrderedEnum):
     MELEE = "MELEE"
     RANGED = "RANGED"
 
+class Position(OrderedEnum): 
+    TOP = "TOP"
+    JUNGLE = "JUNGLE"
+    MIDDLE = "MIDDLE"
+    BOTTOM = "BOTTOM"
+    SUPPORT = "SUPPORT"
 
 class Role(OrderedEnum):
     TANK = "TANK"
@@ -106,6 +112,10 @@ class Stats(object):
     aram_damage_dealt: Stat
     aram_healing: Stat
     aram_shielding: Stat
+    aram_tenacity: Stat
+    aram_ability_haste: Stat
+    aram_attack_speed: Stat
+    aram_energy_regen: Stat
     urf_damage_taken: Stat
     urf_damage_dealt: Stat
     urf_healing: Stat
@@ -121,9 +131,6 @@ class AttributeRatings(object):
     mobility: int
     utility: int
     ability_reliance: int
-    attack: int
-    defense: int
-    magic: int
     difficulty: int
 
 
@@ -271,6 +278,7 @@ class Champion(object):
     attack_type: AttackType
     adaptive_type: DamageType
     stats: Stats
+    positions: List[Position]
     roles: List[Role]
     attribute_ratings: AttributeRatings
     abilities: Mapping[str, List[Ability]]

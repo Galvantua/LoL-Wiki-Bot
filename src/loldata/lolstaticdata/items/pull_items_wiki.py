@@ -3,7 +3,6 @@ from bs4 import BeautifulSoup
 import re
 from collections import OrderedDict
 from slpp import slpp as lua
-import sys
 
 from .modelitem import (
     Stats,
@@ -98,6 +97,7 @@ class WikiItem:
 
     @classmethod
     def _parse_actives(cls, item_data: dict) -> List[Active]:
+        get_cooldown = re.compile(r"(\d+ second cooldown)|(\d+ seconds cooldown)")
         effects = []
         passive = None
         if "effects" in item_data:
@@ -114,11 +114,16 @@ class WikiItem:
                 item_range,
                 cd,
             ) = cls._parse_passive_info(passive)
+            if get_cooldown.search(passive_effects):
+                cooldown = get_cooldown.search(passive_effects).group(0).split(" ", 1)
+                cooldown = cls._parse_float(cooldown[0])
+            else:
+                cooldown = None
             effect = Active(
                 unique=unique,
                 name=passive_name,
                 effects=passive_effects,
-                cooldown=cd,
+                cooldown=cooldown,
                 range=item_range,
             )  # This is hacky...
 
@@ -126,7 +131,7 @@ class WikiItem:
         return effects
 
     @classmethod
-    def _parse_passive_info(cls, passive: dict) -> Tuple[bool, bool, Optional[str], str, Optional[str], Optional[str]]:
+    def _parse_passive_info(cls, passive: dict) -> Tuple[bool, bool, Optional[str], str, Optional[int], Optional[str]]:
         if "unique" in passive:
             unique = True
             mythic = False
@@ -184,7 +189,6 @@ class WikiItem:
         if "Empowers each of your other Legendary items" in passive:
             if health_re.search(passive):
                 print(passive)
-                sys.stdout.flush()
                 health = Health(flat=float(health_re.search(passive).groups()[0]))
             else:
                 health = Health(flat=cls._parse_float(0.0))
@@ -347,7 +351,7 @@ class WikiItem:
         elif item in "Ruby_Crystal_Ruby_Crystal":
             item = "Ruby_Crystal"
 
-        url = "https://leagueoflegends.fandom.com/wiki/Template:Item_data_" + item
+        url = "https://wiki.leagueoflegends.com/en-us/Template:Item_data_" + item
         use_cache = True
         html = download_soup(url, use_cache, dir="__wiki__")
         soup = BeautifulSoup(html, "lxml")
@@ -364,7 +368,7 @@ class WikiItem:
         mana = 0.0
         hsp = 0.0
         mp5 = 0.0
-        tenacity = Tenacity(cls._parse_float(0.0))
+        tenacity = 0.0
         ad = 0.0
         mpenflat = 0.0
         hspunique = 0.0
@@ -416,7 +420,7 @@ class WikiItem:
                     percent=cls._parse_float(omnivamp),  # takes omnivamp from
                 ),
                 ability_haste=AbilityHaste(flat=cls._parse_float(ah)),
-                tenacity=tenacity
+                tenacity=Tenacity(percent=cls._parse_float(tenacity))
             )
             return stats
 
@@ -533,11 +537,10 @@ class WikiItem:
             pvamp = item_data['pvamp']
         else:
             pvamp = None
-        if "spec" in item_data:
-            if "TENACITY" in item_data["spec"].upper():
-                tenacity = Tenacity(
-                    cls._parse_float(re.search(r"(\d+)%", item_data["spec"].upper()).groups()[0]))
-                print(tenacity)
+        
+        if "tenacity" in item_data:
+            tenacity = item_data['tenacity']
+        
         stats = Stats(
             ability_power=AbilityPower(flat=cls._parse_float(ap)),
             armor=Armor(flat=cls._parse_float(armor)),
@@ -571,7 +574,7 @@ class WikiItem:
                 percent=cls._parse_float(omnivamp),  # takes omnivamp from
             ),
             ability_haste=AbilityHaste(flat=cls._parse_float(ah)),
-            tenacity=tenacity
+            tenacity=Tenacity(percent=cls._parse_float(tenacity))
         )
         return stats
 
@@ -658,8 +661,9 @@ class WikiItem:
             no_effects = True
         else:
             no_effects = False
-        if "buy" in item_data:
-
+        if "buy" in item_data:     
+            while isinstance(item_data["buy"], str) and "=>" in item_data["buy"]:
+                item_data["buy"] = wiki_data[item_data["buy"].replace("=>", "")]["buy"]       
             sell = item_data["buy"] * .40
         else:
             sell = 0
@@ -741,7 +745,7 @@ class WikiItem:
         return item
 
 def get_item_urls(use_cache: bool) -> List[str]:
-    url = "https://leagueoflegends.fandom.com/wiki/Module:ItemData/data"
+    url = "https://wiki.leagueoflegends.com/en-us/Module:ItemData/data"
     html = download_soup(url, False)
     soup = BeautifulSoup(html, "lxml")
     spans = soup.find("pre", {"class": "mw-code mw-script"})
@@ -762,6 +766,6 @@ def get_item_urls(use_cache: bool) -> List[str]:
             spans[len(spans) - i - 1] = ""
             break
 
-    spans = "".join(spans)
+    spans = "\n".join(spans)
     data = lua.decode(spans)
     return data

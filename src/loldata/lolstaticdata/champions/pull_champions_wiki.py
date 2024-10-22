@@ -4,8 +4,6 @@ from bs4 import BeautifulSoup
 from collections import Counter
 from slpp import slpp as lua
 from datetime import datetime
-import sys
-
 
 from ..common.modelcommon import (
     DamageType,
@@ -47,6 +45,7 @@ from .modelchampion import (
     Price,
     Resource,
     Modifier,
+    Position,
     Role,
     Leveling,
     Skin,
@@ -133,7 +132,7 @@ class LolWikiDataHandler:
 
     def get_champions(self) -> Iterator[Champion]:
         # Download the page source
-        url = "https://leagueoflegends.fandom.com/wiki/Module:ChampionData/data"
+        url = "https://wiki.leagueoflegends.com/en-us/Module:ChampionData/data"
         html = download_soup(url, self.use_cache)
         soup = BeautifulSoup(html, "lxml")
 
@@ -160,7 +159,6 @@ class LolWikiDataHandler:
 
         for name, d in data.items():
             print(name)
-            sys.stdout.flush()
             if name in [
                 "Kled & Skaarl",
                 "GnarBig",
@@ -176,6 +174,7 @@ class LolWikiDataHandler:
             if (
                 d["id"] == 9999
                 or d["date"] == "Upcoming"
+                or d["date"] == ""
                 or datetime.strptime(d["date"], "%Y-%m-%d") > datetime.today()
             ):  # Champion not released yet
                 continue
@@ -253,8 +252,8 @@ class LolWikiDataHandler:
                     flat=data["stats"]["range"],
                     per_level=data["stats"].get("range_lvl", 0),
                 ),
-                critical_strike_damage=Stat(flat=data["stats"].get("crit_base", 200)),
-                critical_strike_damage_modifier=Stat(flat=data["stats"].get("crit_base", 1.0)),
+                critical_strike_damage=Stat(flat=data["stats"].get("crit_base", 175)),
+                critical_strike_damage_modifier=Stat(flat=data["stats"].get("crit_mod", 1.0)),
                 movespeed=Movespeed(flat=data["stats"]["ms"]),
                 acquisition_radius=Stat(flat=data["stats"].get("acquisition_radius", 800)),
                 selection_radius=Stat(flat=data["stats"].get("selection_radius", 100)),
@@ -264,11 +263,16 @@ class LolWikiDataHandler:
                 aram_damage_dealt=Stat(flat=data["stats"].get("aram",{}).get("dmg_dealt", 1.0)),
                 aram_healing=Stat(flat=data["stats"].get("aram",{}).get("healing", 1.0)),
                 aram_shielding=Stat(flat=data["stats"].get("aram",{}).get("shielding", 1.0)),
+                aram_tenacity=Stat(flat=data["stats"].get("aram",{}).get("tenacity", 1.0)),
+                aram_ability_haste=Stat(flat=data["stats"].get("aram",{}).get("ability_haste", 1.0)),
+                aram_attack_speed=Stat(flat=data["stats"].get("aram",{}).get("attack_speed", 1.0)),
+                aram_energy_regen=Stat(flat=data["stats"].get("aram",{}).get("energy_regen", 1.0)),
                 urf_damage_taken=Stat(flat=data["stats"].get("urf",{}).get("dmg_taken", 1.0)),
                 urf_damage_dealt=Stat(flat=data["stats"].get("urf",{}).get("dmg_dealt", 1.0)),
                 urf_healing=Stat(flat=data["stats"].get("urf",{}).get("healing", 1.0)),
                 urf_shielding=Stat(flat=data["stats"].get("urf",{}).get("shielding", 1.0)),
             ),
+            positions=sorted(Position.from_string(p) for p in data["external_positions"]),
             roles=sorted(
                 {
                     *(Role.from_string(r) for r in data["role"]),
@@ -289,9 +293,6 @@ class LolWikiDataHandler:
                 mobility=data["mobility"],
                 utility=data["utility"],
                 ability_reliance=data["style"],
-                attack=data["attack"],
-                defense=data["defense"],
-                magic=data["magic"],
                 difficulty=data["difficulty"],
             ),
             abilities=dict(
@@ -306,6 +307,7 @@ class LolWikiDataHandler:
                                 and ability_name in LolWikiDataHandler.MISSING_SKILLS[name]
                             )
                         ],
+                        default="I",
                     ),
                     self._render_abilities(
                         champion_name=name,
@@ -317,6 +319,7 @@ class LolWikiDataHandler:
                                 and ability_name in LolWikiDataHandler.MISSING_SKILLS[name]
                             )
                         ],
+                        default="Q",
                     ),
                     self._render_abilities(
                         champion_name=name,
@@ -328,6 +331,7 @@ class LolWikiDataHandler:
                                 and ability_name in LolWikiDataHandler.MISSING_SKILLS[name]
                             )
                         ],
+                        default="W",
                     ),
                     self._render_abilities(
                         champion_name=name,
@@ -339,6 +343,7 @@ class LolWikiDataHandler:
                                 and ability_name in LolWikiDataHandler.MISSING_SKILLS[name]
                             )
                         ],
+                        default="E",
                     ),
                     self._render_abilities(
                         champion_name=name,
@@ -350,6 +355,7 @@ class LolWikiDataHandler:
                                 and ability_name in LolWikiDataHandler.MISSING_SKILLS[name]
                             )
                         ],
+                        default="R",
                     ),
                 ]
             ),
@@ -371,15 +377,15 @@ class LolWikiDataHandler:
 
         # Pull the html from the wiki
         # print(f"  {ability_name}")
-        url = f"https://leagueoflegends.fandom.com/wiki/Template:Data_{champion_name}/{ability_name}"
+        url = f"https://wiki.leagueoflegends.com/en-us/Template:Data_{champion_name}/{ability_name}"
         # temporary fix for pyke passive
-        if url in "https://leagueoflegends.fandom.com/wiki/Template:Data_Pyke/Gift_of_the_Drowned_Ones":
-            url = "https://leagueoflegends.fandom.com/wiki/User:Dryan426/Sandbox"
+        if url in "https://wiki.leagueoflegends.com/en-us/Template:Data_Pyke/Gift_of_the_Drowned_Ones":
+            url = "https://wiki.leagueoflegends.com/en-us/User:Dryan426/Sandbox"
         html = download_soup(url, self.use_cache)
         soup = BeautifulSoup(html, "lxml")
         return HTMLAbilityWrapper(soup)
 
-    def _render_abilities(self, champion_name, abilities: List[HTMLAbilityWrapper]) -> Tuple[str, List[Ability]]:
+    def _render_abilities(self, champion_name, abilities: List[HTMLAbilityWrapper], default: str) -> Tuple[str, List[Ability]]:
         inputs, abilities = abilities, []  # rename variables
         skill_key = inputs[0]["skill"]
         for data in inputs:
@@ -394,14 +400,9 @@ class LolWikiDataHandler:
                 _skill_key = "I"
             if champion_name == "Gnar" and data["name"] in ("Boulder Toss",):
                 _skill_key = "Q"
+            if _skill_key != skill_key:
+                _skill_key = default
             assert _skill_key == skill_key
-
-            if champion_name == "Pyke" and _skill_key == "I":
-                del data[
-                    "Cost"
-                ]  # This is a weird one... There's an embedded table that doesn't get parsed right. It overwrites 'cost', but luckily that isn't an issue because 'cost' is empty.
-            if data.get("Cost") is not None:
-                raise ValueError(data)
 
             nvalues = 5 if _skill_key in ("Q", "W", "E") else 3
             if champion_name == "Aphelios" and _skill_key == "I":
@@ -604,9 +605,7 @@ class LolWikiDataHandler:
             parsed_modifiers = ParsingAndRegex.split_modifiers(mods)
         except Exception as error:
             print("ERROR: FAILURE TO SPLIT MODIFIER")
-            sys.stdout.flush()
             print("ERROR:", error)
-            sys.stdout.flush()
             return modifiers
 
         for lvling in parsed_modifiers:
@@ -615,9 +614,7 @@ class LolWikiDataHandler:
                 modifiers.append(modifier)
             except Exception as error:
                 print(f"ERROR: FAILURE TO PARSE MODIFIER:  {lvling}")
-                sys.stdout.flush()
                 print("ERROR:", error)
-                sys.stdout.flush()
                 while "  " in lvling:
                     lvling = lvling.replace("  ", " ")
                 value = 0
@@ -657,7 +654,7 @@ class LolWikiDataHandler:
     def _get_sale(self):
 
         get_prices = re.compile(r"(\d+) (\d+)")
-        url = f"https://leagueoflegends.fandom.com/wiki/Sales"
+        url = f"https://wiki.leagueoflegends.com/en-us/Sales"
         # temporary fix for pyke passive
         html = download_soup(url, False)
         soup = BeautifulSoup(html, "lxml")
@@ -678,16 +675,9 @@ class LolWikiDataHandler:
         return sale
 
     def _get_skin_id(self, id, skin_id):
-        if skin_id < 10:
-            id_test = str(id) + "00" + str(skin_id)
-        elif skin_id >= 10 and skin_id < 100:
-            id_test = str(id) + "0" + str(skin_id)
-        else:
-            id_test = str(id) + str(skin_id)
-
-        # If a single champion gets over 1k skin ids tell Dan he was wrong to think that it would never happen
-
-        return id_test
+        while len(str(skin_id)) < 3:
+            skin_id = "0" + str(skin_id)
+        return str(id) + str(skin_id)
 
     def _get_chroma_attribs(self, id, name):
         if "chromas" in self.cdragDict[0]:
@@ -714,9 +704,11 @@ class LolWikiDataHandler:
                         rarities=rarities,
                     )
                     return chroma
+            available = [n['id'] for n in self.cdragDict[0]["chromas"]]
+            print(f"Chroma Mismatch: {id} not available in {available}")
 
     def _get_skins(self):
-        url = f"https://leagueoflegends.fandom.com/wiki/Module:SkinData/data"
+        url = f"https://wiki.leagueoflegends.com/en-us/Module:SkinData/data"
 
         html = download_soup(url, False)
         soup = BeautifulSoup(html, "lxml")
@@ -829,6 +821,10 @@ class LolWikiDataHandler:
 
             if "chromas" in champ_data[s]:
                 for chroma in champ_data[s]["chromas"]:
+                    if "id" not in champ_data[s]["chromas"][chroma] or not str(champ_data[s]["chromas"][chroma]["id"]).isnumeric():
+                        continue
+                    if "availability" in champ_data[s]["chromas"][chroma] and champ_data[s]["chromas"][chroma]["availability"] == "Canceled":
+                        continue
                     chromas.append(
                         self._get_chroma_attribs(
                             self._get_skin_id(champ_id, champ_data[s]["chromas"][chroma]["id"]),
@@ -922,7 +918,6 @@ class ParsingAndRegex:
                     values = [values[0], values[2], values[4]]
                 if nvalues is not None and len(values) != nvalues:
                     print(f"WARNING: Unexpected number of modifier values: {values} (expected {nvalues})")
-                    sys.stdout.flush()
                 return not_parsed, values
         raise ValueError(f"Could not parse slash-separated string: {string}")
 
@@ -972,7 +967,7 @@ class ParsingAndRegex:
         return not_parsed[1]
 
     @staticmethod
-    def get_modifier(mod: str, nvalues: int) -> [List[str], List[Union[int, float]]]:
+    def get_modifier(mod: str, nvalues: int) -> Tuple[List[str], List[Union[int, float]]]:
         units, parsed = ParsingAndRegex.regex_simple_flat(mod, nvalues)
         units = ParsingAndRegex.get_units(units)
         units = [units for _ in range(len(parsed))]

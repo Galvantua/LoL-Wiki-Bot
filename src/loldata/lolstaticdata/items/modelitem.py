@@ -65,6 +65,7 @@ class ItemRanks(OrderedEnum):
     DISTRIBUTED = "DISTRIBUTED"
     MINION = "MINION"
     TURRET = "TURRET"
+    SPECIAL = "SPECIAL"
 
 
 @dataclasses_json.dataclass_json(letter_case=dataclasses_json.LetterCase.CAMEL)
@@ -127,8 +128,8 @@ class Active(object):
     unique: bool
     name: str
     effects: str
-    range: str
-    cooldown: str
+    range: int
+    cooldown: float
 
 
 @dataclasses_json.dataclass_json(letter_case=dataclasses_json.LetterCase.CAMEL)

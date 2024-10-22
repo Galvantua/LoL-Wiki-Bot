@@ -1,7 +1,6 @@
 import os
 import json
 from bs4 import BeautifulSoup
-import sys
 
 from ..common import utils
 from .pull_champions_wiki import LolWikiDataHandler
