@@ -67,7 +67,7 @@ export function linkify(el) {
 		if (links[i].textContent && !links[i].textContent.match(/:.+:/g))
 			links[
 				i
-			].textContent = `[${links[i].textContent}](https://leagueoflegends.fandom.com${links[i].href})`;
+			].textContent = `[${links[i].textContent}](https://wiki.leagueoflegends.com/${links[i].href})`;
 	}
 	return el;
 }

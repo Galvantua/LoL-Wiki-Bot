@@ -93,7 +93,7 @@ export default class handler {
 		const links = element.querySelectorAll('a');
 		links.forEach((link) => {
 			if (link.textContent && !link.textContent.match(/:.+:/g))
-				link.textContent = `[${link.textContent}](https://leagueoflegends.fandom.com${link.href})`;
+				link.textContent = `[${link.textContent}](https://wiki.leagueoflegends.com${link.href})`;
 		});
 
 		return element;
@@ -141,7 +141,7 @@ export default class handler {
 			aphAbilities = [1, 3, 5, 7, 9, 11];
 		}
 
-		const url = `https://leagueoflegends.fandom.com/wiki/Aphelios/LoL`;
+		const url = `https://wiki.leagueoflegends.com/Aphelios`;
 		const request = await fetch(url).catch((err) => {
 			console.log(err);
 		});
