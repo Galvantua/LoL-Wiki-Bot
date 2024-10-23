@@ -3,10 +3,10 @@ import { Client, GatewayIntentBits, EmbedBuilder } from 'discord.js';
 import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v9';
 import child_process from 'node:child_process';
-import config from '../config.json' assert { type: 'json' };
-import Package from '../package.json' assert { type: 'json' };
-import usedVersions from '../version.json' assert { type: 'json' };
-export let currentLoLVersion;
+import config from '../config.json' with { type: 'json' };
+import Package from '../package.json' with { type: 'json' };
+import usedVersions from '../version.json' with { type: 'json' };
+export let currentLoLVersion; 
 
 async function checkVersion() {
 	let versions;
@@ -35,7 +35,7 @@ async function checkVersion() {
 		'utf8',
 		'-m',
 		'loldata.lolstaticdata.champions',
-	]);
+	]); 
 	loldataChamps.stdout.on('data', (data) => {
 		console.log(`stdout: ${data}`);
 	});
@@ -63,8 +63,8 @@ async function checkVersion() {
 	});
 }
 
-setInterval(checkVersion, 86400000);
-checkVersion();
+//setInterval(checkVersion, 86400000);
+//checkVersion();
 
 // Create a new client instance
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
@@ -81,7 +81,10 @@ async function loadSlashCommands() {
 		.filter((file) => file.endsWith('.mjs'));
 
 	for (const file of commandFiles) {
+		console.log(file)
 		const command = await import(`./commands/${file}`);
+
+		console.log('command imported')
 		const commandData = command.default.data.toJSON();
 		client.slashCommands.set(commandData.name, {
 			execute: command.default.execute,

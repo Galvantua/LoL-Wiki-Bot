@@ -2,8 +2,8 @@ import { underscore } from 'discord.js';
 import Fuse from 'fuse.js';
 import fetch from 'node-fetch';
 import { currentLoLVersion } from '../index.mjs';
-import champions from '../loldata/champions.json' assert { type: 'json' };
-import items from '../loldata/items.json' assert { type: 'json' };
+import champions from '../loldata/champions.json' with { type: 'json' };
+import items from '../loldata/items.json' with { type: 'json' };
 
 export async function findRune(input, ref) {
 	try {

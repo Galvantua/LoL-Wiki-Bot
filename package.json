@@ -18,6 +18,7 @@
 		"jsdom": "^20.0.0",
 		"jsdom-global": "^3.0.2",
 		"node-fetch": "^2.6.1",
+		"nodemon": "^3.1.7",
 		"prettier": "^2.8.0"
 	},
 	"prettier": {
@@ -28,5 +29,10 @@
 		"useTabs": true,
 		"semi": true,
 		"bracketSpacing": true
+	},
+	"devDependencies": {
+		"@eslint/js": "^9.13.0",
+		"eslint": "^9.13.0",
+		"globals": "^15.11.0"
 	}
 }
