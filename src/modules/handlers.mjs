@@ -13,44 +13,44 @@ export default class handler {
 	constructor() {}
 
 	wikiFormat(element) {
-		const icons = element.querySelectorAll('img');
+		const icons = element.querySelectorAll('span[data-tip]')
 
 		icons.forEach((icon) => {
-			switch (icon.getAttribute('data-image-name')) {
-				case 'Hybrid resistances icon.png':
-					icon.parentElement.innerHTML =
-						'<:hybridresist:1049873538355576924>';
+			switch (icon.getAttribute('data-tip')) {
+				case 'Shield':
+					icon.innerHTML =
+						`<:hybridresist:1049873538355576924> ​**​Shield​**​`;
 					break;
-				case 'Gold.png':
-					icon.parentElement.innerHTML =
+				case '/en-us/Gold':
+					icon.innerHTML =
 						'<:gold:1049873537462173797>';
 					break;
-				case 'Ranged role.png':
-					icon.parentElement.innerHTML =
+				case '/en-us/Ranged':
+					icon.innerHTML =
 						'<:ranged:1049873680555065354>';
 					break;
-				case 'Melee role.png':
-					icon.parentElement.innerHTML =
+				case '/en-us/Melee':
+					icon.innerHTML =
 						'<:melee:1049873678424350780>';
 					break;
-				case 'Slow icon.png':
-					icon.parentElement.innerHTML =
+				case '/en-us/Slow':
+					icon.innerHTML =
 						'<:slow:1049873681704304712>';
 					break;
-				case 'Champion icon.png':
-					icon.parentElement.innerHTML =
+				case '/en-us/Champion':
+					icon.innerHTML =
 						'<:champion:1049873534765236318>';
 					break;
-				case 'Stun icon.png':
-					icon.parentElement.innerHTML =
+				case '/en-us/Stun':
+					icon.innerHTML =
 						'<:stun:1049873684304769086>';
 					break;
-				case 'Movement speed icon.png':
-					icon.parentElement.innerHTML =
+				case '/en-us/Movement_speed':
+					icon.innerHTML =
 						'<:movespeed:1049873679447756861>';
 					break;
-				case 'Heal power icon.png':
-					icon.parentElement.innerHTML =
+				case '/en-us/Healing':
+					icon.innerHTML =
 						'<:Heal:1049873210461655071>';
 					break;
 			}

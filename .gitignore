@@ -22,3 +22,4 @@ pretty.json
 /src/loldata/ENV/
 /src/loldata/env.bak/
 /src/loldata/venv.bak/
+src/commands/table.html
