@@ -46,18 +46,18 @@ export default {
 		let champion = interaction.options.getString('champion');
 		let championName = await findAbilityName(champion, interaction);
 		let ability = interaction.options.getString('ability');
-		let abilityProperties = [
-			'cast time',
-			'target range',
-			'range',
-			'cost',
-			'cooldown',
-			'speed',
-			'effect radius',
-			'width',
-			'recharge',
-			'collision radius',
-		];
+		// let abilityProperties = [
+		// 	'cast time',
+		// 	'target range',
+		// 	'range',
+		// 	'cost',
+		// 	'cooldown',
+		// 	'speed',
+		// 	'effect radius',
+		// 	'width',
+		// 	'recharge',
+		// 	'collision radius',
+		// ];
 		let myEmbeds = [];
 		let document,
 			abilityMain,
@@ -68,7 +68,7 @@ export default {
 			abilityStats,
 			abilityTables,
 			abilityDetails,
-			abilityImage,
+			//abilityImage,
 			detailText;
 
 		//assign value to vars according to the ability selected.
@@ -244,34 +244,34 @@ export default {
 					}
 				}
 			}
-
+            
 			//grabs the array of tables in the ability
 			let abilityContent = ability.getElementsByClassName('ability-info-content')[0];
 			abilityTables = abilityContent.getElementsByTagName('dl');
 
-
+			
 			//process the tables in the array and create fields for each subtable
 			for (let i = 0; i < abilityTables.length; i++) {
 				const subTable = abilityTables[i];
 
-					const subTableHeaders = subTable.getElementsByTagName('dt');
-					const subTableData = subTable.getElementsByTagName('dd');
+				const subTableHeaders = subTable.getElementsByTagName('dt');
+				const subTableData = subTable.getElementsByTagName('dd');
 
-					for (let i = 0; i < subTableHeaders.length; i++) {
-						const header = subTableHeaders[i].textContent;
-						const data = subTableData[i].textContent;
+				for (let i = 0; i < subTableHeaders.length; i++) {
+					const header = subTableHeaders[i].textContent;
+					const data = subTableData[i].textContent;
 
-						//console.log(header + " " + data);
+					//console.log(header + " " + data);
 
-						embed.addFields({
-							name: `${header.trim()}`,
-							value: `${data.trim()}`,
-							inline: true,
-						});
+					embed.addFields({
+						name: `${header.trim()}`,
+						value: `${data.trim()}`,
+						inline: true,
+					});
 		
 				}
 			}
-
+			
 			abilityDetails = abilityContent.getElementsByClassName('ability-info-description');
 			detailText = '';
 
@@ -291,14 +291,14 @@ export default {
 				}
 			}
 
-			abilityImage = ability
-				.getElementsByTagName('img')[0]
-				.getAttribute('src');
-			embed.setThumbnail(abilityImage);
+			// abilityImage = ability
+			// 	.getElementsByTagName('img')[0]
+			// 	.getAttribute('src');
+			// embed.setThumbnail(abilityImage);
 			embed.setColor(0xb6e2a1);
 			myEmbeds.push(embed);
 		}
-
+		
 		try {
 			await interaction.editReply({ embeds: myEmbeds });
 		} catch (error) {
