@@ -176,7 +176,7 @@ export default {
 
 		//TODO convert to custom solution
 		//send request to wiki based on champ and ability
-		const url = `https://leagueoflegends.fandom.com/api.php?action=parse&text={{Grouped%20ability|${championName}|${abilityLetter}}}&contentmodel=wikitext&format=json`;
+		const url = `https://wiki.leagueoflegends.com/api.php?action=parse&text={{Grouped%20ability|${championName}|${abilityLetter}}}&contentmodel=wikitext&format=json`;
 		const request = await fetch(url).catch((err) => {
 			console.log(err);
 		});
@@ -209,31 +209,29 @@ export default {
 
 		if (
 			abilitySub.length > 1 &&
-			abilitySub[0].getElementsByClassName('mw-headline')[0]
+			abilitySub[0].getElementsByClassName('ability-info-stats__ability')[0]
 				.textContent ==
-				abilitySub[1].getElementsByClassName('mw-headline')[0]
+				abilitySub[1].getElementsByClassName('ability-info-stats__ability')[0]
 					.textContent
 		)
 			abilitySub[1].parentNode.removeChild(abilitySub[1]);
 
 		for (let i = 0; i < abilitySub.length; i++) {
 			const embed = new EmbedBuilder();
-			//name of ability
 
 			const ability = abilitySub[i];
 
+			//name of ability
 			abilityHeader =
-				ability.getElementsByClassName('mw-headline')[0].textContent;
+				ability.getElementsByClassName('ability-info-stats__ability')[0].textContent;
 
 			embed.setTitle(`**${abilityHeader}**`);
 
-			abilityStats = ability.getElementsByTagName('aside')[0];
+			abilityStats = ability.getElementsByClassName('ability-info-stats__stat');
 
 			if (abilityStats) {
-				for (let i = 0; i < abilityProperties.length; i++) {
-					const element = abilityStats.querySelector(
-						`div[data-source="${abilityProperties[i]}"]`,
-					);
+				for (let i = 0; i < abilityStats.length; i++) {
+					const element = abilityStats[i];
 
 					if (element) {
 						const elementText = element.textContent.split(':');
@@ -248,16 +246,13 @@ export default {
 			}
 
 			//grabs the array of tables in the ability
-			abilityTables = ability.getElementsByTagName('table');
+			let abilityContent = ability.getElementsByClassName('ability-info-content')[0];
+			abilityTables = abilityContent.getElementsByTagName('dl');
+
 
 			//process the tables in the array and create fields for each subtable
 			for (let i = 0; i < abilityTables.length; i++) {
-				const table = abilityTables[i];
-
-				const subTables = table.getElementsByTagName('dl');
-
-				for (let i = 0; i < subTables.length; i++) {
-					const subTable = subTables[i];
+				const subTable = abilityTables[i];
 
 					const subTableHeaders = subTable.getElementsByTagName('dt');
 					const subTableData = subTable.getElementsByTagName('dd');
@@ -273,17 +268,17 @@ export default {
 							value: `${data.trim()}`,
 							inline: true,
 						});
-					}
+		
 				}
 			}
 
-			abilityDetails = ability.querySelectorAll('p, ul');
+			abilityDetails = abilityContent.getElementsByClassName('ability-info-description');
 			detailText = '';
 
 			for (let i = 0; i < abilityDetails.length; i++) {
 				const detail = abilityDetails[i];
 
-				const detailText = new handlers().wikiFormat(
+				detailText = new handlers().wikiFormat(
 					detail,
 				).textContent;
 				//console.log(detailText);
@@ -307,7 +302,7 @@ export default {
 		try {
 			await interaction.editReply({ embeds: myEmbeds });
 		} catch (error) {
-			//TODO add actual error handling
+			console.error(error)
 			await interaction.editReply(
 				'**Please select a valid champion/ability pair**',
 			);
