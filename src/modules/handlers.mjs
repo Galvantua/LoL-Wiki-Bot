@@ -21,10 +21,10 @@ export default class handler {
 					icon.innerHTML =
 						`<:hybridresist:1049873538355576924> ​**​Shield​**​`;
 					break;
-				case '/en-us/Gold':
-					icon.innerHTML =
-						'<:gold:1049873537462173797>';
-					break;
+				// case '/en-us/Gold':
+				// 	icon.innerHTML =
+				// 		'<:gold:1049873537462173797>';
+				// 	break; //gold is funky and doesnt have a tip, will need to find another way
 				case '/en-us/Ranged':
 					icon.innerHTML =
 						'<:ranged:1049873680555065354>';
