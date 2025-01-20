@@ -47,11 +47,12 @@ export default {
 		// 	return;
 		// }
 
-		const items = JSON.parse(fs.readFileSync(`./loldata/items/${itemId}.json`).toString());
+		const itemObj = JSON.parse(fs.readFileSync(`./loldata/items/${itemId}.json`).toString());
 
-		embed.setTitle(items.name).setThumbnail(items.icon);
-		let statName;
+		embed.setTitle(itemObj.name).setThumbnail(itemObj.icon);
+		// let statName;
 		let statValue;
+		let mythic;
 		let statNameArray = [
 			'Attack Damage',
 			'Ability Power',
@@ -71,9 +72,9 @@ export default {
 			'Attack Speed',
 			'Heal and Shield Power'
 		];
-		for (const stat in items.stats) {
-			for (const type in items.stats[stat]) {
-				if (items.stats[stat][type] !== 0.0) {
+		for (const stat in itemObj.stats) {
+			for (const type in itemObj.stats[stat]) {
+				if (itemObj.stats[stat][type] !== 0.0) {
 					console.log(`itemID: ${itemId}`);
 
 					let fuse = new Fuse(statNameArray);
@@ -89,9 +90,9 @@ export default {
 								result == 'Magic Penetration' ||
 								result == 'Critical Strike Chance'))
 					) {
-						statValue = `${items.stats[stat][type]}%`;
+						statValue = `${itemObj.stats[stat][type]}%`;
 					} else {
-						statValue = items.stats[stat][type];
+						statValue = itemObj.stats[stat][type];
 					}
 
 					embed.addFields({
@@ -102,21 +103,21 @@ export default {
 				}
 			}
 		}
-		let mythic;
-		for (const passive in items.passives) {
+		for (const passive in itemObj.passives) {
 			let passiveName;
-			if (items.passives[passive].name) {
-				passiveName = items.passives[passive].name;
+			if (itemObj.passives[passive].name) {
+				passiveName = itemObj.passives[passive].name;
 			} else {
 				passiveName = '';
 			}
 			let passiveEffects;
-			if (items.passives[passive].effects != null) {
-				passiveEffects = items.passives[passive].effects.replace(
+			if (itemObj.passives[passive].effects != null) {
+				passiveEffects = encodeURIComponent(itemObj.passives[passive].effects.replace(
 					/\+/g,
 					'%2b',
-				);
-				const passiveUrl = `https://leagueoflegends.fandom.com/api.php?action=parse&text=${passiveEffects}&contentmodel=wikitext&format=json`;
+				));
+				const passiveUrl = `https://wiki.leagueoflegends.com/api.php?action=parse&text=${passiveEffects}&contentmodel=wikitext&format=json`;
+				console.log(passiveUrl)
 				const passiveRequest = await fetch(passiveUrl).catch((err) => {
 					console.log(err);
 				});
@@ -125,7 +126,8 @@ export default {
 				try {
 					passivebodyJSON = JSON.parse(passiveBody);
 				} catch (error) {
-					interaction.editReply('**Error parseing passive**');
+					console.log(passiveBody)
+					interaction.editReply('**Error parseing passive effect**');
 					return;
 				}
 
@@ -139,9 +141,9 @@ export default {
 				).textContent;
 			}
 			let passiveCooldown;
-			if (items.passives[passive].cooldown != null) {
-				passiveCooldown = items.passives[passive].cooldown;
-				const passiveUrl = `https://leagueoflegends.fandom.com/api.php?action=parse&text=${passiveCooldown}&contentmodel=wikitext&format=json`;
+			if (itemObj.passives[passive].cooldown != null) {
+				passiveCooldown = encodeURIComponent(itemObj.passives[passive].cooldown);
+				const passiveUrl = `https://wiki.leagueoflegends.com/api.php?action=parse&text=${passiveCooldown}&contentmodel=wikitext&format=json`;
 				const passiveRequest = await fetch(passiveUrl).catch((err) => {
 					console.log(err);
 				});
@@ -150,7 +152,8 @@ export default {
 				try {
 					passivebodyJSON = JSON.parse(passiveBody);
 				} catch (error) {
-					interaction.editReply('**Error parseing passive**');
+					console.log(passiveBody)
+					interaction.editReply('**Error parseing passive cooldown**');
 					return;
 				}
 
@@ -166,15 +169,15 @@ export default {
 				passiveCooldown = '';
 			}
 
-			if (items.passives[passive].mythic == true) {
+			if (itemObj.passives[passive].mythic == true) {
 				mythic = true;
-			} else if (items.passives[passive].unique == true) {
+			} else if (itemObj.passives[passive].unique == true) {
 				mythic = false;
 				embed.addFields({
 					name: `Unique Passive: ${passiveName}`,
 					value: `${passiveEffects} ${passiveCooldown}`,
 				});
-			} else if (items.passives[passive].unique == false) {
+			} else if (itemObj.passives[passive].unique == false) {
 				mythic = false;
 				embed.addFields({
 					name: `Passive: ${passiveName}`,
@@ -183,18 +186,18 @@ export default {
 			}
 		}
 
-		for (const active in items.active) {
+		for (const active in itemObj.active) {
 			let activeName;
-			if (items.active[active].name) {
-				activeName = items.active[active].name;
+			if (itemObj.active[active].name) {
+				activeName = itemObj.active[active].name;
 			}
 			let activeEffects;
-			if (items.active[active].effects != null) {
-				activeEffects = items.active[active].effects.replace(
+			if (itemObj.active[active].effects != null) {
+				activeEffects = encodeURIComponent(itemObj.active[active].effects.replace(
 					/\+/g,
 					'%2b',
-				);
-				const activeUrl = `https://leagueoflegends.fandom.com/api.php?action=parse&text=${activeEffects}&contentmodel=wikitext&format=json`;
+				));
+				const activeUrl = `https://wiki.leagueoflegends.com/api.php?action=parse&text=${activeEffects}&contentmodel=wikitext&format=json`;
 				const activeRequest = await fetch(activeUrl).catch((err) => {
 					console.log(err);
 				});
@@ -217,17 +220,17 @@ export default {
 				).textContent;
 			}
 			let activeCooldown;
-			if (items.active[active].cooldown != null) {
-				activeCooldown = `**Cooldown:** ${items.active[active].cooldown} seconds\n`;
+			if (itemObj.active[active].cooldown != null) {
+				activeCooldown = `**Cooldown:** ${itemObj.active[active].cooldown} seconds\n`;
 			} else {
 				activeCooldown = '';
 			}
 			let activeRange;
 			if (
-				items.active[active].range != null &&
-				items.active[active].range != 0
+				itemObj.active[active].range != null &&
+				itemObj.active[active].range != 0
 			) {
-				activeRange = `**Range:** ${items.active[active].range}`;
+				activeRange = `**Range:** ${itemObj.active[active].range}`;
 			} else {
 				activeRange = '';
 			}
@@ -241,14 +244,14 @@ export default {
 				name: `Mythic Passive: `,
 				value: `Embues each of your legendary items with:`,
 			});
-			for (const passive in items.passives) {
-				if (items.passives[passive].mythic == true) {
-					for (const stat in items.passives[passive].stats) {
-						for (const type in items.passives[passive].stats[
+			for (const passive in itemObj.passives) {
+				if (itemObj.passives[passive].mythic == true) {
+					for (const stat in itemObj.passives[passive].stats) {
+						for (const type in itemObj.passives[passive].stats[
 							stat
 						]) {
 							if (
-								items.passives[passive].stats[stat][type] !==
+								itemObj.passives[passive].stats[stat][type] !==
 								0.0
 							) {
 								let fuse = new Fuse(statNameArray);
@@ -262,10 +265,10 @@ export default {
 											result == 'Magic Penetration' ||
 											result == 'Critical Strike Chance'))
 								) {
-									statValue = `${items.passives[passive].stats[stat][type]}%`;
+									statValue = `${itemObj.passives[passive].stats[stat][type]}%`;
 								} else {
 									statValue =
-										items.passives[passive].stats[stat][
+										itemObj.passives[passive].stats[stat][
 											type
 										];
 								}

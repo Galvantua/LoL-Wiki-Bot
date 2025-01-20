@@ -72,7 +72,7 @@ export default {
 					resolve: 'Durability and crowd control.',
 				};
 
-				const url = `https://leagueoflegends.fandom.com/api.php?action=parse&text={{Rune%20path%20infobox/${rune.name}}}&contentmodel=wikitext&format=json`;
+				const url = `https://wiki.leagueoflegends.com/api.php?action=parse&text={{Rune%20path%20infobox/${encodeURIComponent(rune.name)}}}&contentmodel=wikitext&format=json`;
 				const body = await fetch(url)
 					.then(async (res) => await res.json())
 					.catch((err) => {
@@ -206,7 +206,7 @@ export default {
 
 				return;
 			} else {
-				const url = `https://leagueoflegends.fandom.com/api.php?action=parse&text={{rune%20header|${rune.name}}}&contentmodel=wikitext&format=json`;
+				const url = `https://wiki.leagueoflegends.com/api.php?action=parse&text={{rune%20header|${encodeURIComponent(rune.name)}}}&contentmodel=wikitext&format=json`;
 				const body = await fetch(url)
 					.then(async (res) => await res.json())
 					.catch((err) => {

@@ -14,46 +14,52 @@ export default class handler {
 
 	wikiFormat(element) {
 		const icons = element.querySelectorAll('span[data-tip]')
-
+		let iconImage
+		let iconText
 		icons.forEach((icon) => {
 			switch (icon.getAttribute('data-tip')) {
 				case 'Shield':
-					icon.innerHTML =
-						`<:hybridresist:1049873538355576924> ​**​Shield​**​`;
+					iconImage =
+						'<:hybridresist:1049873538355576924>';
 					break;
 				// case '/en-us/Gold':
-				// 	icon.innerHTML =
+				// 	iconImage =
 				// 		'<:gold:1049873537462173797>';
 				// 	break; //gold is funky and doesnt have a tip, will need to find another way
-				case '/en-us/Ranged':
-					icon.innerHTML =
+				case 'Ranged':
+					iconImage =
 						'<:ranged:1049873680555065354>';
 					break;
-				case '/en-us/Melee':
-					icon.innerHTML =
+				case 'Melee':
+					iconImage =
 						'<:melee:1049873678424350780>';
 					break;
-				case '/en-us/Slow':
-					icon.innerHTML =
+				case 'Slow':
+					iconImage =
 						'<:slow:1049873681704304712>';
 					break;
-				case '/en-us/Champion':
-					icon.innerHTML =
+				case 'Champion':
+					iconImage =
 						'<:champion:1049873534765236318>';
 					break;
-				case '/en-us/Stun':
-					icon.innerHTML =
+				case 'Stun':
+					iconImage =
 						'<:stun:1049873684304769086>';
 					break;
-				case '/en-us/Movement_speed':
-					icon.innerHTML =
+				case 'Movement_speed':
+					iconImage =
 						'<:movespeed:1049873679447756861>';
 					break;
-				case '/en-us/Healing':
-					icon.innerHTML =
+				case 'Healing':
+					iconImage =
 						'<:Heal:1049873210461655071>';
 					break;
 			}
+			if (icon.querySelector('a')[1]) {
+				iconText = icon.querySelector('a')[1].innerHTML	
+				icon.innerHTML = `${iconImage}` + `​**​${iconText}​**​`;
+			}
+			
 		});
 
 		for (const node of element.querySelectorAll('b')) {

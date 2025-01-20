@@ -176,7 +176,7 @@ export default {
 
 		//TODO convert to custom solution
 		//send request to wiki based on champ and ability
-		const url = `https://wiki.leagueoflegends.com/api.php?action=parse&text={{Grouped%20ability|${championName}|${abilityLetter}}}&contentmodel=wikitext&format=json`;
+		const url = `https://wiki.leagueoflegends.com/api.php?action=parse&text={{Grouped%20ability|${encodeURIComponent(championName)}|${encodeURIComponent(abilityLetter)}}}&contentmodel=wikitext&format=json`;
 		const request = await fetch(url).catch((err) => {
 			console.log(err);
 		});
