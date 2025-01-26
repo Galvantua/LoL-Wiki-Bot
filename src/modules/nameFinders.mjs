@@ -225,7 +225,7 @@ export async function findAbilityName(input, interaction) {
 			champNames.push(champ);
 		}
 	}
-
+	//console.log(champNames)
 	const fuse = new Fuse(champNames);
 	const result = fuse.search(championName);
 
