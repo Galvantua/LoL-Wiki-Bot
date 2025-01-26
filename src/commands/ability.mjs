@@ -291,10 +291,8 @@ export default {
 				}
 			}
 
-			// abilityImage = ability
-			// 	.getElementsByTagName('img')[0]
-			// 	.getAttribute('src');
-			// embed.setThumbnail(abilityImage);
+			let abilityImage = ability.querySelectorAll('div.ability-info-icon img')[0].getAttribute('src');			
+			embed.setThumbnail(`https://wiki.leagueoflegends.com${abilityImage}`);
 			embed.setColor(0xb6e2a1);
 			myEmbeds.push(embed);
 		}
