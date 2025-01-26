@@ -79,7 +79,6 @@ export default {
 
 					let fuse = new Fuse(statNameArray);
 					let results = fuse.search(stat);
-					console.log(`fuse Results: ${results}`)
 					let result = fuse.search(stat)[0].item;
 
 					if (
@@ -117,7 +116,6 @@ export default {
 					'%2b',
 				));
 				const passiveUrl = `https://wiki.leagueoflegends.com/api.php?action=parse&text=${passiveEffects}&contentmodel=wikitext&format=json`;
-				console.log(passiveUrl)
 				const passiveRequest = await fetch(passiveUrl).catch((err) => {
 					console.log(err);
 				});
@@ -126,7 +124,7 @@ export default {
 				try {
 					passivebodyJSON = JSON.parse(passiveBody);
 				} catch (error) {
-					console.log(passiveBody)
+
 					interaction.editReply('**Error parseing passive effect**');
 					return;
 				}
