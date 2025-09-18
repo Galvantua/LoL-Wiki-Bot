@@ -30,41 +30,41 @@ async function checkVersion() {
 			`Checked version, using current version: ${currentLoLVersion}`,
 		);
 	}
-	const loldataChamps = child_process.spawn('python', [
-		'-X',
-		'utf8',
-		'-m',
-		'loldata.lolstaticdata.champions',
-	]); 
-	loldataChamps.stdout.on('data', (data) => {
-		console.log(`stdout: ${data}`);
-	});
+	// const loldataChamps = child_process.spawn('python', [
+	// 	'-X',
+	// 	'utf8',
+	// 	'-m',
+	// 	'loldata.lolstaticdata.champions',
+	// ]); 
+	// loldataChamps.stdout.on('data', (data) => {
+	// 	console.log(`stdout: ${data}`);
+	// });
 
-	loldataChamps.stderr.on('data', (data) => {
-		console.error(`stderr: ${data}`);
-	});
+	// loldataChamps.stderr.on('data', (data) => {
+	// 	console.error(`stderr: ${data}`);
+	// });
 
-	loldataChamps.on('close', (code) => {
-		console.log(`child process exited with code ${code}`);
-	});
-	const loldataItems = child_process.spawn(
-		'python',
-		['-X', 'utf8', '-m', 'loldata.lolstaticdata.items'],
-	);
-	loldataItems.stdout.on('data', (data) => {
-		console.log(`stdout: ${data}`);
-	});
+	// loldataChamps.on('close', (code) => {
+	// 	console.log(`child process exited with code ${code}`);
+	// });
+	// const loldataItems = child_process.spawn(
+	// 	'python',
+	// 	['-X', 'utf8', '-m', 'loldata.lolstaticdata.items'],
+	// );
+	// loldataItems.stdout.on('data', (data) => {
+	// 	console.log(`stdout: ${data}`);
+	// });
 
-	loldataItems.stderr.on('data', (data) => {
-		console.error(`stderr: ${data}`);
-	});
-	loldataItems.on('close', (code) => {
-		console.log(`items process exited with code ${code}`);
-	});
+	// loldataItems.stderr.on('data', (data) => {
+	// 	console.error(`stderr: ${data}`);
+	// });
+	// loldataItems.on('close', (code) => {
+	// 	console.log(`items process exited with code ${code}`);
+	// });
 }
 
 //setInterval(checkVersion, 86400000);
-//checkVersion();
+checkVersion();
 
 // Create a new client instance
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
@@ -81,10 +81,10 @@ async function loadSlashCommands() {
 		.filter((file) => file.endsWith('.mjs'));
 
 	for (const file of commandFiles) {
-		console.log(file)
+		// console.log(file)
 		const command = await import(`./commands/${file}`);
 
-		console.log('command imported')
+		// console.log('command imported')
 		const commandData = command.default.data.toJSON();
 		client.slashCommands.set(commandData.name, {
 			execute: command.default.execute,
