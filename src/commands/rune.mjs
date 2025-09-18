@@ -38,14 +38,14 @@ export default {
 			let rune = await findRune(givenRune, ref);
 
 			if (rune === undefined) {
-				embed.setTitle('**Error getting rune or rune tree**');
+				embed.setTitle('**Error getting rune or rune tree (rune is undefined)**');
 				embed.setColor(0xf7a4a4);
 				rtnEmbeds.push(embed);
 				await interaction.editReply({ embeds: rtnEmbeds });
 				return;
 			}
 			if (rune === null) {
-				embed.setTitle('**Rune or rune tree not found**');
+				embed.setTitle('**Rune or rune tree not found (rune is null)**');
 				embed.setColor(0xfebe8c);
 				rtnEmbeds.push(embed);
 				await interaction.editReply({ embeds: rtnEmbeds });
@@ -206,6 +206,7 @@ export default {
 
 				return;
 			} else {
+				console.log(rune.name)
 				const url = `https://wiki.leagueoflegends.com/api.php?action=parse&text={{rune%20header|${encodeURIComponent(rune.name)}}}&contentmodel=wikitext&format=json`;
 				const body = await fetch(url)
 					.then(async (res) => await res.json())
@@ -216,13 +217,12 @@ export default {
 					contentType: 'text/html',
 				});
 				let document = dom.window.document;
+				let runeInfo = document.querySelectorAll('div.infobox.theme-rune')[0]
 
 				if (
-					document.getElementsByClassName(
-						'pi-item pi-data pi-item-spacing pi-border-color',
-					)[0] === undefined
+					runeInfo === undefined
 				) {
-					embed.setTitle('**Error getting rune or rune tree**');
+					embed.setTitle('**Error getting rune or rune tree (runeInfo is undefined)**');
 					rtnEmbeds.push(embed);
 					await interaction.editReply({ embeds: rtnEmbeds });
 					return;
@@ -233,46 +233,59 @@ export default {
 					`https://ddragon.leagueoflegends.com/cdn/img/${rune.icon}`,
 				);
 
-				let index = 0;
+				let runeSections = runeInfo.getElementsByClassName('infobox-section')
 
-				while (
-					document.getElementsByClassName(
-						'pi-item pi-data pi-item-spacing pi-border-color',
-					)[index + 1] !== undefined
-				) {
-					if (
-						document.getElementsByClassName(
-							'pi-item pi-data pi-item-spacing pi-border-color',
-						)[index].childElementCount === 2
-					) {
+				for (let i = 0; i < runeSections.length; i++) {
+					const section = runeSections[i];
+					let rows = section.getElementsByClassName('infobox-data-row');
+					for (let j = 0; j < rows.length; j++) {
+						const row = rows[j];
 						embed.addFields({
-							name: document.getElementsByClassName(
-								'pi-item pi-data pi-item-spacing pi-border-color',
-							)[index].children[0].textContent,
-							value: document.getElementsByClassName(
-								'pi-item pi-data pi-item-spacing pi-border-color',
-							)[index].children[1].textContent,
-						});
-						haveFields = true;
-					} else {
-						new handlers().wikiFormat(
-							document.getElementsByClassName(
-								'pi-item pi-data pi-item-spacing pi-border-color',
-							)[index],
-						);
-
-						const content = new handlers()
-							.wikiLinkify(
-								document.getElementsByClassName(
-									'pi-item pi-data pi-item-spacing pi-border-color',
-								)[index],
-							)
-							.textContent.trim();
-						//console.log(content);
-						description += '\n' + content + '\n';
+							name: "row1",
+							value: row.getElementsByClassName('infobox-data-value')[0].textContent
+						})
 					}
-					index++;
 				}
+
+				// let index = 0;
+				// while (
+				// 	document.getElementsByClassName(
+				// 		'pi-item pi-data pi-item-spacing pi-border-color',
+				// 	)[index + 1] !== undefined
+				// ) {
+				// 	if (
+				// 		document.getElementsByClassName(
+				// 			'pi-item pi-data pi-item-spacing pi-border-color',
+				// 		)[index].childElementCount === 2
+				// 	) {
+				// 		embed.addFields({
+				// 			name: document.getElementsByClassName(
+				// 				'pi-item pi-data pi-item-spacing pi-border-color',
+				// 			)[index].children[0].textContent,
+				// 			value: document.getElementsByClassName(
+				// 				'pi-item pi-data pi-item-spacing pi-border-color',
+				// 			)[index].children[1].textContent,
+				// 		});
+				// 		haveFields = true;
+				// 	} else {
+				// 		new handlers().wikiFormat(
+				// 			document.getElementsByClassName(
+				// 				'pi-item pi-data pi-item-spacing pi-border-color',
+				// 			)[index],
+				// 		);
+
+				// 		const content = new handlers()
+				// 			.wikiLinkify(
+				// 				document.getElementsByClassName(
+				// 					'pi-item pi-data pi-item-spacing pi-border-color',
+				// 				)[index],
+				// 			)
+				// 			.textContent.trim();
+				// 		//console.log(content);
+				// 		description += '\n' + content + '\n';
+				// 	}
+				// 	index++;
+				// }
 			}
 
 			if (haveFields) description += '​';
@@ -285,7 +298,7 @@ export default {
 		} catch (error) {
 			console.error(error);
 			embed = new EmbedBuilder();
-			embed.setTitle('**Error getting rune or rune tree**');
+			embed.setTitle('**Error getting rune or rune tree (catchall)**');
 			embed.setColor(0xf7a4a4);
 			rtnEmbeds = [embed];
 			interaction.editReply({ embeds: rtnEmbeds });
